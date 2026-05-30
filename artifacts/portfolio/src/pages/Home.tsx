@@ -240,27 +240,27 @@ export default function Home() {
                 title: "Muslim Traders",
                 desc: "Web platform for a 1988-founded Chakwal distribution network spanning 375+ distributors and 400K+ retail stores across Pakistan.",
                 tags: ["Next.js", "Full Stack", "Enterprise"],
-                link: "https://muslim-traders.vercel.app"
+                link: "https://muslim-traders.vercel.app",
+                github: "https://github.com/abdullahrauf245-hue/muslim-traders-2"
               },
               {
                 title: "NUST Events & Society Portal",
                 desc: "Full-stack event discovery platform for NUST with role-based access (Guest/Student/Organizer), live filtering, and Supabase backend.",
                 tags: ["React", "Supabase", "Role-based Auth"],
-                link: "https://nust-pulse.vercel.app"
+                link: "https://nust-pulse.vercel.app",
+                github: "https://github.com/abdullahrauf245-hue/Nust-society-and-portal-system"
               },
               {
                 title: "NUSTCafe",
                 desc: "Centralized search & filter system covering 9 NUST campus cafes, built collaboratively with the BSDS-3A team.",
                 tags: ["Frontend", "Search", "Team Collab"],
-                link: "https://nustcafe.vercel.app"
+                link: "https://nustcafe.vercel.app",
+                github: "https://github.com/abdullahrauf245-hue/nustcafe"
               }
             ].map((project, idx) => (
-              <motion.a 
+              <motion.div 
                 key={idx}
                 variants={fadeInUp}
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
                 className="group block p-8 rounded-2xl bg-[#080808] border border-[var(--color-border-subtle)]/15 hover:border-[var(--color-accent-orange)] transition-all duration-300 relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
@@ -270,12 +270,31 @@ export default function Home() {
                 <h3 className="text-2xl font-poppins font-bold mb-3 text-white group-hover:text-[var(--color-accent-orange)] transition-colors">{project.title}</h3>
                 <p className="text-[var(--color-text-secondary)] max-w-2xl mb-6 font-poppins font-normal text-sm">{project.desc}</p>
                 
-                <div className="flex gap-2.5 text-[10px] font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
+                <div className="flex flex-wrap items-center gap-2.5 mb-6 text-[10px] font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
                   {project.tags.map(tag => (
                     <span key={tag} className="px-3 py-1 bg-white/5 rounded-full text-white">{tag}</span>
                   ))}
                 </div>
-              </motion.a>
+
+                <div className="flex gap-3">
+                  <a 
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-accent-orange)] text-white font-satoshi font-bold text-[10px] tracking-wider uppercase hover:bg-[var(--color-accent-orange)]/90 transition-all hover:scale-105 duration-200"
+                  >
+                    <ArrowUpRight className="w-3.5 h-3.5" /> Live Demo
+                  </a>
+                  <a 
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-transparent border border-[var(--color-border-subtle)]/30 text-white font-satoshi font-bold text-[10px] tracking-wider uppercase hover:bg-white/5 hover:border-white transition-all hover:scale-105 duration-200"
+                  >
+                    <SiGithub className="w-3.5 h-3.5" /> GitHub
+                  </a>
+                </div>
+              </motion.div>
             ))}
           </div>
         </motion.section>
