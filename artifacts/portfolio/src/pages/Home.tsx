@@ -142,30 +142,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* STAT COUNTERS SECTION */}
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="mb-32 md:mb-40 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
-        >
-          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-orange)]/50 transition-colors group">
-            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-orange)] mb-2 group-hover:scale-105 transition-transform duration-300">1059</div>
-            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Matric / 1100 (Topper)</div>
-          </motion.div>
-          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-lime)]/50 transition-colors group">
-            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-lime)] mb-2 group-hover:scale-105 transition-transform duration-300">1069</div>
-            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Intermediate / 1200</div>
-          </motion.div>
-          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-orange)]/50 transition-colors group">
-            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-orange)] mb-2 group-hover:scale-105 transition-transform duration-300">4.0</div>
-            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Merit Scholar GPA</div>
-          </motion.div>
-          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-lime)]/50 transition-colors group">
-            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-lime)] mb-2 group-hover:scale-105 transition-transform duration-300">6+</div>
-            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Leadership Roles</div>
-          </motion.div>
-        </motion.section>
-
         {/* ABOUT SECTION */}
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
