@@ -146,7 +146,7 @@
 }
 
 .dark {
-  /* Under the deep space system, light and dark themes are unified to remain Deep Space background */
+  color-scheme: dark;
 }
 
 
@@ -166,8 +166,6 @@
     color: hsl(var(--muted-foreground));
     pointer-events: none;
   }
-  .no-default-hover-elevate {}
-  .no-default-active-elevate {}
   .toggle-elevate::before,
   .toggle-elevate-2::before {
     content: "";
