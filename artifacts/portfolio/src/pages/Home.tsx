@@ -36,6 +36,26 @@ export default function Home() {
   const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
   const [activeSection, setActiveSection] = useState("overview");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Lock body scroll when preloader is loading
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [loading]);
 
   // Custom pointer follow cursor setup (spring animated)
   const cursorX = useMotionValue(-100);
@@ -181,6 +201,52 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)] ${a11y.highContrast ? 'a11y-high-contrast' : ''} ${!a11y.reducedMotion && cursorVisible ? 'custom-cursor-active' : ''}`}>
+      
+      {/* Splash Preloader Screen */}
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ 
+              opacity: 0,
+              y: -80,
+              transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } 
+            }}
+            className="fixed inset-0 bg-[#000000] z-[99999] flex flex-col items-center justify-center pointer-events-auto select-none"
+          >
+            <div className="text-center space-y-6 max-w-xl px-6">
+              {/* Outlined Name */}
+              <motion.h1 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                className="text-4xl md:text-6xl font-poppins font-bold tracking-wider text-transparent uppercase select-none"
+                style={{ WebkitTextStroke: "1.2px var(--color-accent-lime)" }}
+              >
+                M. Abdullah
+              </motion.h1>
+
+              {/* Thin Glowing Divider */}
+              <motion.div 
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
+                className="h-[1.5px] w-64 bg-[var(--color-accent-lime)] mx-auto shadow-[0_0_15px_var(--color-accent-lime)] origin-center"
+              />
+
+              {/* Muted Subtitle */}
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
+                className="text-[10px] md:text-[11px] font-mono uppercase tracking-[0.3em] text-stone-500 font-semibold"
+              >
+                DATA SCIENCE BUILDER &bull; DEVELOPER &bull; CREATOR
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Background ambient grid/lights with parallax */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-40" aria-hidden="true">
