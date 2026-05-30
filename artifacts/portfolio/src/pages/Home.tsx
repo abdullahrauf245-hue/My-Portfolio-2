@@ -1,8 +1,8 @@
-import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download } from "lucide-react";
+import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2 } from "lucide-react";
 import avatarImg from "@assets/image_1780140069977.png";
 
 const fadeInUp = {
@@ -16,8 +16,20 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+
+  useEffect(() => {
+    if (isContactOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isContactOpen]);
 
   return (
     <div className="min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)]">
@@ -40,9 +52,12 @@ export default function Home() {
         >
           <div className="font-satoshi text-xl tracking-widest text-[var(--color-accent-orange)] font-bold">MA.</div>
           <div className="flex gap-6 items-center text-sm">
-            <a href="mailto:abdullahrauf245@gmail.com" className="font-satoshi text-xs uppercase tracking-wider font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors flex items-center gap-2">
+            <button 
+              onClick={() => setIsContactOpen(true)}
+              className="font-satoshi text-xs uppercase tracking-wider font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors flex items-center gap-2 cursor-pointer bg-transparent border-none outline-none"
+            >
               <Mail className="w-4 h-4" /> <span>Get In Touch</span>
-            </a>
+            </button>
           </div>
         </motion.nav>
 
@@ -116,9 +131,12 @@ export default function Home() {
                 <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
                   <FaLinkedin className="w-4 h-4" />
                 </a>
-                <a href="mailto:abdullahrauf245@gmail.com" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                <button 
+                  onClick={() => setIsContactOpen(true)}
+                  className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors cursor-pointer border-none outline-none"
+                >
                   <Mail className="w-4 h-4" />
-                </a>
+                </button>
               </div>
             </div>
           </motion.div>
@@ -388,9 +406,12 @@ export default function Home() {
         >
           <div>
             <h2 className="text-2xl font-poppins font-bold mb-2 text-white">Let's build something.</h2>
-            <a href="mailto:abdullahrauf245@gmail.com" className="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors text-sm font-poppins font-medium flex items-center gap-2">
+            <button 
+              onClick={() => setIsContactOpen(true)}
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors text-sm font-poppins font-medium flex items-center gap-2 cursor-pointer bg-transparent border-none outline-none"
+            >
               abdullahrauf245@gmail.com
-            </a>
+            </button>
           </div>
           
           <div className="flex gap-4">
@@ -404,6 +425,234 @@ export default function Home() {
         </motion.footer>
 
       </div>
+
+      {/* Contact Modal overlay */}
+      <AnimatePresence>
+        {isContactOpen && (
+          <ContactModal onClose={() => setIsContactOpen(false)} />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// Contact Modal Component
+function ContactModal({ onClose }: { onClose: () => void }) {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Close modal when pressing Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+
+    setStatus("submitting");
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/abdullahrauf245@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          _subject: `New Portfolio Message from ${formData.name}`,
+          _honey: "", // Honeypot field for spam prevention
+        })
+      });
+
+      const result = await response.json();
+      if (response.ok && result.success === "true") {
+        setStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        throw new Error(result.message || "Failed to send message.");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setStatus("error");
+      setErrorMessage(err.message || "Something went wrong. Please try again.");
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop with fade-in animation */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-black/85 backdrop-blur-md"
+      />
+
+      {/* Modal Card with slide-up and scale spring animation */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
+        className="relative w-full max-w-4xl bg-[#080808] border border-[var(--color-border-subtle)]/30 rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row min-h-[500px]"
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-stone-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full z-20 cursor-pointer border-none outline-none"
+          aria-label="Close modal"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Info Column (Left) with large @ symbol background */}
+        <div className="relative flex-1 p-8 md:p-12 overflow-hidden flex flex-col justify-between border-b md:border-b-0 md:border-r border-[var(--color-border-subtle)]/15">
+          {/* Watermark @ Symbol */}
+          <div className="absolute -bottom-24 -left-24 text-[30rem] font-bold text-white/[0.02] select-none pointer-events-none leading-none">
+            @
+          </div>
+
+          <div className="relative z-10">
+            <h2 className="text-4xl md:text-5xl font-poppins font-bold tracking-tight text-white mb-6">
+              Contact<span className="text-[var(--color-accent-orange)]">.</span>
+            </h2>
+            <p className="text-[var(--color-text-secondary)] font-poppins text-[15px] font-normal leading-relaxed max-w-sm">
+              Got a collaboration idea? Want to connect? I'm always open to learning and building together!
+            </p>
+          </div>
+
+          <div className="relative z-10 mt-12 md:mt-0 space-y-4">
+            <div className="text-xs font-satoshi font-bold uppercase tracking-widest text-[var(--color-accent-orange)]">
+              Direct Mail
+            </div>
+            <a 
+              href="mailto:abdullahrauf245@gmail.com" 
+              className="text-white hover:text-[var(--color-accent-orange)] font-poppins text-lg font-medium transition-colors"
+            >
+              abdullahrauf245@gmail.com
+            </a>
+          </div>
+        </div>
+
+        {/* Form Column (Right) */}
+        <div className="flex-1 p-8 md:p-12 flex flex-col justify-center relative">
+          <AnimatePresence mode="wait">
+            {status === "success" ? (
+              <motion.div
+                key="success-message"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="text-center py-8 flex flex-col items-center justify-center h-full"
+              >
+                <div className="w-16 h-16 bg-[var(--color-accent-lime)]/10 rounded-full flex items-center justify-center mb-6 border border-[var(--color-accent-lime)]/20 animate-pulse">
+                  <CheckCircle2 className="w-8 h-8 text-[var(--color-accent-lime)]" />
+                </div>
+                <h3 className="text-2xl font-poppins font-bold text-white mb-3">Message Sent!</h3>
+                <p className="text-[var(--color-text-secondary)] font-poppins text-sm leading-relaxed max-w-sm">
+                  Thank you for reaching out. Abdullah has received your email and will get back to you shortly.
+                </p>
+                <button
+                  onClick={onClose}
+                  className="mt-8 px-6 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white text-xs font-satoshi font-bold tracking-widest uppercase transition-all cursor-pointer outline-none"
+                >
+                  Close Window
+                </button>
+              </motion.div>
+            ) : (
+              <motion.form
+                key="contact-form"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onSubmit={handleSubmit}
+                className="space-y-6"
+              >
+                {status === "error" && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm font-poppins">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <div>
+                  <label htmlFor="name" className="block text-xs font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    required
+                    disabled={status === "submitting"}
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full bg-[#0d0d0d] border border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-white text-sm font-poppins placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors disabled:opacity-50"
+                    placeholder="Enter your name"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-xs font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    required
+                    disabled={status === "submitting"}
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full bg-[#0d0d0d] border border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-white text-sm font-poppins placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-lime)] transition-colors disabled:opacity-50"
+                    placeholder="Enter your email address"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-xs font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    required
+                    rows={4}
+                    disabled={status === "submitting"}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full bg-[#0d0d0d] border border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-white text-sm font-poppins placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors resize-none disabled:opacity-50"
+                    placeholder="Type your message here..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white font-satoshi font-bold text-xs tracking-wider uppercase transition-all hover:scale-[1.01] duration-200 cursor-pointer disabled:opacity-50 disabled:hover:scale-100 border-none outline-none"
+                >
+                  {status === "submitting" ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>Sending...</span>
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <Send className="w-4 h-4" />
+                      <span>Send Message</span>
+                    </span>
+                  )}
+                </button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        </div>
+      </motion.div>
     </div>
   );
 }
