@@ -2,8 +2,8 @@ import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, ArrowUpRight, Code2, Database, Terminal, ArrowDown, MapPin, Building, Trophy, Briefcase, GraduationCap, Award } from "lucide-react";
-import avatarImg from "@/assets/avatar.png";
+import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download } from "lucide-react";
+import avatarImg from "@assets/image_1780140069977.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -74,6 +74,9 @@ export default function Home() {
               </a>
               <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-md bg-card hover:bg-card/80 border border-border hover:border-secondary/50 transition-all font-medium text-sm group">
                 <FaLinkedin className="w-4 h-4 group-hover:text-secondary transition-colors" /> LinkedIn
+              </a>
+              <a href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-all font-medium text-sm group">
+                <Download className="w-4 h-4" /> Download CV
               </a>
             </motion.div>
           </motion.div>
