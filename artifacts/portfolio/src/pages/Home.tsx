@@ -222,7 +222,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                 className="text-4xl md:text-6xl font-poppins font-bold tracking-wider text-transparent uppercase select-none"
-                style={{ WebkitTextStroke: "1.2px var(--color-accent-orange)" }}
+                style={{ WebkitTextStroke: "1.2px var(--color-accent-lime)" }}
               >
                 M. Abdullah
               </motion.h1>
@@ -232,7 +232,7 @@ export default function Home() {
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-                className="h-[1.5px] w-64 bg-[var(--color-accent-orange)] mx-auto shadow-[0_0_15px_var(--color-accent-orange)] origin-center"
+                className="h-[1.5px] w-64 bg-[var(--color-accent-lime)] mx-auto shadow-[0_0_15px_var(--color-accent-lime)] origin-center"
               />
 
               {/* Muted Subtitle */}
@@ -253,7 +253,7 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-40" aria-hidden="true">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
         <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY }} className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[var(--color-accent-orange)]/5 blur-[140px]" />
-        <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-orange)]/5 blur-[120px]" />
+        <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
       {/* Sticky Top Header Navigation */}
@@ -413,29 +413,21 @@ export default function Home() {
 
         {/* HERO SECTION with parallax */}
         <motion.div id="overview" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
-        <section className="pt-[140px] md:pt-[180px] mb-32 md:mb-40 w-full text-left">
+        <section className="pt-[140px] md:pt-[180px] mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
           <motion.div 
-            className="w-full"
+            className="flex-1"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
-            {/* 60px Circular Avatar */}
-            <motion.img 
-              variants={fadeInUp}
-              src={avatarImg} 
-              alt="Muhammad Abdullah" 
-              className="w-[60px] h-[60px] rounded-full border-2 border-[#FF6B35] object-cover mb-6"
-            />
-
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111111] text-[#FF6B35] text-xs font-satoshi font-bold uppercase tracking-wider mb-6 border border-[#FF6B35]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35] animate-pulse" />
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-accent-lime)]/10 text-[var(--color-accent-lime)] text-xs font-satoshi font-bold uppercase tracking-wider mb-6 border border-[var(--color-accent-lime)]/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)] animate-pulse" />
               Available for impact
             </motion.div>
             
             <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-white">
               Muhammad <br />
-              <span className="text-[#FF6B35]">Abdullah.</span>
+              <span className="text-[var(--color-accent-orange)]">Abdullah.</span>
             </motion.h1>
             
             <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[var(--color-text-secondary)] font-poppins font-normal mb-8 max-w-xl leading-relaxed">
@@ -444,16 +436,60 @@ export default function Home() {
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-              <a href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[#FF6B35]/20 hover:scale-105 duration-200 group">
+              <a href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
                 <Download className="w-4 h-4" /> Download CV
               </a>
-              <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[#1f1f1f] hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+              <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
                 <SiGithub className="w-4 h-4" /> GitHub
               </a>
-              <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[#1f1f1f] hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+              <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
                 <FaLinkedin className="w-4 h-4" /> LinkedIn
               </a>
             </motion.div>
+          </motion.div>
+
+          {/* Profile Card component */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full md:w-[350px] bg-white text-black rounded-2xl p-6 shadow-2xl border border-[var(--color-border-subtle)] flex-shrink-0 flex flex-col gap-4 hover:scale-[1.01] transition-transform duration-300 relative"
+          >
+            <div className="relative w-full h-64 overflow-hidden rounded-xl bg-stone-100">
+              <img 
+                src={avatarImg} 
+                alt="Muhammad Abdullah" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--color-accent-orange)] text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">
+                BS Data Science
+              </div>
+            </div>
+            <div>
+              <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
+              <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
+            </div>
+            <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
+              Full Merit Scholar & Data Science builder thinking from first principles. Chakwal District Topper.
+            </p>
+            <div className="h-px bg-stone-200 my-1" />
+            <div className="flex justify-between items-center">
+              <span className="font-satoshi text-xs font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Let's Connect</span>
+              <div className="flex gap-2.5">
+                <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                  <SiGithub className="w-4 h-4" />
+                </a>
+                <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                  <FaLinkedin className="w-4 h-4" />
+                </a>
+                <button 
+                  onClick={() => setIsContactOpen(true)}
+                  className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors cursor-pointer border-none outline-none"
+                >
+                  <Mail className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </motion.div>
         </section>
         </motion.div>

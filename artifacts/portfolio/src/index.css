@@ -46,6 +46,7 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: #888888;
   --color-accent-orange: #FF6B35;
+  --color-accent-lime: #c5ff41;
   --color-border-subtle: #1f1f1f;
   --color-text-muted: #6a6b6e;
   /* Font mapping */
@@ -98,8 +99,8 @@
   --primary: 16 100% 60%; /* Sunset Orange #FF6B35 */
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 16 100% 60%; /* Sunset Orange #FF6B35 */
-  --secondary-foreground: 0 0% 100%;
+  --secondary: 78 100% 63%; /* Electric Lime #c5ff41 */
+  --secondary-foreground: 0 0% 0%;
 
   --muted: 0 0% 42%;
   --muted-foreground: 0 0% 53%; /* Text Secondary #888888 */
