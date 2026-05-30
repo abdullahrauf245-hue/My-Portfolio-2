@@ -9,6 +9,7 @@ import muslimTraders2 from "@assets/muslim_traders_2.png";
 import nustEvents1 from "@assets/nust_events_1.png";
 import nustEvents2 from "@assets/nust_events_2.png";
 import nustCafe1 from "@assets/nust_cafe_1.png";
+import ToolkitOrbital from "@/components/ToolkitOrbital";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -686,47 +687,9 @@ export default function Home() {
 
         {/* SKILLS SECTION with parallax */}
         <motion.div id="skills" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-          className="mb-32 md:mb-40"
-        >
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Technical Arsenal</h2>
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-[var(--color-accent-orange)] text-white shadow-xl border border-[var(--color-accent-orange)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
-              <div>
-                <Code2 className="w-8 h-8 text-white mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-2 text-white">Languages</h4>
-              </div>
-              <p className="text-sm text-white/95 leading-relaxed font-poppins font-medium">{`C++, Java, Python, SQL, JavaScript, HTML, CSS`}</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-[var(--color-accent-lime)] text-black shadow-xl border border-[var(--color-accent-lime)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
-              <div>
-                <Terminal className="w-8 h-8 text-black mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-2 text-black">Frameworks</h4>
-              </div>
-              <p className="text-sm text-black/95 leading-relaxed font-poppins font-semibold">React, Next.js, Node.js, Tailwind CSS</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-[var(--color-accent-orange)] text-white shadow-xl border border-[var(--color-accent-orange)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
-              <div>
-                <Database className="w-8 h-8 text-white mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-2 text-white">Data & Tools</h4>
-              </div>
-              <p className="text-sm text-white/95 leading-relaxed font-poppins font-medium">MongoDB, Supabase, Git, GitHub, Vercel</p>
-            </div>
-            <div className="p-6 rounded-2xl bg-[var(--color-accent-lime)] text-black shadow-xl border border-[var(--color-accent-lime)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
-              <div>
-                <Award className="w-8 h-8 text-black mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-2 text-black">Certifications</h4>
-              </div>
-              <p className="text-sm text-black/95 leading-relaxed font-poppins font-semibold">AI Fluency Framework & Foundations (Anthropic Certified)</p>
-            </div>
-          </div>
-        </motion.section>
+          <section className="mb-32 md:mb-40">
+            <ToolkitOrbital />
+          </section>
         </motion.div>
 
         {/* EXPERIENCE & LEADERSHIP with parallax */}
