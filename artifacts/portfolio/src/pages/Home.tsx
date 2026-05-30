@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
 import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp } from "lucide-react";
-import avatarImg from "@assets/image_1780140069977.png";
+import avatarImg from "@assets/image_1780161923266.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
