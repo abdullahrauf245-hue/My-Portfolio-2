@@ -35,7 +35,6 @@ export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
   const [activeSection, setActiveSection] = useState("overview");
-  const [portalMode, setPortalMode] = useState("Guest Mode");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Custom pointer follow cursor setup (spring animated)
@@ -190,75 +189,88 @@ export default function Home() {
         <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
-      {/* Persistent Desktop Sidebar */}
-      <aside className="hidden md:flex fixed top-0 bottom-0 left-0 w-64 bg-[#000000] border-r border-[#14142c] flex-col justify-between p-6 z-45">
-        <div>
-          {/* Branding Header */}
-          <div className="mb-8 select-none">
-            <h1 className="text-[25px] font-extrabold tracking-tighter text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
-              My Portfolio
-            </h1>
-            <p className="text-[9px] font-poppins font-bold text-[#727293] uppercase tracking-[0.2em] mt-1.5 leading-none">
-              Developer Portal
-            </p>
+      {/* Sticky Top Header Navigation */}
+      <header className="sticky top-0 z-40 w-full bg-black/60 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between transition-all duration-300 select-none">
+        {/* Left Side: Logo */}
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollToSection("overview")}>
+          <div className="font-poppins text-lg tracking-wider text-white font-extrabold drop-shadow-[0_2px_8px_rgba(255,255,255,0.1)]">
+            MA<span className="text-[var(--color-accent-orange)]">.</span>
           </div>
-
-          {/* User Profile Card */}
-          <div className="flex items-center gap-3.5 p-3.5 bg-[#0b0b18] border border-[#171732] rounded-2xl mb-8">
-            <div className="w-11 h-11 rounded-full bg-[#b4b4f5] text-[#0a0a1a] font-poppins font-bold flex items-center justify-center text-sm shadow-md flex-shrink-0">
-              MA
-            </div>
-            <div className="min-w-0">
-              <div className="text-[14px] font-semibold text-white font-poppins truncate leading-tight">Muhammad Abdullah</div>
-              <div className="text-[10px] text-[#8282a5] font-mono mt-0.5 tracking-wider">BSDS-3A</div>
-            </div>
-          </div>
-
-          {/* Navigation Menu */}
-          <nav className="flex flex-col gap-1.5">
-            {sections.map((sec) => {
-              const Icon = sec.icon;
-              const isActive = activeSection === sec.id;
-              return (
-                <button
-                  key={sec.id}
-                  onClick={() => scrollToSection(sec.id)}
-                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-[14px] font-poppins font-medium tracking-wide transition-all cursor-pointer border-none outline-none ${
-                    isActive
-                      ? "bg-[#1c1c3c] text-white shadow-lg shadow-[#1c1c3c]/10 border border-[#2b2b58]/30"
-                      : "bg-transparent text-[#8282a5] hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-[#727293]"}`} />
-                  <span>{sec.label}</span>
-                </button>
-              );
-            })}
-          </nav>
         </div>
 
-        {/* Portal Mode Switcher */}
-        <div className="border border-[#171732] bg-[#0c0c1b]/60 rounded-2xl p-4 flex flex-col gap-2.5">
-          <div className="text-[10px] font-poppins font-bold uppercase tracking-widest text-[#727293]">Portal Mode</div>
+        {/* Center: Desktop Navigation Items */}
+        <nav className="hidden md:flex items-center gap-1">
+          {sections.map((sec) => {
+            const isActive = activeSection === sec.id;
+            return (
+              <button
+                key={sec.id}
+                onClick={() => scrollToSection(sec.id)}
+                className="relative px-4 py-2 text-xs font-poppins font-semibold uppercase tracking-wider transition-colors cursor-pointer border-none outline-none text-stone-400 hover:text-white"
+              >
+                <span className={`relative z-10 transition-colors ${isActive ? "text-[var(--color-accent-orange)]" : ""}`}>
+                  {sec.label}
+                </span>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeHeaderTab"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    className="absolute inset-0 bg-white/5 border border-white/5 rounded-full z-0"
+                  />
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Right Side: Icons + Contact Button */}
+        <div className="flex items-center gap-5">
+          {/* Social Icons */}
+          <div className="hidden sm:flex items-center gap-3">
+            <a
+              href="https://github.com/abdullahrauf245-hue/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-stone-400 hover:text-white transition-all hover:scale-110"
+              aria-label="GitHub"
+            >
+              <SiGithub className="w-[18px] h-[18px]" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/muhammad-abdullahrauf/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-stone-400 hover:text-white transition-all hover:scale-110"
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin className="w-[18px] h-[18px]" />
+            </a>
+            <button
+              onClick={() => setIsContactOpen(true)}
+              className="text-stone-400 hover:text-white transition-all hover:scale-110 bg-transparent border-none p-0 cursor-pointer outline-none"
+              aria-label="Email"
+            >
+              <Mail className="w-[18px] h-[18px]" />
+            </button>
+          </div>
+
+          {/* Contact Button (CTA) */}
           <button
-            onClick={() => setPortalMode(prev => prev === "Guest Mode" ? "Dev Mode" : "Guest Mode")}
-            className="relative flex items-center w-full h-[40px] rounded-full bg-[#1c1c3c] border border-[#2b2b58]/40 p-1 cursor-pointer overflow-hidden"
+            onClick={() => setIsContactOpen(true)}
+            className="px-5 py-2 text-xs font-poppins font-extrabold uppercase tracking-wider bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white rounded-full transition-all hover:scale-105 duration-200 cursor-pointer border-none outline-none shadow-md shadow-[var(--color-accent-orange)]/10"
           >
-            <div className={`flex items-center gap-2.5 w-full h-full px-2 transition-all duration-300 ${
-              portalMode === "Dev Mode" ? "flex-row-reverse" : "flex-row"
-            }`}>
-              <motion.div
-                layout
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="w-6 h-6 rounded-full bg-white shadow-md flex-shrink-0"
-              />
-              <span className="text-[13px] font-semibold text-white font-poppins tracking-wide">
-                {portalMode}
-              </span>
-            </div>
+            Contact
+          </button>
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 text-stone-400 hover:text-white hover:bg-white/10 text-xs font-poppins font-bold uppercase tracking-wider rounded-lg cursor-pointer outline-none"
+          >
+            Menu
           </button>
         </div>
-      </aside>
+      </header>
 
       {/* Mobile Sidebar Slide-out Drawer */}
       <AnimatePresence>
@@ -269,14 +281,14 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-45 md:hidden"
             />
             <motion.aside
-              initial={{ x: -260 }}
+              initial={{ x: 260 }}
               animate={{ x: 0 }}
-              exit={{ x: -260 }}
+              exit={{ x: 260 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 bottom-0 left-0 w-64 bg-[#000000] border-r border-[#14142c] z-50 flex flex-col justify-between p-6 md:hidden"
+              className="fixed top-0 bottom-0 right-0 w-64 bg-[#000000] border-l border-white/5 z-50 flex flex-col justify-between p-6 md:hidden"
             >
               <div>
                 <div className="flex items-center justify-between mb-8">
@@ -296,13 +308,13 @@ export default function Home() {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-3.5 p-3.5 bg-[#0b0b18] border border-[#171732] rounded-2xl mb-8">
-                  <div className="w-11 h-11 rounded-full bg-[#b4b4f5] text-[#0a0a1a] font-poppins font-bold flex items-center justify-center text-sm shadow-md flex-shrink-0">
+                <div className="flex items-center gap-3.5 p-3.5 bg-[#0a0a0a] border border-white/5 rounded-2xl mb-8">
+                  <div className="w-11 h-11 rounded-full bg-[var(--color-accent-lime)] text-black font-poppins font-bold flex items-center justify-center text-sm shadow-md flex-shrink-0">
                     MA
                   </div>
                   <div className="min-w-0">
                     <div className="text-[14px] font-semibold text-white font-poppins truncate leading-tight">Muhammad Abdullah</div>
-                    <div className="text-[10px] text-[#8282a5] font-mono mt-0.5 tracking-wider">BSDS-3A</div>
+                    <div className="text-[10px] text-stone-500 font-mono mt-0.5 tracking-wider">BSDS-3A</div>
                   </div>
                 </div>
 
@@ -316,37 +328,16 @@ export default function Home() {
                         onClick={() => scrollToSection(sec.id)}
                         className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-[14px] font-poppins font-medium tracking-wide transition-all cursor-pointer border-none outline-none ${
                           isActive
-                            ? "bg-[#1c1c3c] text-white shadow-lg shadow-[#1c1c3c]/10 border border-[#2b2b58]/30"
-                            : "bg-transparent text-[#8282a5] hover:text-white hover:bg-white/5"
+                            ? "bg-[var(--color-accent-orange)]/10 text-[var(--color-accent-orange)] border border-[var(--color-accent-orange)]/25 shadow-lg shadow-[var(--color-accent-orange)]/5"
+                            : "bg-transparent text-stone-400 hover:text-white hover:bg-white/5"
                         }`}
                       >
-                        <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-[#727293]"}`} />
+                        <Icon className={`w-4 h-4 ${isActive ? "text-[var(--color-accent-orange)]" : "text-stone-500"}`} />
                         <span>{sec.label}</span>
                       </button>
                     );
                   })}
                 </nav>
-              </div>
-
-              <div className="border border-[#171732] bg-[#0c0c1b]/60 rounded-2xl p-4 flex flex-col gap-2.5">
-                <div className="text-[10px] font-poppins font-bold uppercase tracking-widest text-[#727293]">Portal Mode</div>
-                <button
-                  onClick={() => setPortalMode(prev => prev === "Guest Mode" ? "Dev Mode" : "Guest Mode")}
-                  className="relative flex items-center w-full h-[40px] rounded-full bg-[#1c1c3c] border border-[#2b2b58]/40 p-1 cursor-pointer overflow-hidden"
-                >
-                  <div className={`flex items-center gap-2.5 w-full h-full px-2 transition-all duration-300 ${
-                    portalMode === "Dev Mode" ? "flex-row-reverse" : "flex-row"
-                  }`}>
-                    <motion.div
-                      layout
-                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                      className="w-6 h-6 rounded-full bg-white shadow-md flex-shrink-0"
-                    />
-                    <span className="text-[13px] font-semibold text-white font-poppins tracking-wide">
-                      {portalMode}
-                    </span>
-                  </div>
-                </button>
               </div>
             </motion.aside>
           </>
@@ -354,19 +345,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <div className="md:pl-64 min-h-screen flex flex-col relative z-10">
-        
-        {/* Mobile Header Top Bar */}
-        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-[#07070f]/90 backdrop-blur-md border-b border-[#151525]/80 sticky top-0 z-30">
-          <div className="font-satoshi text-lg tracking-widest text-[var(--color-accent-orange)] font-bold">MA.</div>
-          <button 
-            onClick={() => setMobileMenuOpen(true)}
-            className="font-satoshi text-xs uppercase tracking-wider font-bold text-[var(--color-text-secondary)] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg cursor-pointer border border-white/10 outline-none"
-          >
-            Menu
-          </button>
-        </div>
-
+      <div className="min-h-screen flex flex-col relative z-10">
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-32 relative z-10 w-full flex-grow">
 
         {/* HERO SECTION with parallax */}
