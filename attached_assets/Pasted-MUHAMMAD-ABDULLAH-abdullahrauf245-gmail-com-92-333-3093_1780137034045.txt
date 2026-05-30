@@ -1,0 +1,51 @@
+MUHAMMAD ABDULLAH
+abdullahrauf245@gmail.com |+92-333-3093310 | Portfolio | GitHub | LinkedIn
+Skills
+C++, Java, Python, SQL, JavaScript, HTML, CSS, React, Next.js, Node.js, Tailwind CSS, MongoDB, Supabase, Git, GitHub, Vercel, MS Office
+Education
+National University of Sciences & Technology (NUST) Islamabad, Pakistan
+Bachelor's Data Science — Full Merit Scholar Sep 2025 – Sep 2029
+Punjab College Chakwal Chakwal, Pakistan
+Intermediate — 1069/1200 2023 – 2025
+District Public School Chakwal Chakwal, Pakistan
+Matriculation — 1059/1100 | District Topper 2023 2011 – 2023
+Technical Skills
+Languages: C++, Java, Python, SQL, JavaScript, HTML, CSS
+Frameworks: React, Next.js, Node.js, Tailwind CSS
+Databases: MongoDB, Supabase
+Tools: Git, GitHub, Vercel
+Concepts: OOP — Polymorphism, Inheritance, Abstraction, Dynamic Dispatch, Constructor Chaining
+AI & Certs: Anthropic — AI Fluency Framework & Foundations, Claude 101
+Projects
+NUST Events & Society Portal
+–
+Full-stack event discovery platform for NUST with role-based access (Guest/Student/Organizer), live filtering, and Supabase backend.
+–
+Live at: nust-pulse.vercel.app
+NUSTCafe
+–
+Centralized search & filter system covering 9 NUST campus cafes — built with BSDS-3A team to address a real daily student problem.
+–
+Live at: nustcafe.vercel.app
+Muslim Traders
+–
+Web platform for a 1988-founded Chakwal distribution network spanning 375+ distributors and 400K+ retail stores across Pakistan.
+–
+Live at: muslim-traders.vercel.app
+Leadership & Experience
+Logistics Executive — HAAMI NUST
+–
+Managed end-to-end logistics for NUST's largest student fundraising initiative.
+Finance Executive — NUST Cultural Fest Feb 2026 – Present
+–
+Handled budgeting, expense tracking, and post-event financial reporting.
+Logistics Executive — NUST Olympiad Dec 2025 – Feb 2026
+–
+Coordinated operations across multiple venues and participant teams.
+Certifications & Honors
+AI Fluency Framework & Foundations — Anthropic Apr 2026
+–
+Official Anthropic certification demonstrating proficiency in AI concepts and applications.
+District Topper — DC Chakwal 2023
+–
+Government recognition for scoring 1059/1100 in Matriculation — highest score in the district.
