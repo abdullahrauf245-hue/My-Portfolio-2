@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Code2, Award } from "lucide-react";
 
 interface Skill {
   name: string;
-  accent: string; // HSL or Hex matching the branding
+  accent: string;
 }
 
 export default function ToolkitOrbital() {
   const [time, setTime] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
   // Orbit Speed definitions (radians per second)
@@ -20,44 +19,40 @@ export default function ToolkitOrbital() {
     ring4: 0.15,
   };
 
-  // Skill mappings matching the exact request
+  // Concentric Orbit Radii (px)
+  const radius1 = 50;
+  const radius2 = 90;
+  const radius3 = 130;
+  const radius4 = 170;
+
+  // Skills mapped exactly to the request
   const ring1Skills: Skill[] = [
-    { name: "Python", accent: "var(--color-accent-orange)" },
-    { name: "Java", accent: "var(--color-accent-orange)" },
+    { name: "Python", accent: "#FF6B35" },
+    { name: "Java", accent: "#FF6B35" },
   ];
 
   const ring2Skills: Skill[] = [
-    { name: "C++", accent: "var(--color-accent-orange)" },
-    { name: "SQL", accent: "var(--color-accent-orange)" },
-    { name: "JavaScript", accent: "var(--color-accent-orange)" },
+    { name: "C++", accent: "#FF6B35" },
+    { name: "SQL", accent: "#FF6B35" },
+    { name: "JavaScript", accent: "#FF6B35" },
   ];
 
   const ring3Skills: Skill[] = [
-    { name: "React", accent: "var(--color-accent-lime)" },
-    { name: "Next.js", accent: "var(--color-accent-lime)" },
-    { name: "Node.js", accent: "var(--color-accent-lime)" },
-    { name: "Tailwind CSS", accent: "var(--color-accent-lime)" },
+    { name: "React", accent: "#FF6B35" },
+    { name: "Next.js", accent: "#FF6B35" },
+    { name: "Node.js", accent: "#FF6B35" },
+    { name: "Tailwind CSS", accent: "#FF6B35" },
   ];
 
   const ring4Skills: Skill[] = [
-    { name: "MongoDB", accent: "var(--color-accent-lime)" },
-    { name: "Supabase", accent: "var(--color-accent-lime)" },
-    { name: "Git", accent: "var(--color-accent-orange)" },
-    { name: "GitHub", accent: "var(--color-accent-orange)" },
-    { name: "Vercel", accent: "var(--color-accent-lime)" },
+    { name: "MongoDB", accent: "#FF6B35" },
+    { name: "Supabase", accent: "#FF6B35" },
+    { name: "Git", accent: "#FF6B35" },
+    { name: "GitHub", accent: "#FF6B35" },
+    { name: "Vercel", accent: "#FF6B35" },
   ];
 
-  // Screen size listener for responsive scaling
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Animation frame loop
+  // requestAnimationFrame Loop for jank-free 60 FPS animation
   useEffect(() => {
     let frameId: number;
     let lastTime = performance.now();
@@ -73,35 +68,31 @@ export default function ToolkitOrbital() {
     return () => cancelAnimationFrame(frameId);
   }, []);
 
-  // Dynamic radius calculations based on viewport scaling
-  const scale = isMobile ? 0.62 : 1.0;
-  const radius1 = 65 * scale;
-  const radius2 = 120 * scale;
-  const radius3 = 175 * scale;
-  const radius4 = 230 * scale;
-
-  // Helper to render pills at computed coordinates
   const renderSkills = (skills: Skill[], radius: number, speed: number) => {
     return skills.map((skill, index) => {
+      // Calculate angular spacing for perfect even distribution
       const baseAngle = (index * 2 * Math.PI) / skills.length;
+      // Formula: x = cos(angle + elapsed * speed) * radius, y = sin(angle + elapsed * speed) * radius
       const currentAngle = baseAngle + time * speed;
-      const x = radius * Math.cos(currentAngle);
-      const y = radius * Math.sin(currentAngle);
+      const x = Math.cos(currentAngle) * radius;
+      const y = Math.sin(currentAngle) * radius;
 
       const isHovered = hoveredSkill === skill.name;
 
       return (
         <button
           key={skill.name}
-          onMouseEnter={() => setCursorHoverState(skill.name, true)}
-          onMouseLeave={() => setCursorHoverState(skill.name, false)}
+          onMouseEnter={() => setHoveredSkill(skill.name)}
+          onMouseLeave={() => setHoveredSkill(null)}
           style={{
-            transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${isHovered ? 1.08 : 1})`,
-            borderColor: isHovered ? skill.accent : "rgba(255, 255, 255, 0.08)",
-            boxShadow: isHovered ? `0 0 14px ${skill.accent}30` : "none",
-            color: isHovered ? skill.accent : "#ffffff",
+            left: "50%",
+            top: "50%",
+            transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${isHovered ? 1.1 : 1})`,
+            borderColor: isHovered ? "#FF6B35" : "#1f1f1f",
+            boxShadow: isHovered ? "0 0 12px rgba(255, 107, 53, 0.35)" : "none",
+            color: isHovered ? "#FF6B35" : "#ffffff",
           }}
-          className="absolute z-20 px-3.5 py-1.5 rounded-full bg-[#0c0c0c] border text-[11px] md:text-xs font-semibold tracking-wide cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none"
+          className="absolute z-20 px-3 py-1.5 rounded-full bg-[#111111] border text-xs font-medium cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none"
         >
           {skill.name}
         </button>
@@ -109,43 +100,23 @@ export default function ToolkitOrbital() {
     });
   };
 
-  const setCursorHoverState = (name: string, active: boolean) => {
-    setHoveredSkill(active ? name : null);
-    // Dispatches a state change event for our custom follow cursor
-    const element = document.body;
-    if (active) {
-      element.classList.add("cursor-hover-element");
-    } else {
-      element.classList.remove("cursor-hover-element");
-    }
-  };
-
   return (
-    <div className="w-full flex flex-col items-center justify-center py-10 relative overflow-hidden select-none">
+    <div className="w-full flex flex-col items-center justify-center py-6 select-none relative z-10">
       
-      {/* Label Title */}
-      <span className="text-[11px] font-poppins font-bold text-stone-500 uppercase tracking-[0.35em] mb-4 block text-center">
-        Technical Arsenal
-      </span>
-
-      {/* Primary Orbital Canvas Wrapper */}
+      {/* Dynamic Scale Wrapper for perfect Mobile viewports scaling */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.82 }}
+        initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-        style={{
-          width: radius4 * 2 + 100,
-          height: radius4 * 2 + 100,
-        }}
-        className="relative flex items-center justify-center flex-shrink-0"
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="w-[380px] h-[380px] md:w-[400px] md:h-[400px] relative flex items-center justify-center scale-75 sm:scale-90 md:scale-100 flex-shrink-0"
       >
-        {/* Core Center Sun Element */}
+        {/* Center core: solid orange circle with Code Lucide Icon */}
         <div 
           style={{
-            boxShadow: "0 0 35px var(--color-accent-orange)40",
+            boxShadow: "0 0 30px rgba(255, 107, 53, 0.45)",
           }}
-          className="w-12 h-12 rounded-full bg-[var(--color-accent-orange)] flex items-center justify-center z-30 transition-transform duration-300 hover:scale-105"
+          className="w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center z-35 transition-transform duration-300 hover:scale-105"
         >
           <Code2 className="w-5 h-5 text-white" />
         </div>
@@ -153,31 +124,53 @@ export default function ToolkitOrbital() {
         {/* Orbit Ring 1 */}
         <div
           style={{ width: radius1 * 2, height: radius1 * 2 }}
-          className="absolute rounded-full border border-white/5 pointer-events-none z-10"
+          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
         />
         {renderSkills(ring1Skills, radius1, speeds.ring1)}
 
         {/* Orbit Ring 2 */}
         <div
           style={{ width: radius2 * 2, height: radius2 * 2 }}
-          className="absolute rounded-full border border-white/5 pointer-events-none z-10"
+          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
         />
         {renderSkills(ring2Skills, radius2, speeds.ring2)}
 
         {/* Orbit Ring 3 */}
         <div
           style={{ width: radius3 * 2, height: radius3 * 2 }}
-          className="absolute rounded-full border border-white/5 pointer-events-none z-10"
+          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
         />
         {renderSkills(ring3Skills, radius3, speeds.ring3)}
 
         {/* Orbit Ring 4 */}
         <div
           style={{ width: radius4 * 2, height: radius4 * 2 }}
-          className="absolute rounded-full border border-white/5 pointer-events-none z-10"
+          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
         />
         {renderSkills(ring4Skills, radius4, speeds.ring4)}
       </motion.div>
+
+      {/* Certification Details Card: slides up on viewport entry */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+        className="mt-6 w-full max-w-md p-5 bg-[#111111] border-l-3 border-[#FF6B35] border-y border-r border-[#1f1f1f] rounded-r-2xl shadow-xl flex items-center gap-4 transition-all duration-300 hover:border-white/5"
+      >
+        <div className="w-12 h-12 rounded-full bg-[#FF6B35]/10 flex items-center justify-center flex-shrink-0">
+          <Award className="w-6 h-6 text-[#FF6B35]" />
+        </div>
+        <div className="min-w-0">
+          <h4 className="font-poppins font-bold text-sm text-white tracking-wide leading-tight">
+            Anthropic Certified
+          </h4>
+          <p className="text-xs text-[#888888] font-poppins font-medium mt-1 leading-normal">
+            AI Fluency Framework & Foundations
+          </p>
+        </div>
+      </motion.div>
+
     </div>
   );
 }

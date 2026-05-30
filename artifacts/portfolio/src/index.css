@@ -42,12 +42,11 @@
   --color-destructive-border: var(--destructive-border);
 
   /* Specific design tokens */
-  --color-background-primary: #000000;
+  --color-background-primary: #0a0a0a;
   --color-text-primary: #ffffff;
-  --color-text-secondary: #998f8f;
-  --color-accent-orange: #f46c38;
-  --color-accent-lime: #c5ff41;
-  --color-border-subtle: #b6b4bd;
+  --color-text-secondary: #888888;
+  --color-accent-orange: #FF6B35;
+  --color-border-subtle: #1f1f1f;
   --color-text-muted: #6a6b6e;
   /* Font mapping */
   --font-sans: var(--app-font-sans);
@@ -74,48 +73,48 @@
   --elevate-2: rgba(0, 0, 0, 0.08);
 
   /* Deep Space Palette */
-  --background: 0 0% 0%; /* Deep Space #000000 */
+  --background: 0 0% 4%; /* Background #0a0a0a */
   --foreground: 0 0% 100%; /* Pure Snow #ffffff */
   
-  --border: 253 6% 72%; /* Border Subtle #b6b4bd */
+  --border: 0 0% 12%; /* Border #1f1f1f */
   
-  --card: 0 0% 100%; /* Profile Card: White rounded card */
-  --card-foreground: 0 0% 0%; /* Black text inside white card */
-  --card-border: 253 6% 72%;
+  --card: 0 0% 4%; /* Background #0a0a0a */
+  --card-foreground: 0 0% 100%;
+  --card-border: 0 0% 12%;
   
-  --sidebar: 0 0% 5%;
+  --sidebar: 0 0% 4%;
   --sidebar-foreground: 0 0% 100%;
-  --sidebar-border: 253 6% 25%;
-  --sidebar-primary: 17 90% 59%;
+  --sidebar-border: 0 0% 12%;
+  --sidebar-primary: 16 100% 60%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 0 0% 10%;
+  --sidebar-accent: 0 0% 6%;
   --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 17 90% 59%;
+  --sidebar-ring: 16 100% 60%;
 
-  --popover: 0 0% 5%;
+  --popover: 0 0% 4%;
   --popover-foreground: 0 0% 100%;
-  --popover-border: 253 6% 20%;
+  --popover-border: 0 0% 12%;
 
-  --primary: 17 90% 59%; /* Sunset Orange #f46c38 */
+  --primary: 16 100% 60%; /* Sunset Orange #FF6B35 */
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 78 100% 63%; /* Electric Lime #c5ff41 */
-  --secondary-foreground: 0 0% 0%;
+  --secondary: 16 100% 60%; /* Sunset Orange #FF6B35 */
+  --secondary-foreground: 0 0% 100%;
 
-  --muted: 225 2% 42%; /* Text Muted #6a6b6e */
-  --muted-foreground: 0 5% 58%; /* Warm Stone #998f8f */
+  --muted: 0 0% 42%;
+  --muted-foreground: 0 0% 53%; /* Text Secondary #888888 */
 
-  --accent: 17 90% 59%;
+  --accent: 16 100% 60%;
   --accent-foreground: 0 0% 100%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 253 6% 30%;
-  --ring: 17 90% 59%;
+  --input: 0 0% 15%;
+  --ring: 16 100% 60%;
   
-  --chart-1: 17 90% 59%;
-  --chart-2: 78 100% 63%;
+  --chart-1: 16 100% 60%;
+  --chart-2: 16 100% 60%;
   --chart-3: 160 20% 45%;
   --chart-4: 46 85% 70%;
   --chart-5: 160 10% 75%;
