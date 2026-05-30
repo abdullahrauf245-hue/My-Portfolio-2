@@ -235,3 +235,11 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* Custom Cursor Hiding for Interactive Elements on Desktop */
+@media (min-width: 768px) {
+  .custom-cursor-active,
+  .custom-cursor-active * {
+    cursor: none !important;
+  }
+}

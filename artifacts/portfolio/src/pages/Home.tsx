@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
 import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode } from "lucide-react";
@@ -37,6 +37,69 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState("overview");
   const [portalMode, setPortalMode] = useState("Guest Mode");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Custom pointer follow cursor setup (spring animated)
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  const springConfig = { damping: 30, stiffness: 280, mass: 0.6 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+
+  const [cursorVisible, setCursorVisible] = useState(false);
+  const [cursorHovered, setCursorHovered] = useState(false);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      if (!cursorVisible) setCursorVisible(true);
+    };
+
+    const handleMouseLeaveWindow = () => setCursorVisible(false);
+    const handleMouseEnterWindow = () => setCursorVisible(true);
+
+    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeaveWindow);
+    document.addEventListener("mouseenter", handleMouseEnterWindow);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeaveWindow);
+      document.removeEventListener("mouseenter", handleMouseEnterWindow);
+    };
+  }, [cursorVisible]);
+
+  useEffect(() => {
+    const handleMouseEnter = () => setCursorHovered(true);
+    const handleMouseLeave = () => setCursorHovered(false);
+
+    const addListeners = () => {
+      const clickables = document.querySelectorAll(
+        "a, button, [role='button'], input, textarea, select, [data-cursor-hover]"
+      );
+      clickables.forEach((el) => {
+        el.addEventListener("mouseenter", handleMouseEnter);
+        el.addEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+
+    addListeners();
+
+    const observer = new MutationObserver(addListeners);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      const clickables = document.querySelectorAll(
+        "a, button, [role='button'], input, textarea, select, [data-cursor-hover]"
+      );
+      clickables.forEach((el) => {
+        el.removeEventListener("mouseenter", handleMouseEnter);
+        el.removeEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+  }, []);
 
   const sections = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -118,7 +181,7 @@ export default function Home() {
   const motionProps = a11y.reducedMotion ? { initial: undefined, animate: undefined, whileInView: undefined, variants: undefined, transition: { duration: 0 } } : {};
 
   return (
-    <div className={`min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)] ${a11y.highContrast ? 'a11y-high-contrast' : ''}`}>
+    <div className={`min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)] ${a11y.highContrast ? 'a11y-high-contrast' : ''} ${!a11y.reducedMotion && cursorVisible ? 'custom-cursor-active' : ''}`}>
       
       {/* Background ambient grid/lights with parallax */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-40" aria-hidden="true">
@@ -128,15 +191,15 @@ export default function Home() {
       </div>
 
       {/* Persistent Desktop Sidebar */}
-      <aside className="hidden md:flex fixed top-0 bottom-0 left-0 w-64 bg-[#070712] border-r border-[#14142c] flex-col justify-between p-6 z-45">
+      <aside className="hidden md:flex fixed top-0 bottom-0 left-0 w-64 bg-[#000000] border-r border-[#14142c] flex-col justify-between p-6 z-45">
         <div>
           {/* Branding Header */}
           <div className="mb-8 select-none">
             <h1 className="text-[25px] font-extrabold tracking-tighter text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
-              NUSTEvents
+              My Portfolio
             </h1>
             <p className="text-[9px] font-poppins font-bold text-[#727293] uppercase tracking-[0.2em] mt-1.5 leading-none">
-              Society Portal
+              Developer Portal
             </p>
           </div>
 
@@ -213,16 +276,16 @@ export default function Home() {
               animate={{ x: 0 }}
               exit={{ x: -260 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 bottom-0 left-0 w-64 bg-[#070712] border-r border-[#14142c] z-50 flex flex-col justify-between p-6 md:hidden"
+              className="fixed top-0 bottom-0 left-0 w-64 bg-[#000000] border-r border-[#14142c] z-50 flex flex-col justify-between p-6 md:hidden"
             >
               <div>
                 <div className="flex items-center justify-between mb-8">
                   <div className="select-none">
                     <h1 className="text-[25px] font-extrabold tracking-tighter text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
-                      NUSTEvents
+                      My Portfolio
                     </h1>
                     <p className="text-[9px] font-poppins font-bold text-[#727293] uppercase tracking-[0.2em] mt-1.5 leading-none">
-                      Society Portal
+                      Developer Portal
                     </p>
                   </div>
                   <button
@@ -855,6 +918,46 @@ export default function Home() {
           <Accessibility className="w-5 h-5" />
         </button>
       </div>
+
+      {/* Custom Mouse Cursor */}
+      {!a11y.reducedMotion && cursorVisible && (
+        <>
+          {/* Outer ring */}
+          <motion.div
+            style={{
+              x: cursorXSpring,
+              y: cursorYSpring,
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
+            animate={{
+              width: cursorHovered ? 48 : 24,
+              height: cursorHovered ? 48 : 24,
+              backgroundColor: cursorHovered ? "rgba(244, 108, 56, 0.08)" : "rgba(244, 108, 56, 0)",
+              borderColor: cursorHovered ? "var(--color-accent-lime)" : "var(--color-accent-orange)",
+              borderWidth: cursorHovered ? 2 : 1,
+            }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
+          />
+
+          {/* Inner dot */}
+          <motion.div
+            style={{
+              x: cursorXSpring,
+              y: cursorYSpring,
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
+            animate={{
+              scale: cursorHovered ? 1.5 : 1,
+              backgroundColor: cursorHovered ? "var(--color-accent-lime)" : "var(--color-accent-orange)",
+            }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] hidden md:block"
+          />
+        </>
+      )}
     </div>
   );
 }
