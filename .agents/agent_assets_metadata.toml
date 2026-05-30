@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "2ZEGFQw5GXC2-LSFCVkm2"
+uri = "file://artifacts/portfolio/src/assets/avatar.png"
+type = "image"
+title = "Pakistani developer artistic avatar"
