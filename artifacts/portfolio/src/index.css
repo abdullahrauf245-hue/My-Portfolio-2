@@ -141,6 +141,7 @@
   --app-font-mono: 'Space Mono', monospace;
   --app-font-satoshi: 'Outfit', 'Poppins', sans-serif;
   --radius: 10px;
+  --spacing: 0.25rem;
   
   --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.03);
   --shadow-xs: 0px 2px 4px 0px rgba(0,0,0,0.04);
