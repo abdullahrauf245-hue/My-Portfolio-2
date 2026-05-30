@@ -178,28 +178,6 @@ export default function ToolkitOrbital() {
         />
         {renderSkills(ring4Skills, radius4, speeds.ring4)}
       </motion.div>
-
-      {/* Certification Details Card */}
-      <motion.div
-        initial={{ y: 24, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 1, 0.5, 1] }}
-        className="mt-16 w-full max-w-md p-5 bg-[#080808] border-l-4 border-[var(--color-accent-orange)] border-y border-r border-white/5 rounded-r-2xl shadow-xl flex items-center gap-4 transition-all duration-300 hover:border-white/10"
-      >
-        <div className="w-12 h-12 rounded-full bg-[var(--color-accent-orange)]/10 flex items-center justify-center flex-shrink-0">
-          <Award className="w-6 h-6 text-[var(--color-accent-orange)]" />
-        </div>
-        <div className="min-w-0">
-          <h4 className="font-poppins font-bold text-sm text-white tracking-wide leading-tight">
-            Anthropic Certified
-          </h4>
-          <p className="text-xs text-stone-500 font-poppins font-medium mt-1 leading-normal">
-            AI Fluency Framework & Foundations
-          </p>
-        </div>
-      </motion.div>
-
     </div>
   );
 }
