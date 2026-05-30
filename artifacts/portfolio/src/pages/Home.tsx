@@ -2,8 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp } from "lucide-react";
+import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode } from "lucide-react";
 import avatarImg from "@assets/image_1780161923266.png";
+import muslimTraders1 from "@assets/muslim_traders_1.png";
+import muslimTraders2 from "@assets/muslim_traders_2.png";
+import nustEvents1 from "@assets/nust_events_1.png";
+import nustEvents2 from "@assets/nust_events_2.png";
+import nustCafe1 from "@assets/nust_cafe_1.png";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -29,6 +34,46 @@ function useParallax(offset: number = 50) {
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
+  const [activeSection, setActiveSection] = useState("overview");
+  const [portalMode, setPortalMode] = useState("Guest Mode");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const sections = [
+    { id: "overview", label: "Overview", icon: LayoutDashboard },
+    { id: "about", label: "About", icon: User2 },
+    { id: "projects", label: "Projects", icon: FolderCode },
+    { id: "skills", label: "Skills", icon: Code2 },
+    { id: "experience", label: "Experience", icon: Briefcase },
+    { id: "education", label: "Education", icon: GraduationCap },
+  ];
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setActiveSection(id);
+      setMobileMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200;
+      for (const section of sections) {
+        const el = document.getElementById(section.id);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section.id);
+          }
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
@@ -82,28 +127,187 @@ export default function Home() {
         <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-32 relative z-10">
-        
-        {/* Navigation / Header */}
-        <motion.nav 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex justify-between items-center mb-12 md:mb-16"
-        >
-          <div className="font-satoshi text-xl tracking-widest text-[var(--color-accent-orange)] font-bold">MA.</div>
-          <div className="flex gap-6 items-center text-sm">
-            <button 
-              onClick={() => setIsContactOpen(true)}
-              className="font-satoshi text-xs uppercase tracking-wider font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors flex items-center gap-2 cursor-pointer bg-transparent border-none outline-none"
-            >
-              <Mail className="w-4 h-4" /> <span>Get In Touch</span>
-            </button>
+      {/* Persistent Desktop Sidebar */}
+      <aside className="hidden md:flex fixed top-0 bottom-0 left-0 w-64 bg-[#070712] border-r border-[#14142c] flex-col justify-between p-6 z-45">
+        <div>
+          {/* Branding Header */}
+          <div className="mb-8 select-none">
+            <h1 className="text-[25px] font-extrabold tracking-tighter text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+              NUSTEvents
+            </h1>
+            <p className="text-[9px] font-poppins font-bold text-[#727293] uppercase tracking-[0.2em] mt-1.5 leading-none">
+              Society Portal
+            </p>
           </div>
-        </motion.nav>
+
+          {/* User Profile Card */}
+          <div className="flex items-center gap-3.5 p-3.5 bg-[#0b0b18] border border-[#171732] rounded-2xl mb-8">
+            <div className="w-11 h-11 rounded-full bg-[#b4b4f5] text-[#0a0a1a] font-poppins font-bold flex items-center justify-center text-sm shadow-md flex-shrink-0">
+              MA
+            </div>
+            <div className="min-w-0">
+              <div className="text-[14px] font-semibold text-white font-poppins truncate leading-tight">Muhammad Abdullah</div>
+              <div className="text-[10px] text-[#8282a5] font-mono mt-0.5 tracking-wider">BSDS-3A</div>
+            </div>
+          </div>
+
+          {/* Navigation Menu */}
+          <nav className="flex flex-col gap-1.5">
+            {sections.map((sec) => {
+              const Icon = sec.icon;
+              const isActive = activeSection === sec.id;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => scrollToSection(sec.id)}
+                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-[14px] font-poppins font-medium tracking-wide transition-all cursor-pointer border-none outline-none ${
+                    isActive
+                      ? "bg-[#1c1c3c] text-white shadow-lg shadow-[#1c1c3c]/10 border border-[#2b2b58]/30"
+                      : "bg-transparent text-[#8282a5] hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-[#727293]"}`} />
+                  <span>{sec.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Portal Mode Switcher */}
+        <div className="border border-[#171732] bg-[#0c0c1b]/60 rounded-2xl p-4 flex flex-col gap-2.5">
+          <div className="text-[10px] font-poppins font-bold uppercase tracking-widest text-[#727293]">Portal Mode</div>
+          <button
+            onClick={() => setPortalMode(prev => prev === "Guest Mode" ? "Dev Mode" : "Guest Mode")}
+            className="relative flex items-center w-full h-[40px] rounded-full bg-[#1c1c3c] border border-[#2b2b58]/40 p-1 cursor-pointer overflow-hidden"
+          >
+            <div className={`flex items-center gap-2.5 w-full h-full px-2 transition-all duration-300 ${
+              portalMode === "Dev Mode" ? "flex-row-reverse" : "flex-row"
+            }`}>
+              <motion.div
+                layout
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="w-6 h-6 rounded-full bg-white shadow-md flex-shrink-0"
+              />
+              <span className="text-[13px] font-semibold text-white font-poppins tracking-wide">
+                {portalMode}
+              </span>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      {/* Mobile Sidebar Slide-out Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 md:hidden"
+            />
+            <motion.aside
+              initial={{ x: -260 }}
+              animate={{ x: 0 }}
+              exit={{ x: -260 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 bottom-0 left-0 w-64 bg-[#070712] border-r border-[#14142c] z-50 flex flex-col justify-between p-6 md:hidden"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-8">
+                  <div className="select-none">
+                    <h1 className="text-[25px] font-extrabold tracking-tighter text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+                      NUSTEvents
+                    </h1>
+                    <p className="text-[9px] font-poppins font-bold text-[#727293] uppercase tracking-[0.2em] mt-1.5 leading-none">
+                      Society Portal
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-stone-400 hover:text-white p-1 hover:bg-white/5 rounded-lg md:hidden cursor-pointer border-none bg-transparent"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-3.5 p-3.5 bg-[#0b0b18] border border-[#171732] rounded-2xl mb-8">
+                  <div className="w-11 h-11 rounded-full bg-[#b4b4f5] text-[#0a0a1a] font-poppins font-bold flex items-center justify-center text-sm shadow-md flex-shrink-0">
+                    MA
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-semibold text-white font-poppins truncate leading-tight">Muhammad Abdullah</div>
+                    <div className="text-[10px] text-[#8282a5] font-mono mt-0.5 tracking-wider">BSDS-3A</div>
+                  </div>
+                </div>
+
+                <nav className="flex flex-col gap-1.5">
+                  {sections.map((sec) => {
+                    const Icon = sec.icon;
+                    const isActive = activeSection === sec.id;
+                    return (
+                      <button
+                        key={sec.id}
+                        onClick={() => scrollToSection(sec.id)}
+                        className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-[14px] font-poppins font-medium tracking-wide transition-all cursor-pointer border-none outline-none ${
+                          isActive
+                            ? "bg-[#1c1c3c] text-white shadow-lg shadow-[#1c1c3c]/10 border border-[#2b2b58]/30"
+                            : "bg-transparent text-[#8282a5] hover:text-white hover:bg-white/5"
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-[#727293]"}`} />
+                        <span>{sec.label}</span>
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              <div className="border border-[#171732] bg-[#0c0c1b]/60 rounded-2xl p-4 flex flex-col gap-2.5">
+                <div className="text-[10px] font-poppins font-bold uppercase tracking-widest text-[#727293]">Portal Mode</div>
+                <button
+                  onClick={() => setPortalMode(prev => prev === "Guest Mode" ? "Dev Mode" : "Guest Mode")}
+                  className="relative flex items-center w-full h-[40px] rounded-full bg-[#1c1c3c] border border-[#2b2b58]/40 p-1 cursor-pointer overflow-hidden"
+                >
+                  <div className={`flex items-center gap-2.5 w-full h-full px-2 transition-all duration-300 ${
+                    portalMode === "Dev Mode" ? "flex-row-reverse" : "flex-row"
+                  }`}>
+                    <motion.div
+                      layout
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      className="w-6 h-6 rounded-full bg-white shadow-md flex-shrink-0"
+                    />
+                    <span className="text-[13px] font-semibold text-white font-poppins tracking-wide">
+                      {portalMode}
+                    </span>
+                  </div>
+                </button>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content Area */}
+      <div className="md:pl-64 min-h-screen flex flex-col relative z-10">
+        
+        {/* Mobile Header Top Bar */}
+        <div className="md:hidden flex items-center justify-between px-6 py-4 bg-[#07070f]/90 backdrop-blur-md border-b border-[#151525]/80 sticky top-0 z-30">
+          <div className="font-satoshi text-lg tracking-widest text-[var(--color-accent-orange)] font-bold">MA.</div>
+          <button 
+            onClick={() => setMobileMenuOpen(true)}
+            className="font-satoshi text-xs uppercase tracking-wider font-bold text-[var(--color-text-secondary)] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg cursor-pointer border border-white/10 outline-none"
+          >
+            Menu
+          </button>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-32 relative z-10 w-full flex-grow">
 
         {/* HERO SECTION with parallax */}
-        <motion.div ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
+        <motion.div id="overview" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
         <section className="mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
           <motion.div 
             className="flex-1"
@@ -186,7 +390,7 @@ export default function Home() {
         </motion.div>
 
         {/* ABOUT SECTION with parallax */}
-        <motion.div ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
+        <motion.div id="about" ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
@@ -223,76 +427,152 @@ export default function Home() {
         </motion.div>
 
         {/* PROJECTS SECTION with parallax */}
-        <motion.div ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
+        <motion.div id="projects" ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
           className="mb-32 md:mb-40"
         >
-          <div className="flex items-center gap-4 mb-12">
+          <div className="flex items-center gap-4 mb-16">
             <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-lime)] tracking-widest uppercase">Selected Work</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
-          <div className="grid gap-8">
+          <div className="flex flex-col gap-24">
             {[
               {
                 title: "Muslim Traders",
-                desc: "Web platform for a 1988-founded Chakwal distribution network spanning 375+ distributors and 400K+ retail stores across Pakistan.",
-                tags: ["Next.js", "Full Stack", "Enterprise"],
+                classification: "ENTERPRISE LOGISTICS - FEATURED",
+                desc: "Enterprise logistics and distribution platform for a 1988-founded network covering 375+ exclusive sub-distributors and 400,000+ retail stores across Pakistan.",
+                bullets: [
+                  "375+ exclusive distribution hubs mapped throughout regional networks.",
+                  "400,000+ retail storefronts supported with path-optimized delivery systems.",
+                  "3+ Decades of secure enterprise logistics management and supply chain rigor."
+                ],
+                tags: ["Next.js", "Full Stack", "Enterprise", "Tailwind CSS"],
                 link: "https://muslim-traders.vercel.app",
-                github: "https://github.com/abdullahrauf245-hue/muslim-traders-2"
+                github: "https://github.com/abdullahrauf245-hue/muslim-traders-2",
+                img1: muslimTraders1,
+                img2: muslimTraders2
               },
               {
                 title: "NUST Events & Society Portal",
-                desc: "Full-stack event discovery platform for NUST with role-based access (Guest/Student/Organizer), live filtering, and Supabase backend.",
-                tags: ["React", "Supabase", "Role-based Auth"],
+                classification: "FULL STACK PORTAL - FEATURED",
+                desc: "An all-in-one campus discovery platform providing structured event search, student registrations, and role-based workflows for organizers and guests.",
+                bullets: [
+                  "Role-based workflows with robust permission gates for Students, Guests, and Admins.",
+                  "Supabase integration driving live participant dashboards and data logging.",
+                  "Clean glassmorphism dashboard UI with instantaneous status updates."
+                ],
+                tags: ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
                 link: "https://nust-pulse.vercel.app",
-                github: "https://github.com/abdullahrauf245-hue/Nust-society-and-portal-system"
+                github: "https://github.com/abdullahrauf245-hue/Nust-society-and-portal-system",
+                img1: nustEvents1,
+                img2: nustEvents2
               },
               {
                 title: "NUSTCafe",
-                desc: "Centralized search & filter system covering 9 NUST campus cafes, built collaboratively with the BSDS-3A team.",
-                tags: ["Frontend", "Search", "Team Collab"],
+                classification: "CAMPUS WEB APP - COLLABORATIVE",
+                desc: "Centralized search, menu, and filter system consolidation covering 9 NUST campus cafes, built collaboratively with the BSDS-3A development team.",
+                bullets: [
+                  "9 Campus cafes indexed under a single high-speed menu finder.",
+                  "Dynamic filtering by location, meal categorization, and price limits.",
+                  "Collaborative sprint designed and launched with the BSDS-3A developer group."
+                ],
+                tags: ["Frontend", "Tailwind CSS", "Vite", "React"],
                 link: "https://nustcafe.vercel.app",
-                github: "https://github.com/abdullahrauf245-hue/nustcafe"
+                github: "https://github.com/abdullahrauf245-hue/nustcafe",
+                img1: nustCafe1,
+                img2: nustCafe1
               }
             ].map((project, idx) => (
               <motion.div 
                 key={idx}
                 variants={fadeInUp}
-                className="group block p-8 rounded-2xl bg-[#080808] border border-[var(--color-border-subtle)]/15 hover:border-[var(--color-accent-orange)] transition-all duration-300 relative overflow-hidden"
+                className="flex flex-col lg:flex-row gap-12 items-center justify-between group"
               >
-                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                  <ArrowUpRight className="w-6 h-6 text-[var(--color-accent-orange)]" />
-                </div>
-                
-                <h3 className="text-2xl font-poppins font-bold mb-3 text-white group-hover:text-[var(--color-accent-orange)] transition-colors">{project.title}</h3>
-                <p className="text-[var(--color-text-secondary)] max-w-2xl mb-6 font-poppins font-normal text-sm">{project.desc}</p>
-                
-                <div className="flex flex-wrap items-center gap-2.5 mb-6 text-[10px] font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 bg-white/5 rounded-full text-white">{tag}</span>
-                  ))}
+                {/* Project Details (Left) */}
+                <div className="flex-1 space-y-6">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)]" />
+                      <span className="text-[10px] font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">{project.classification}</span>
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-poppins font-bold text-white tracking-tight leading-none group-hover:text-[var(--color-accent-orange)] transition-colors duration-300">
+                      {project.title}
+                    </h3>
+                  </div>
+
+                  <p className="text-[var(--color-text-secondary)] font-poppins font-normal text-[15px] leading-relaxed">
+                    {project.desc}
+                  </p>
+
+                  <ul className="space-y-3">
+                    {project.bullets.map((bullet, bIdx) => (
+                      <li key={bIdx} className="flex gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <span className="text-[var(--color-accent-orange)] font-poppins font-bold flex-shrink-0 mt-0.5">+</span>
+                        <span className="font-poppins">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {project.tags.map(tag => (
+                      <span key={tag} className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">{tag}</span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-6 pt-4 text-xs font-satoshi font-bold uppercase tracking-wider">
+                    <a 
+                      href={project.github} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="flex items-center gap-2 text-stone-400 hover:text-white transition-colors animate-pulse"
+                    >
+                      <SiGithub className="w-4 h-4" /> GitHub
+                    </a>
+                    <a 
+                      href={project.link} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="flex items-center gap-2 text-[var(--color-accent-orange)] hover:text-[var(--color-accent-orange)]/80 transition-colors font-bold"
+                    >
+                      <ArrowUpRight className="w-4 h-4" /> Live Demo
+                    </a>
+                  </div>
                 </div>
 
-                <div className="flex gap-3">
-                  <a 
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-accent-orange)] text-white font-satoshi font-bold text-[10px] tracking-wider uppercase hover:bg-[var(--color-accent-orange)]/90 transition-all hover:scale-105 duration-200"
-                  >
-                    <ArrowUpRight className="w-3.5 h-3.5" /> Live Demo
-                  </a>
-                  <a 
-                    href={project.github}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-transparent border border-[var(--color-border-subtle)]/30 text-white font-satoshi font-bold text-[10px] tracking-wider uppercase hover:bg-white/5 hover:border-white transition-all hover:scale-105 duration-200"
-                  >
-                    <SiGithub className="w-3.5 h-3.5" /> GitHub
-                  </a>
+                {/* Device Mockups (Right) */}
+                <div className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
+                  {/* Laptop Mockup */}
+                  <div className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col group-hover:scale-[1.02] transition-transform duration-300">
+                    <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#0b0b1a] border-b border-[#1b1b36]">
+                      <div className="w-2 h-2 rounded-full bg-red-500/60" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+                      <div className="w-2 h-2 rounded-full bg-green-500/60" />
+                    </div>
+                    <div className="w-full h-full bg-[#05050d] overflow-hidden relative">
+                      <img 
+                        src={project.img1} 
+                        alt={`${project.title} Desktop`} 
+                        className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Overlapping Mobile Phone Mockup */}
+                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 group-hover:translate-x-2 transition-transform duration-300">
+                    <div className="w-full h-full rounded-xl overflow-hidden bg-black relative border border-white/5">
+                      <img 
+                        src={project.img2} 
+                        alt={`${project.title} Mobile`} 
+                        className="w-full h-full object-cover object-top opacity-95"
+                      />
+                      <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-black rounded-full flex items-center justify-center">
+                        <div className="w-6 h-1 bg-stone-800 rounded-full" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -301,7 +581,7 @@ export default function Home() {
         </motion.div>
 
         {/* SKILLS SECTION with parallax */}
-        <motion.div ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
+        <motion.div id="skills" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
@@ -346,7 +626,7 @@ export default function Home() {
         </motion.div>
 
         {/* EXPERIENCE & LEADERSHIP with parallax */}
-        <motion.div ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
+        <motion.div id="experience" ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
@@ -411,7 +691,7 @@ export default function Home() {
         </motion.div>
 
         {/* EDUCATION with parallax */}
-        <motion.div ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
+        <motion.div id="education" ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
@@ -472,6 +752,7 @@ export default function Home() {
           </div>
         </motion.footer>
 
+      </div>
       </div>
 
       {/* Contact Modal overlay */}
