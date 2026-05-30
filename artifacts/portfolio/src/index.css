@@ -49,29 +49,12 @@
   --color-accent-lime: #c5ff41;
   --color-border-subtle: #b6b4bd;
   --color-text-muted: #6a6b6e;
-
   /* Font mapping */
   --font-sans: var(--app-font-sans);
   --font-serif: var(--app-font-serif);
   --font-mono: var(--app-font-mono);
   --font-poppins: "Poppins", sans-serif;
   --font-satoshi: var(--app-font-satoshi);
-
-  /* Spacing Scale (4px base) */
-  --spacing-xs: 4px;
-  --spacing-sm: 6px;
-  --spacing-md: 10px;
-  --spacing-lg: 12px;
-  --spacing-xl: 16px;
-  --spacing-2xl: 20px;
-  --spacing-3xl: 24px;
-  --spacing-4xl: 30px;
-  --spacing-5xl: 40px;
-  --spacing-6xl: 50px;
-  --spacing-7xl: 60px;
-  --spacing-8xl: 80px;
-  --spacing-9xl: 120px;
-  --spacing-10xl: 160px;
 
   /* Radii */
   --radius-sm: 6px;
