@@ -20,12 +20,13 @@ export default function Home() {
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+    <div className="min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)]">
       
-      {/* Background ambient elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center" aria-hidden="true">
-        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-primary/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] rounded-full bg-secondary/5 blur-[100px]" />
+      {/* Background ambient grid/lights */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-40" aria-hidden="true">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[var(--color-accent-orange)]/5 blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-12 md:py-24 relative z-10">
@@ -35,97 +36,147 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex justify-between items-center mb-32"
+          className="flex justify-between items-center mb-24 md:mb-32"
         >
-          <div className="font-mono text-sm tracking-widest text-primary font-bold">MA.</div>
-          <div className="flex gap-6 items-center text-sm font-medium">
-            <a href="mailto:abdullahrauf245@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
-              <Mail className="w-4 h-4" /> <span className="hidden sm:inline">Contact</span>
+          <div className="font-satoshi text-xl tracking-widest text-[var(--color-accent-orange)] font-bold">MA.</div>
+          <div className="flex gap-6 items-center text-sm">
+            <a href="mailto:abdullahrauf245@gmail.com" className="font-satoshi text-xs uppercase tracking-wider font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors flex items-center gap-2">
+              <Mail className="w-4 h-4" /> <span>Get In Touch</span>
             </a>
           </div>
         </motion.nav>
 
         {/* HERO SECTION */}
-        <section className="mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
+        <section className="mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
           <motion.div 
             className="flex-1"
             initial="hidden"
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-mono mb-6 border border-secondary/20">
-              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-accent-lime)]/10 text-[var(--color-accent-lime)] text-xs font-satoshi font-bold uppercase tracking-wider mb-6 border border-[var(--color-accent-lime)]/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)] animate-pulse" />
               Available for impact
             </motion.div>
             
-            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight">
+            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-white">
               Muhammad <br />
-              <span className="text-muted-foreground">Abdullah.</span>
+              <span className="text-[var(--color-accent-orange)]">Abdullah.</span>
             </motion.h1>
             
-            <motion.p variants={fadeInUp} className="text-xl md:text-2xl text-muted-foreground font-light mb-8 max-w-xl">
-              <strong className="text-foreground font-semibold">Curious. Resourceful. Driven.</strong> <br/>
+            <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[var(--color-text-secondary)] font-poppins font-normal mb-8 max-w-xl leading-relaxed">
+              <strong className="text-white font-semibold">Curious. Resourceful. Driven.</strong> <br/>
               A Data Science builder thinking from first principles.
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-              <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-md bg-card hover:bg-card/80 border border-border hover:border-primary/50 transition-all font-medium text-sm group">
-                <SiGithub className="w-4 h-4 group-hover:text-primary transition-colors" /> GitHub
-              </a>
-              <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-5 py-3 rounded-md bg-card hover:bg-card/80 border border-border hover:border-secondary/50 transition-all font-medium text-sm group">
-                <FaLinkedin className="w-4 h-4 group-hover:text-secondary transition-colors" /> LinkedIn
-              </a>
-              <a href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-5 py-3 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-all font-medium text-sm group">
+              <a href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
                 <Download className="w-4 h-4" /> Download CV
+              </a>
+              <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+                <SiGithub className="w-4 h-4" /> GitHub
+              </a>
+              <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+                <FaLinkedin className="w-4 h-4" /> LinkedIn
               </a>
             </motion.div>
           </motion.div>
 
+          {/* Profile Card component */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-64 h-64 md:w-80 md:h-80 flex-shrink-0"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full md:w-[350px] bg-white text-black rounded-2xl p-6 shadow-2xl border border-[var(--color-border-subtle)] flex-shrink-0 flex flex-col gap-4 hover:scale-[1.01] transition-transform duration-300"
           >
-            <div className="absolute inset-0 bg-primary/20 rounded-2xl rotate-6 blur-lg" />
-            <div className="absolute inset-0 border border-primary/30 rounded-2xl -rotate-3" />
-            <img 
-              src={avatarImg} 
-              alt="Muhammad Abdullah" 
-              className="w-full h-full object-cover rounded-2xl relative z-10 border border-border shadow-2xl grayscale-[20%] contrast-125"
-            />
+            <div className="relative w-full h-64 overflow-hidden rounded-xl bg-stone-100">
+              <img 
+                src={avatarImg} 
+                alt="Muhammad Abdullah" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--color-accent-orange)] text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">
+                BS Data Science
+              </div>
+            </div>
+            <div>
+              <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
+              <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
+            </div>
+            <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
+              Full Merit Scholar & Data Science builder thinking from first principles. Chakwal District Topper.
+            </p>
+            <div className="h-px bg-stone-200 my-1" />
+            <div className="flex justify-between items-center">
+              <span className="font-satoshi text-xs font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Let's Connect</span>
+              <div className="flex gap-2.5">
+                <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                  <SiGithub className="w-4 h-4" />
+                </a>
+                <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                  <FaLinkedin className="w-4 h-4" />
+                </a>
+                <a href="mailto:abdullahrauf245@gmail.com" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                  <Mail className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
           </motion.div>
         </section>
+
+        {/* STAT COUNTERS SECTION */}
+        <motion.section 
+          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="mb-32 md:mb-40 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+        >
+          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-orange)]/50 transition-colors group">
+            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-orange)] mb-2 group-hover:scale-105 transition-transform duration-300">1059</div>
+            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Matric / 1100 (Topper)</div>
+          </motion.div>
+          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-lime)]/50 transition-colors group">
+            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-lime)] mb-2 group-hover:scale-105 transition-transform duration-300">1069</div>
+            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Intermediate / 1200</div>
+          </motion.div>
+          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-orange)]/50 transition-colors group">
+            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-orange)] mb-2 group-hover:scale-105 transition-transform duration-300">4.0</div>
+            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Merit Scholar GPA</div>
+          </motion.div>
+          <motion.div variants={fadeInUp} className="p-6 rounded-xl border border-[var(--color-border-subtle)]/20 bg-[#080808] hover:border-[var(--color-accent-lime)]/50 transition-colors group">
+            <div className="font-poppins font-bold text-4xl md:text-5xl text-[var(--color-accent-lime)] mb-2 group-hover:scale-105 transition-transform duration-300">6+</div>
+            <div className="font-satoshi text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Leadership Roles</div>
+          </motion.div>
+        </motion.section>
 
         {/* ABOUT SECTION */}
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
-          className="mb-40"
+          className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <div className="h-px bg-border flex-1" />
-            <h2 className="text-sm font-mono text-muted-foreground tracking-widest uppercase">About</h2>
-            <div className="h-px bg-border flex-1" />
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+            <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">About</h2>
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-start">
-            <h3 className="text-3xl font-semibold leading-snug">
+            <h3 className="text-3xl font-poppins font-bold leading-tight tracking-tight text-white">
               I study Data Science at NUST Islamabad. But my real education happens when I build.
             </h3>
-            <div className="space-y-6 text-muted-foreground leading-relaxed">
+            <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed font-poppins font-normal text-[15px]">
               <p>
                 As a Full Merit Scholar (2025-2029), I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events.
               </p>
               <p>
                 I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems.
               </p>
-              <div className="flex gap-4 pt-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <MapPin className="w-4 h-4 text-primary" /> Islamabad & Chakwal, PK
+              <div className="flex gap-6 pt-4 text-white">
+                <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
+                  <MapPin className="w-4 h-4 text-[var(--color-accent-orange)]" /> Islamabad, PK
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Building className="w-4 h-4 text-primary" /> NUST
+                <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
+                  <Building className="w-4 h-4 text-[var(--color-accent-orange)]" /> NUST SEECS
                 </div>
               </div>
             </div>
@@ -136,11 +187,11 @@ export default function Home() {
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="mb-40"
+          className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm font-mono text-muted-foreground tracking-widest uppercase">Selected Work</h2>
-            <div className="h-px bg-border flex-1" />
+            <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-lime)] tracking-widest uppercase">Selected Work</h2>
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
           <div className="grid gap-8">
@@ -170,18 +221,18 @@ export default function Home() {
                 href={project.link}
                 target="_blank"
                 rel="noreferrer"
-                className="group block p-8 rounded-xl bg-card border border-border hover:border-primary/50 transition-all duration-300 relative overflow-hidden"
+                className="group block p-8 rounded-2xl bg-[#080808] border border-[var(--color-border-subtle)]/15 hover:border-[var(--color-accent-orange)] transition-all duration-300 relative overflow-hidden"
               >
-                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0">
-                  <ArrowUpRight className="w-6 h-6 text-primary" />
+                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                  <ArrowUpRight className="w-6 h-6 text-[var(--color-accent-orange)]" />
                 </div>
                 
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{project.title}</h3>
-                <p className="text-muted-foreground max-w-2xl mb-6">{project.desc}</p>
+                <h3 className="text-2xl font-poppins font-bold mb-3 text-white group-hover:text-[var(--color-accent-orange)] transition-colors">{project.title}</h3>
+                <p className="text-[var(--color-text-secondary)] max-w-2xl mb-6 font-poppins font-normal text-sm">{project.desc}</p>
                 
-                <div className="flex gap-3 text-xs font-mono text-muted-foreground">
+                <div className="flex gap-2.5 text-[10px] font-satoshi font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
                   {project.tags.map(tag => (
-                    <span key={tag} className="px-2 py-1 bg-muted rounded">{tag}</span>
+                    <span key={tag} className="px-3 py-1 bg-white/5 rounded-full text-white">{tag}</span>
                   ))}
                 </div>
               </motion.a>
@@ -189,37 +240,45 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* SKILLS SECTION */}
+        {/* SKILLS SECTION (Vibrant Service Cards) */}
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
-          className="mb-40"
+          className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm font-mono text-muted-foreground tracking-widest uppercase">Technical Arsenal</h2>
-            <div className="h-px bg-border flex-1" />
+            <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Technical Arsenal</h2>
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
-            <div className="p-6 rounded-xl border border-border bg-card/50">
-              <Code2 className="w-6 h-6 text-primary mb-4" />
-              <h4 className="font-semibold mb-4">Languages</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">C++, Java, Python, SQL, JavaScript, HTML, CSS</p>
+            <div className="p-6 rounded-2xl bg-[var(--color-accent-orange)] text-white shadow-xl border border-[var(--color-accent-orange)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
+              <div>
+                <Code2 className="w-8 h-8 text-white mb-4" />
+                <h4 className="font-poppins font-bold text-lg mb-2 text-white">Languages</h4>
+              </div>
+              <p className="text-sm text-white/95 leading-relaxed font-poppins font-medium">{`C++, Java, Python, SQL, JavaScript, HTML, CSS`}</p>
             </div>
-            <div className="p-6 rounded-xl border border-border bg-card/50">
-              <Terminal className="w-6 h-6 text-secondary mb-4" />
-              <h4 className="font-semibold mb-4">Frameworks</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">React, Next.js, Node.js, Tailwind CSS</p>
+            <div className="p-6 rounded-2xl bg-[var(--color-accent-lime)] text-black shadow-xl border border-[var(--color-accent-lime)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
+              <div>
+                <Terminal className="w-8 h-8 text-black mb-4" />
+                <h4 className="font-poppins font-bold text-lg mb-2 text-black">Frameworks</h4>
+              </div>
+              <p className="text-sm text-black/95 leading-relaxed font-poppins font-semibold">React, Next.js, Node.js, Tailwind CSS</p>
             </div>
-            <div className="p-6 rounded-xl border border-border bg-card/50">
-              <Database className="w-6 h-6 text-primary mb-4" />
-              <h4 className="font-semibold mb-4">Data & Tools</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">MongoDB, Supabase, Git, GitHub, Vercel</p>
+            <div className="p-6 rounded-2xl bg-[var(--color-accent-orange)] text-white shadow-xl border border-[var(--color-accent-orange)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
+              <div>
+                <Database className="w-8 h-8 text-white mb-4" />
+                <h4 className="font-poppins font-bold text-lg mb-2 text-white">Data & Tools</h4>
+              </div>
+              <p className="text-sm text-white/95 leading-relaxed font-poppins font-medium">MongoDB, Supabase, Git, GitHub, Vercel</p>
             </div>
-            <div className="p-6 rounded-xl border border-border bg-card/50">
-              <Award className="w-6 h-6 text-secondary mb-4" />
-              <h4 className="font-semibold mb-4">Certifications</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">AI Fluency Framework & Foundations (Anthropic Certified)</p>
+            <div className="p-6 rounded-2xl bg-[var(--color-accent-lime)] text-black shadow-xl border border-[var(--color-accent-lime)] hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-between min-h-[220px]">
+              <div>
+                <Award className="w-8 h-8 text-black mb-4" />
+                <h4 className="font-poppins font-bold text-lg mb-2 text-black">Certifications</h4>
+              </div>
+              <p className="text-sm text-black/95 leading-relaxed font-poppins font-semibold">AI Fluency Framework & Foundations (Anthropic Certified)</p>
             </div>
           </div>
         </motion.section>
@@ -228,14 +287,14 @@ export default function Home() {
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="mb-40"
+          className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm font-mono text-muted-foreground tracking-widest uppercase">Experience & Leadership</h2>
-            <div className="h-px bg-border flex-1" />
+            <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-lime)] tracking-widest uppercase">Experience & Leadership</h2>
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
-          <div className="relative border-l border-border ml-3 md:ml-0 md:pl-6 space-y-12">
+          <div className="relative border-l border-[var(--color-border-subtle)]/20 ml-3 md:ml-0 md:pl-6 space-y-12">
             {[
               {
                 role: "Forward Program Learner",
@@ -275,13 +334,13 @@ export default function Home() {
               }
             ].map((exp, idx) => (
               <motion.div key={idx} variants={fadeInUp} className="relative pl-6 md:pl-0">
-                <div className="absolute -left-[33px] md:-left-[31px] top-1.5 w-3 h-3 rounded-full bg-primary/20 border border-primary ring-4 ring-background" />
+                <div className="absolute -left-[33px] md:-left-[31px] top-1.5 w-3 h-3 rounded-full bg-[var(--color-accent-orange)]/20 border border-[var(--color-accent-orange)] ring-4 ring-[var(--color-background-primary)]" />
                 <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-2">
-                  <h3 className="text-lg font-semibold">{exp.role}</h3>
-                  <span className="text-primary font-medium text-sm">@ {exp.org}</span>
-                  <span className="text-xs font-mono text-muted-foreground md:ml-auto">{exp.date}</span>
+                  <h3 className="text-lg font-poppins font-bold text-white">{exp.role}</h3>
+                  <span className="text-[var(--color-accent-orange)] font-satoshi font-bold text-xs uppercase tracking-wider">@ {exp.org}</span>
+                  <span className="text-xs font-mono text-[var(--color-text-muted)] md:ml-auto">{exp.date}</span>
                 </div>
-                <p className="text-muted-foreground text-sm">{exp.desc}</p>
+                <p className="text-[var(--color-text-secondary)] text-sm font-poppins font-normal leading-relaxed">{exp.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -291,32 +350,32 @@ export default function Home() {
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
-          className="mb-40"
+          className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm font-mono text-muted-foreground tracking-widest uppercase">Education</h2>
-            <div className="h-px bg-border flex-1" />
+            <h2 className="text-sm font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Education</h2>
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <motion.div variants={fadeInUp} className="p-6 border border-border rounded-xl bg-card hover:border-primary/30 transition-colors">
-              <GraduationCap className="w-6 h-6 text-primary mb-4" />
-              <h4 className="font-bold mb-1">NUST Islamabad</h4>
-              <p className="text-sm text-secondary font-medium mb-3">Bachelor's Data Science</p>
-              <p className="text-sm text-muted-foreground">Full Merit Scholar<br/>Sep 2025 – Sep 2029</p>
+            <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-orange)] transition-colors duration-300">
+              <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
+              <h4 className="font-poppins font-bold text-lg mb-1 text-white">NUST Islamabad</h4>
+              <p className="text-sm text-[var(--color-accent-lime)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">Full Merit Scholar<br/>Sep 2025 – Sep 2029</p>
             </motion.div>
-            <motion.div variants={fadeInUp} className="p-6 border border-border rounded-xl bg-card hover:border-primary/30 transition-colors">
-              <Building className="w-6 h-6 text-muted-foreground mb-4" />
-              <h4 className="font-bold mb-1">Punjab College Chakwal</h4>
-              <p className="text-sm text-muted-foreground mb-3">Intermediate</p>
-              <p className="text-sm text-muted-foreground">1069/1200<br/>2023-2025</p>
+            <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-lime)] transition-colors duration-300">
+              <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
+              <h4 className="font-poppins font-bold text-lg mb-1 text-white">Punjab College Chakwal</h4>
+              <p className="text-sm text-[var(--color-text-secondary)] font-satoshi font-bold uppercase tracking-wider mb-3">Intermediate</p>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">1069/1200<br/>2023-2025</p>
             </motion.div>
-            <motion.div variants={fadeInUp} className="p-6 border border-border rounded-xl bg-card hover:border-secondary/30 transition-colors relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-secondary/5 rounded-bl-full" />
-              <Trophy className="w-6 h-6 text-secondary mb-4 relative z-10" />
-              <h4 className="font-bold mb-1 relative z-10">DPS Chakwal</h4>
-              <p className="text-sm text-muted-foreground mb-3 relative z-10">Matriculation</p>
-              <p className="text-sm text-muted-foreground relative z-10">1059/1100<br/><span className="text-secondary">District Topper 2023</span></p>
+            <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-orange)] transition-colors duration-300 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-accent-orange)]/5 rounded-bl-full" />
+              <Trophy className="w-6 h-6 text-[var(--color-accent-orange)] mb-4 relative z-10" />
+              <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-white">DPS Chakwal</h4>
+              <p className="text-sm text-[var(--color-accent-lime)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
+              <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
             </motion.div>
           </div>
         </motion.section>
@@ -325,20 +384,20 @@ export default function Home() {
         <motion.footer 
           initial="hidden" whileInView="visible" viewport={{ once: true }}
           variants={fadeInUp}
-          className="border-t border-border pt-12 pb-24 flex flex-col md:flex-row items-center justify-between gap-6"
+          className="border-t border-[var(--color-border-subtle)]/15 pt-12 pb-24 flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div>
-            <h2 className="text-2xl font-bold mb-2">Let's build something.</h2>
-            <a href="mailto:abdullahrauf245@gmail.com" className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2">
+            <h2 className="text-2xl font-poppins font-bold mb-2 text-white">Let's build something.</h2>
+            <a href="mailto:abdullahrauf245@gmail.com" className="text-[var(--color-text-secondary)] hover:text-[var(--color-accent-orange)] transition-colors text-sm font-poppins font-medium flex items-center gap-2">
               abdullahrauf245@gmail.com
             </a>
           </div>
           
-          <div className="flex gap-6">
-            <a href="https://github.com/abdullahrauf245-hue/" className="text-muted-foreground hover:text-foreground transition-colors p-2 bg-card rounded-full border border-border hover:border-primary/50">
+          <div className="flex gap-4">
+            <a href="https://github.com/abdullahrauf245-hue/" className="text-[var(--color-text-secondary)] hover:text-white transition-colors p-3 bg-[#080808] rounded-full border border-[var(--color-border-subtle)]/15 hover:border-[var(--color-accent-orange)]">
               <SiGithub className="w-5 h-5" />
             </a>
-            <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" className="text-muted-foreground hover:text-foreground transition-colors p-2 bg-card rounded-full border border-border hover:border-secondary/50">
+            <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" className="text-[var(--color-text-secondary)] hover:text-white transition-colors p-3 bg-[#080808] rounded-full border border-[var(--color-border-subtle)]/15 hover:border-[var(--color-accent-orange)]">
               <FaLinkedin className="w-5 h-5" />
             </a>
           </div>
