@@ -82,14 +82,14 @@ export default function Home() {
         <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-12 md:py-24 relative z-10">
+      <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-32 relative z-10">
         
         {/* Navigation / Header */}
         <motion.nav 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex justify-between items-center mb-24 md:mb-32"
+          className="flex justify-between items-center mb-12 md:mb-16"
         >
           <div className="font-satoshi text-xl tracking-widest text-[var(--color-accent-orange)] font-bold">MA.</div>
           <div className="flex gap-6 items-center text-sm">
