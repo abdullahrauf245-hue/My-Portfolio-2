@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp } from "lucide-react";
 import avatarImg from "@assets/image_1780140069977.png";
 
 const fadeInUp = {
@@ -15,10 +15,34 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
+// Parallax hook for individual sections
+function useParallax(offset: number = 50) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [offset, -offset]);
+  return { ref, y };
+}
+
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+
+  // Per-section parallax refs
+  const heroParallax = useParallax(40);
+  const aboutParallax = useParallax(30);
+  const projectsParallax = useParallax(35);
+  const skillsParallax = useParallax(25);
+  const experienceParallax = useParallax(30);
+  const educationParallax = useParallax(25);
+
+  // Background ambient blobs parallax
+  const bgBlobY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const bgBlobY2 = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   useEffect(() => {
     if (isContactOpen) {
@@ -31,14 +55,31 @@ export default function Home() {
     };
   }, [isContactOpen]);
 
+  // Apply accessibility font size class to root
+  useEffect(() => {
+    const html = document.documentElement;
+    html.style.fontSize = `${100 + a11y.fontSize * 12.5}%`;
+    if (a11y.highContrast) {
+      html.classList.add('a11y-high-contrast');
+    } else {
+      html.classList.remove('a11y-high-contrast');
+    }
+    return () => {
+      html.style.fontSize = '';
+      html.classList.remove('a11y-high-contrast');
+    };
+  }, [a11y.fontSize, a11y.highContrast]);
+
+  const motionProps = a11y.reducedMotion ? { initial: undefined, animate: undefined, whileInView: undefined, variants: undefined, transition: { duration: 0 } } : {};
+
   return (
-    <div className="min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)]">
+    <div className={`min-h-screen bg-[var(--color-background-primary)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent-orange)]/20 selection:text-[var(--color-accent-orange)] ${a11y.highContrast ? 'a11y-high-contrast' : ''}`}>
       
-      {/* Background ambient grid/lights */}
+      {/* Background ambient grid/lights with parallax */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-40" aria-hidden="true">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[var(--color-accent-orange)]/5 blur-[140px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
+        <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY }} className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[var(--color-accent-orange)]/5 blur-[140px]" />
+        <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-12 md:py-24 relative z-10">
@@ -61,7 +102,8 @@ export default function Home() {
           </div>
         </motion.nav>
 
-        {/* HERO SECTION */}
+        {/* HERO SECTION with parallax */}
+        <motion.div ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
         <section className="mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
           <motion.div 
             className="flex-1"
@@ -141,8 +183,10 @@ export default function Home() {
             </div>
           </motion.div>
         </section>
+        </motion.div>
 
-        {/* ABOUT SECTION */}
+        {/* ABOUT SECTION with parallax */}
+        <motion.div ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
@@ -176,8 +220,10 @@ export default function Home() {
             </div>
           </div>
         </motion.section>
+        </motion.div>
 
-        {/* PROJECTS SECTION */}
+        {/* PROJECTS SECTION with parallax */}
+        <motion.div ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
@@ -233,8 +279,10 @@ export default function Home() {
             ))}
           </div>
         </motion.section>
+        </motion.div>
 
-        {/* SKILLS SECTION (Vibrant Service Cards) */}
+        {/* SKILLS SECTION with parallax */}
+        <motion.div ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={fadeInUp}
@@ -276,8 +324,10 @@ export default function Home() {
             </div>
           </div>
         </motion.section>
+        </motion.div>
 
-        {/* EXPERIENCE & LEADERSHIP */}
+        {/* EXPERIENCE & LEADERSHIP with parallax */}
+        <motion.div ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
@@ -339,8 +389,10 @@ export default function Home() {
             ))}
           </div>
         </motion.section>
+        </motion.div>
 
-        {/* EDUCATION */}
+        {/* EDUCATION with parallax */}
+        <motion.div ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
@@ -373,6 +425,7 @@ export default function Home() {
             </motion.div>
           </div>
         </motion.section>
+        </motion.div>
 
         {/* FOOTER / CONTACT */}
         <motion.footer 
@@ -408,6 +461,100 @@ export default function Home() {
           <ContactModal onClose={() => setIsContactOpen(false)} />
         )}
       </AnimatePresence>
+
+      {/* Accessibility Widget */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <AnimatePresence>
+          {a11y.menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ type: "spring", duration: 0.35, bounce: 0.15 }}
+              className="mb-3 w-[260px] bg-[#0a0a0a] border border-[var(--color-border-subtle)]/30 rounded-2xl p-5 shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="text-sm font-satoshi font-bold text-white uppercase tracking-wider">Accessibility</h3>
+                <button
+                  onClick={() => setA11y(prev => ({ ...prev, menuOpen: false }))}
+                  className="text-stone-500 hover:text-white transition-colors cursor-pointer bg-transparent border-none outline-none p-1"
+                  aria-label="Close accessibility menu"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Font Size */}
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Type className="w-4 h-4 text-[var(--color-accent-orange)]" />
+                  <span className="text-xs font-satoshi font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Font Size</span>
+                </div>
+                <div className="flex gap-2">
+                  {[-1, 0, 1, 2].map(level => (
+                    <button
+                      key={level}
+                      onClick={() => setA11y(prev => ({ ...prev, fontSize: level }))}
+                      className={`flex-1 py-2 rounded-lg text-xs font-satoshi font-bold transition-all cursor-pointer border-none outline-none ${
+                        a11y.fontSize === level
+                          ? 'bg-[var(--color-accent-orange)] text-white'
+                          : 'bg-white/5 text-stone-400 hover:bg-white/10'
+                      }`}
+                    >
+                      {level === -1 ? 'S' : level === 0 ? 'M' : level === 1 ? 'L' : 'XL'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* High Contrast */}
+              <div className="mb-4">
+                <button
+                  onClick={() => setA11y(prev => ({ ...prev, highContrast: !prev.highContrast }))}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-satoshi font-bold uppercase tracking-wider transition-all cursor-pointer border-none outline-none ${
+                    a11y.highContrast
+                      ? 'bg-[var(--color-accent-lime)]/15 text-[var(--color-accent-lime)] border border-[var(--color-accent-lime)]/30'
+                      : 'bg-white/5 text-stone-400 hover:bg-white/10'
+                  }`}
+                >
+                  <Eye className="w-4 h-4" />
+                  High Contrast
+                  <span className="ml-auto text-[10px]">{a11y.highContrast ? 'ON' : 'OFF'}</span>
+                </button>
+              </div>
+
+              {/* Reduced Motion */}
+              <div>
+                <button
+                  onClick={() => setA11y(prev => ({ ...prev, reducedMotion: !prev.reducedMotion }))}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-satoshi font-bold uppercase tracking-wider transition-all cursor-pointer border-none outline-none ${
+                    a11y.reducedMotion
+                      ? 'bg-[var(--color-accent-lime)]/15 text-[var(--color-accent-lime)] border border-[var(--color-accent-lime)]/30'
+                      : 'bg-white/5 text-stone-400 hover:bg-white/10'
+                  }`}
+                >
+                  <Zap className="w-4 h-4" />
+                  Reduce Motion
+                  <span className="ml-auto text-[10px]">{a11y.reducedMotion ? 'ON' : 'OFF'}</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Floating trigger button */}
+        <button
+          onClick={() => setA11y(prev => ({ ...prev, menuOpen: !prev.menuOpen }))}
+          className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer border-none outline-none hover:scale-110 ${
+            a11y.menuOpen
+              ? 'bg-[var(--color-accent-orange)] text-white rotate-0'
+              : 'bg-[#111] border border-[var(--color-border-subtle)]/30 text-stone-400 hover:text-white hover:border-[var(--color-accent-orange)]'
+          }`}
+          aria-label="Toggle accessibility menu"
+        >
+          <Accessibility className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 }
