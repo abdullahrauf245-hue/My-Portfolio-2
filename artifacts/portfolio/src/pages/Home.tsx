@@ -191,12 +191,8 @@ export default function Home() {
 
       {/* Sticky Top Header Navigation */}
       <header className="sticky top-0 z-40 w-full bg-black/60 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between transition-all duration-300 select-none">
-        {/* Left Side: Logo */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollToSection("overview")}>
-          <div className="font-poppins text-lg tracking-wider text-white font-extrabold drop-shadow-[0_2px_8px_rgba(255,255,255,0.1)]">
-            MA<span className="text-[var(--color-accent-orange)]">.</span>
-          </div>
-        </div>
+        {/* Left Side Spacer to maintain center nav alignments */}
+        <div className="w-12 h-6 md:block hidden" />
 
         {/* Center: Desktop Navigation Items */}
         <nav className="hidden md:flex items-center gap-1">
