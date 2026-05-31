@@ -22,7 +22,7 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
-const beadVariants = {
+const beadVariants: any = {
   hidden: { 
     scale: 0, 
     x: 30, 
@@ -34,14 +34,14 @@ const beadVariants = {
     opacity: 1,
     transition: {
       delay: 0.15 + idx * 0.2,
-      type: "spring",
+      type: "spring" as any,
       stiffness: 160,
       damping: 15
     }
   })
 };
 
-const contentVariants = {
+const contentVariants: any = {
   hidden: { 
     opacity: 0, 
     x: 25 
@@ -52,7 +52,7 @@ const contentVariants = {
     transition: {
       delay: 0.3 + idx * 0.2,
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1]
+      ease: [0.22, 1, 0.36, 1] as any
     }
   })
 };
