@@ -796,7 +796,7 @@ export default function Home() {
                 </div>
 
                 {/* Device Mockups (Right) */}
-                <Interactive3DTilt className="flex-grow w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
+                <Interactive3DTilt className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
                   {/* Laptop Mockup */}
                   <div 
                     style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" as any }}
@@ -1315,7 +1315,6 @@ function ContactModal({ onClose }: { onClose: () => void }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
@@ -1345,12 +1344,30 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         throw new Error(result.message || "Failed to send message.");
       }
     } catch (err: any) {
-      console.error(err);
-      setStatus("error");
-      setErrorMessage(err.message || "Something went wrong. Please try again.");
+      console.error("Form submission error:", err);
+      
+      const isFetchError = err.message === "Failed to fetch" || err.message?.includes("fetch");
+      
+      if (isFetchError) {
+        setStatus("error");
+        setErrorMessage("Network request blocked (likely by an AdBlocker or Privacy Shield). Redirecting you to your mail client to send directly...");
+        
+        setTimeout(() => {
+          const subject = encodeURIComponent(`Inquiry from ${formData.name}`);
+          const body = encodeURIComponent(
+            `Hi Abdullah,\n\n${formData.message}\n\n---\nSender Name: ${formData.name}\nSender Email: ${formData.email}`
+          );
+          window.location.href = `mailto:abdullahrauf245@gmail.com?subject=${subject}&body=${body}`;
+          
+          setStatus("success");
+          setFormData({ name: "", email: "", message: "" });
+        }, 3000);
+      } else {
+        setStatus("error");
+        setErrorMessage(err.message || "Something went wrong. Please try again.");
+      }
     }
   };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop with fade-in animation */}
