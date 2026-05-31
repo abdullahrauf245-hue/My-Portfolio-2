@@ -509,7 +509,7 @@ export default function Home() {
               <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
             </div>
             <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
-              Full Merit Scholar & Data Science builder thinking from first principles. Chakwal District Topper.
+              Data Science builder thinking from first principles. Chakwal District Topper.
             </p>
             <div className="h-px bg-stone-200 my-1" />
             <div className="flex justify-between items-center">
@@ -552,7 +552,7 @@ export default function Home() {
             </h3>
             <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed font-poppins font-normal text-[15px]">
               <p>
-                As a Full Merit Scholar (2025-2029), I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events.
+                I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events.
               </p>
               <p>
                 I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems.
@@ -887,7 +887,7 @@ export default function Home() {
               <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
               <h4 className="font-poppins font-bold text-lg mb-1 text-white">NUST Islamabad</h4>
               <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
-              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">Full Merit Scholar<br/>Sep 2025 – Sep 2029</p>
+              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">Sep 2025 – Sep 2029</p>
             </motion.div>
             <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-orange)] transition-colors duration-300">
               <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
