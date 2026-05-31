@@ -69,6 +69,87 @@ function useParallax(offset: number = 50) {
   return { ref, y };
 }
 
+function Interactive3DTilt({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness: 120, damping: 20 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness: 120, damping: 20 });
+
+  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left - width / 2;
+    const mouseY = event.clientY - rect.top - height / 2;
+    
+    x.set(mouseX / width);
+    y.set(mouseY / height);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <div style={{ perspective: 1200 }} className="flex-grow w-full flex items-center justify-center">
+      <motion.div
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        className={`relative ${className}`}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+
+const MagneticButton = ({ children, className = "", href, download, target, rel }: { children: React.ReactNode, className?: string, href?: string, download?: string, target?: string, rel?: string }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const springX = useSpring(x, { stiffness: 150, damping: 15 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15 });
+
+  function handleMouseMove(event: React.MouseEvent<HTMLAnchorElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left - width / 2;
+    const mouseY = event.clientY - rect.top - height / 2;
+    
+    x.set(mouseX * 0.25);
+    y.set(mouseY * 0.25);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.a
+      href={href}
+      download={download}
+      target={target}
+      rel={rel}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: springX, y: springY }}
+      className={className}
+    >
+      {children}
+    </motion.a>
+  );
+};
+
+
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
@@ -459,11 +540,42 @@ export default function Home() {
             animate="visible"
             variants={staggerContainer}
           >
-
-            
             <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-white">
-              Muhammad <br />
-              <span className="text-[var(--color-accent-orange)]">Abdullah.</span>
+              <span className="inline-block">
+                {"Muhammad".split("").map((letter, idx) => (
+                  <motion.span
+                    key={idx}
+                    className="inline-block hover:text-[var(--color-accent-orange)] cursor-default select-none transition-colors duration-200"
+                    whileHover={{ 
+                      scale: 1.2, 
+                      y: -8,
+                      rotate: idx % 2 === 0 ? -5 : 5,
+                      filter: "drop-shadow(0 0 10px rgba(255, 107, 53, 0.6))"
+                    }}
+                    transition={{ type: "spring", stiffness: 350, damping: 12 }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </span>{" "}
+              <br />
+              <span className="text-[var(--color-accent-orange)] inline-block mt-2">
+                {"Abdullah.".split("").map((letter, idx) => (
+                  <motion.span
+                    key={idx}
+                    className="inline-block hover:text-[var(--color-accent-lime)] cursor-default select-none transition-colors duration-200"
+                    whileHover={{ 
+                      scale: 1.2, 
+                      y: -8,
+                      rotate: idx % 2 === 0 ? 5 : -5,
+                      filter: "drop-shadow(0 0 10px rgba(163, 230, 53, 0.6))"
+                    }}
+                    transition={{ type: "spring", stiffness: 350, damping: 12 }}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </span>
             </motion.h1>
             
             <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[var(--color-text-secondary)] font-poppins font-normal mb-8 max-w-xl leading-relaxed">
@@ -472,15 +584,15 @@ export default function Home() {
             </motion.p>
             
             <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-              <a href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
+              <MagneticButton href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
                 <Download className="w-4 h-4" /> Download CV
-              </a>
-              <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+              </MagneticButton>
+              <MagneticButton href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
                 <SiGithub className="w-4 h-4" /> GitHub
-              </a>
-              <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+              </MagneticButton>
+              <MagneticButton href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
                 <FaLinkedin className="w-4 h-4" /> LinkedIn
-              </a>
+              </MagneticButton>
             </motion.div>
           </motion.div>
 
@@ -684,9 +796,12 @@ export default function Home() {
                 </div>
 
                 {/* Device Mockups (Right) */}
-                <div className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
+                <Interactive3DTilt className="flex-grow w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
                   {/* Laptop Mockup */}
-                  <div className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col group-hover:scale-[1.02] transition-transform duration-300">
+                  <div 
+                    style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" as any }}
+                    className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col group-hover:scale-[1.01] transition-transform duration-300"
+                  >
                     <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#0b0b1a] border-b border-[#1b1b36]">
                       <div className="w-2 h-2 rounded-full bg-red-500/60" />
                       <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
@@ -702,7 +817,10 @@ export default function Home() {
                   </div>
 
                   {/* Overlapping Mobile Phone Mockup */}
-                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 group-hover:translate-x-2 transition-transform duration-300">
+                  <div 
+                    style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" as any }}
+                    className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 group-hover:translate-x-3 transition-transform duration-300"
+                  >
                     <div className="w-full h-full rounded-xl overflow-hidden bg-black relative border border-white/5">
                       <img 
                         src={project.img2} 
@@ -714,7 +832,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Interactive3DTilt>
               </motion.div>
             ))}
           </div>
