@@ -877,6 +877,17 @@ export default function Home() {
 
             {[
               {
+                role: "Dev-Weekend Fellow",
+                org: "Dev-Weekend Fellowship",
+                date: "May 2026 – Present",
+                desc: "Accepted into the highly selective Dev-Weekend Fellowship program, designed to cultivate advanced software engineering and rapid product development capabilities.",
+                details: [
+                  "Collaborating with cross-functional development teams in intensive weekend hackathons and engineering sprints to ship production-ready applications.",
+                  "Designing and building high-performance systems under rapid timelines, focusing on robust APIs and responsive glassmorphism UI design.",
+                  "Engaging in expert mentorship sessions covering advanced database architectures, cloud deployments, and scalable engineering practices."
+                ]
+              },
+              {
                 role: "Forward Program Learner",
                 org: "McKinsey.org",
                 date: "May 2026 – Present",
