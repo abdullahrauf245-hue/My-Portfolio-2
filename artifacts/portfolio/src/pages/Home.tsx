@@ -459,10 +459,7 @@ export default function Home() {
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--color-accent-lime)]/10 text-[var(--color-accent-lime)] text-xs font-satoshi font-bold uppercase tracking-wider mb-6 border border-[var(--color-accent-lime)]/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)] animate-pulse" />
-              Available for impact
-            </motion.div>
+
             
             <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-white">
               Muhammad <br />
