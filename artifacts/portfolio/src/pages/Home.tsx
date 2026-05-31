@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode } from "lucide-react";
+import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode, GitGraph } from "lucide-react";
+import { GitHubCalendar } from "react-github-calendar";
 import avatarImg from "@assets/image_1780161923266.png";
 import muslimTraders1 from "@assets/muslim_traders_1.png";
 import muslimTraders2 from "@assets/muslim_traders_2.png";
@@ -128,6 +129,7 @@ export default function Home() {
     { id: "skills", label: "Skills", icon: Code2 },
     { id: "experience", label: "Experience", icon: Briefcase },
     { id: "education", label: "Education", icon: GraduationCap },
+    { id: "activity", label: "Activity", icon: GitGraph },
   ];
 
   const scrollToSection = (id: string) => {
@@ -167,6 +169,7 @@ export default function Home() {
   const skillsParallax = useParallax(25);
   const experienceParallax = useParallax(30);
   const educationParallax = useParallax(25);
+  const activityParallax = useParallax(25);
 
   // Background ambient blobs parallax
   const bgBlobY = useTransform(scrollYProgress, [0, 1], [0, -120]);
@@ -793,6 +796,66 @@ export default function Home() {
               <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
               <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
             </motion.div>
+          </div>
+        </motion.section>
+        </motion.div>
+
+        {/* GITHUB ACTIVITY SECTION with parallax */}
+        <motion.div id="activity" ref={activityParallax.ref} style={{ y: a11y.reducedMotion ? 0 : activityParallax.y }}>
+        <motion.section 
+          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="mb-32 md:mb-40"
+        >
+          <div className="flex items-center gap-4 mb-12">
+            <h2 className="text-[11px] tracking-[4px] text-[var(--color-accent-lime)] font-medium uppercase">Activity</h2>
+            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+          </div>
+
+          <div className="space-y-8">
+            {/* Header Row */}
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <div>
+                <h3 className="text-3xl font-poppins font-bold tracking-tight text-white mb-2">
+                  Contributions
+                </h3>
+                <p className="text-[var(--color-text-secondary)] font-poppins text-sm font-normal">
+                  My GitHub contribution graph — consistency is the compound interest of growth.
+                </p>
+              </div>
+              <a 
+                href="https://github.com/abdullahrauf245-hue" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[var(--color-accent-orange)] text-white text-xs font-satoshi font-bold uppercase tracking-wider transition-all hover:scale-105 duration-200 w-fit"
+              >
+                <SiGithub className="w-4 h-4" /> View Profile
+              </a>
+            </div>
+
+            {/* Calendar Container */}
+            <div className="relative p-6 md:p-8 rounded-2xl bg-[#080808] border border-[var(--color-border-subtle)]/15 overflow-hidden group hover:border-[var(--color-accent-orange)]/30 transition-colors duration-300">
+              {/* Subtle gradient glow behind */}
+              <div className="absolute -top-20 -right-20 w-60 h-60 bg-[var(--color-accent-orange)]/5 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[var(--color-accent-lime)]/5 rounded-full blur-[60px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="relative z-10 github-calendar-wrapper overflow-x-auto">
+                <GitHubCalendar 
+                  username="abdullahrauf245-hue" 
+                  colorScheme="dark"
+                  blockSize={14}
+                  blockMargin={4}
+                  fontSize={13}
+                  style={{ width: '100%' }}
+                  theme={{
+                    dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353']
+                  }}
+                  labels={{
+                    totalCount: '{{count}} contributions in the last year'
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </motion.section>
         </motion.div>

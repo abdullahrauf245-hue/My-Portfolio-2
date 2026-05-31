@@ -243,3 +243,42 @@ html {
     cursor: none !important;
   }
 }
+
+/* GitHub Calendar Styling */
+.github-calendar-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.github-calendar-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.github-calendar-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.github-calendar-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.github-calendar-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Override calendar text colors for dark theme */
+.github-calendar-wrapper text {
+  fill: #888888 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.github-calendar-wrapper .react-activity-calendar__count {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.github-calendar-wrapper .react-activity-calendar__legend-month,
+.github-calendar-wrapper .react-activity-calendar__legend-weekday {
+  font-size: 11px !important;
+}
