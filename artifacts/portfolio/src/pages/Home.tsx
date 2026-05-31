@@ -69,46 +69,7 @@ function useParallax(offset: number = 50) {
   return { ref, y };
 }
 
-function Interactive3DTilt({ children, className = "" }: { children: React.ReactNode, className?: string }) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness: 120, damping: 20 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness: 120, damping: 20 });
-
-  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = event.clientX - rect.left - width / 2;
-    const mouseY = event.clientY - rect.top - height / 2;
-    
-    x.set(mouseX / width);
-    y.set(mouseY / height);
-  }
-
-  function handleMouseLeave() {
-    x.set(0);
-    y.set(0);
-  }
-
-  return (
-    <div style={{ perspective: 1200 }} className="flex-grow w-full flex items-center justify-center">
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        className={`relative ${className}`}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-}
 
 const MagneticButton = ({ children, className = "", href, download, target, rel }: { children: React.ReactNode, className?: string, href?: string, download?: string, target?: string, rel?: string }) => {
   const x = useMotionValue(0);
@@ -796,12 +757,9 @@ export default function Home() {
                 </div>
 
                 {/* Device Mockups (Right) */}
-                <Interactive3DTilt className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
+                <div className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
                   {/* Laptop Mockup */}
-                  <div 
-                    style={{ transform: "translateZ(20px)", transformStyle: "preserve-3d" as any }}
-                    className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col group-hover:scale-[1.01] transition-transform duration-300"
-                  >
+                  <div className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col group-hover:scale-[1.02] transition-transform duration-300">
                     <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#0b0b1a] border-b border-[#1b1b36]">
                       <div className="w-2 h-2 rounded-full bg-red-500/60" />
                       <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
@@ -817,10 +775,7 @@ export default function Home() {
                   </div>
 
                   {/* Overlapping Mobile Phone Mockup */}
-                  <div 
-                    style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" as any }}
-                    className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 group-hover:translate-x-3 transition-transform duration-300"
-                  >
+                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 group-hover:translate-x-2 transition-transform duration-300">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-black relative border border-white/5">
                       <img 
                         src={project.img2} 
@@ -832,7 +787,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </Interactive3DTilt>
+                </div>
               </motion.div>
             ))}
           </div>
