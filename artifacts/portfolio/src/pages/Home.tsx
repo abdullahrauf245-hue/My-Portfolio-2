@@ -1310,24 +1310,45 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         throw new Error(result.message || "Failed to send message.");
       }
     } catch (err: any) {
-      console.error("Form submission error:", err);
+      console.error("Form submission AJAX error:", err);
       
       const isFetchError = err.message === "Failed to fetch" || err.message?.includes("fetch");
       
       if (isFetchError) {
-        setStatus("error");
-        setErrorMessage("Network request blocked (likely by an AdBlocker or Privacy Shield). Redirecting you to your mail client to send directly...");
-        
-        setTimeout(() => {
-          const subject = encodeURIComponent(`Inquiry from ${formData.name}`);
-          const body = encodeURIComponent(
-            `Hi Abdullah,\n\n${formData.message}\n\n---\nSender Name: ${formData.name}\nSender Email: ${formData.email}`
-          );
-          window.location.href = `mailto:abdullahrauf245@gmail.com?subject=${subject}&body=${body}`;
+        try {
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "https://formsubmit.co/abdullahrauf245@gmail.com";
+          form.style.display = "none";
+
+          const fields = {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            _subject: `New Portfolio Message from ${formData.name}`,
+          };
+
+          for (const [key, value] of Object.entries(fields)) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = value;
+            form.appendChild(input);
+          }
+
+          document.body.appendChild(form);
+          form.submit();
           
-          setStatus("success");
-          setFormData({ name: "", email: "", message: "" });
-        }, 3000);
+          setTimeout(() => {
+            document.body.removeChild(form);
+            setStatus("success");
+            setFormData({ name: "", email: "", message: "" });
+          }, 1000);
+        } catch (fallbackErr) {
+          console.error("Form submission fallback error:", fallbackErr);
+          setStatus("error");
+          setErrorMessage("Failed to submit form. Please email directly to abdullahrauf245@gmail.com.");
+        }
       } else {
         setStatus("error");
         setErrorMessage(err.message || "Something went wrong. Please try again.");
