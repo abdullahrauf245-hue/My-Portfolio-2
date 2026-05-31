@@ -150,26 +150,7 @@ export default function ToolkitOrbital() {
         {renderSkills(ring4Skills, radius4, speeds.ring4)}
       </motion.div>
 
-      {/* Certification Details Card: slides up on viewport entry */}
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-        className="mt-6 w-full max-w-md p-5 bg-[#111111] border-l-3 border-[#FF6B35] border-y border-r border-[#1f1f1f] rounded-r-2xl shadow-xl flex items-center gap-4 transition-all duration-300 hover:border-white/5"
-      >
-        <div className="w-12 h-12 rounded-full bg-[#FF6B35]/10 flex items-center justify-center flex-shrink-0">
-          <Award className="w-6 h-6 text-[#FF6B35]" />
-        </div>
-        <div className="min-w-0">
-          <h4 className="font-poppins font-bold text-sm text-white tracking-wide leading-tight">
-            Anthropic Certified
-          </h4>
-          <p className="text-xs text-[#888888] font-poppins font-medium mt-1 leading-normal">
-            AI Fluency Framework & Foundations
-          </p>
-        </div>
-      </motion.div>
+
 
     </div>
   );

@@ -22,6 +22,42 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
+const beadVariants = {
+  hidden: { 
+    scale: 0, 
+    x: 30, 
+    opacity: 0 
+  },
+  visible: (idx: number) => ({
+    scale: 1,
+    x: 0,
+    opacity: 1,
+    transition: {
+      delay: 0.15 + idx * 0.2,
+      type: "spring",
+      stiffness: 160,
+      damping: 15
+    }
+  })
+};
+
+const contentVariants = {
+  hidden: { 
+    opacity: 0, 
+    x: 25 
+  },
+  visible: (idx: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: 0.3 + idx * 0.2,
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  })
+};
+
+
 // Parallax hook for individual sections
 function useParallax(offset: number = 50) {
   const ref = useRef<HTMLDivElement>(null);
@@ -711,53 +747,123 @@ export default function Home() {
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
-          <div className="relative border-l border-[var(--color-border-subtle)]/20 ml-3 md:ml-0 md:pl-6 space-y-12">
+          <div className="relative ml-4 md:ml-6 space-y-12">
+            {/* The background track line */}
+            <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[var(--color-border-subtle)]/15 pointer-events-none rounded-full" />
+            
+            {/* The animated drawing line */}
+            <motion.div 
+              className="absolute left-0 top-2 w-[2px] bg-gradient-to-b from-[var(--color-accent-lime)] via-[var(--color-accent-orange)] to-[var(--color-accent-orange)] origin-top pointer-events-none rounded-full"
+              initial={{ height: 0 }}
+              whileInView={{ height: "calc(100% - 16px)" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
+            />
+
             {[
               {
                 role: "Forward Program Learner",
                 org: "McKinsey.org",
                 date: "May 2026 – Present",
-                desc: "Selected into the Forward Program; building foundations in business and analytical thinking."
+                desc: "Selected into McKinsey's prestigious flagship Forward Program to build foundational business leadership and analytical capabilities.",
+                details: [
+                  "Engaging in intensive training on systematic problem-solving, structured communication, and data-driven business analytics.",
+                  "Collaborating with global peers on real-world business case simulations, developing robust strategic thinking methodologies.",
+                  "Mastering modern work adaptability skills including agile collaboration, emotional intelligence, and digital fluency."
+                ]
               },
               {
                 role: "Communications Executive",
                 org: "NUST Entrepreneurs Club",
                 date: "Oct 2025 – Present",
-                desc: "Handled internal/external communications, managed outreach, drafted announcements."
+                desc: "Leading the design and execution of high-impact communication strategies to amplify entrepreneurial activities across NUST.",
+                details: [
+                  "Drafting high-profile official announcements, newsletters, and promotional copies for events reaching a student body of 10,000+.",
+                  "Managing end-to-end outreach initiatives, fostering strategic collaborations with external startups, media partners, and keynote speakers.",
+                  "Spearheading internal team alignment across marketing, design, and public relations teams to ensure brand consistency."
+                ]
               },
               {
                 role: "Logistics Executive",
                 org: "HAAMI NUST",
                 date: "Feb 2026 – Present",
-                desc: "Managed end-to-end logistics for NUST's largest student fundraising initiative."
+                desc: "Executing complex operations and logistics management for HAAMI, NUST's premier student-led fundraising and social welfare initiative.",
+                details: [
+                  "Coordinating end-to-end supply chain and resource allocation for large-scale charity drives and fundraising galas.",
+                  "Managing vendor relations, negotiating contracts, and optimizing procurement budgets to maximize proceeds directed to beneficiary causes.",
+                  "Collaborating with public relations and finance departments to streamline volunteer deployment of 100+ members."
+                ]
               },
               {
                 role: "Finance Executive",
                 org: "NUST Cultural Fest",
                 date: "Dec 2025 – Feb 2026",
-                desc: "Budgeting, expense tracking, post-event financial reporting."
+                desc: "Supervised the complete financial lifecycle, budgeting, and audits for NUST's flagship annual cultural celebration.",
+                details: [
+                  "Formulated a detailed operational budget, allocating resources across multiple festival departments to maximize financial efficiency.",
+                  "Tracked real-time expenses, managed digital and physical cash flows, and executed swift ticket-sales reconciliation.",
+                  "Compiled and presented comprehensive post-event financial reports to university administration, detailing cost-saving outcomes."
+                ]
               },
               {
                 role: "Logistics Executive",
                 org: "NUST Olympiad",
                 date: "Nov 2025 – Feb 2026",
-                desc: "Coordinated operations across multiple venues and participant teams."
+                desc: "Managed venue operations, volunteer scheduling, and event coordination for NUST's largest national-level sports and academic Olympiad.",
+                details: [
+                  "Orchestrated complex multi-venue scheduling and participant logistics for 20+ parallel competitive sports and academic events.",
+                  "Led a dedicated task force of 50+ campus volunteers, conducting training workshops on crowd management and emergency response.",
+                  "Managed dynamic on-site equipment inventory, ensuring seamless technical and physical setup for all events."
+                ]
               },
               {
                 role: "Finance Executive",
                 org: "ASME NUST Chapter",
                 date: "Oct 2025 – Dec 2025",
-                desc: "Budget management and financial operations for EFX festival."
+                desc: "Administered financial operations, sponsorship funds, and budget controls for the American Society of Mechanical Engineers (ASME) student chapter.",
+                details: [
+                  "Managed financial operations and budget planning for the ASME Engineering Festivals (EFX), ensuring optimal fund utilization.",
+                  "Oversaw registration payments, cash inflows, and managed disbursements for technical workshops and hardware exhibition items.",
+                  "Secured and accounted for corporate sponsorships, building transparent ledger records for audit trails."
+                ]
               }
             ].map((exp, idx) => (
-              <motion.div key={idx} variants={fadeInUp} className="relative pl-6 md:pl-0">
-                <div className="absolute -left-[33px] md:-left-[31px] top-1.5 w-3 h-3 rounded-full bg-[var(--color-accent-orange)]/20 border border-[var(--color-accent-orange)] ring-4 ring-[var(--color-background-primary)]" />
-                <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-2">
-                  <h3 className="text-lg font-poppins font-bold text-white">{exp.role}</h3>
+              <motion.div 
+                key={idx} 
+                custom={idx}
+                variants={contentVariants}
+                className="relative pl-8 md:pl-10 group"
+              >
+                {/* Bead (snaps onto line one by one) */}
+                <motion.div 
+                  custom={idx}
+                  variants={beadVariants}
+                  className="absolute -left-2 top-[6px] w-4 h-4 rounded-full bg-[var(--color-accent-orange)]/10 border-2 border-[var(--color-accent-orange)] ring-4 ring-[#05050d] shadow-[0_0_12px_rgba(255,107,53,0.3)] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-125"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)] group-hover:bg-[var(--color-accent-lime)] transition-colors duration-300" />
+                </motion.div>
+
+                {/* Experience Header */}
+                <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-3">
+                  <h3 className="text-lg font-poppins font-bold text-white group-hover:text-[var(--color-accent-lime)] transition-colors duration-300">{exp.role}</h3>
                   <span className="text-[var(--color-accent-orange)] font-satoshi font-bold text-xs uppercase tracking-wider">@ {exp.org}</span>
                   <span className="text-xs font-mono text-[var(--color-text-muted)] md:ml-auto">{exp.date}</span>
                 </div>
-                <p className="text-[var(--color-text-secondary)] text-sm font-poppins font-normal leading-relaxed">{exp.desc}</p>
+
+                {/* Experience Body */}
+                <div className="space-y-3 max-w-4xl">
+                  <p className="text-[var(--color-text-secondary)] text-sm font-poppins font-medium leading-relaxed">{exp.desc}</p>
+                  
+                  {/* Detailed Bullet Points */}
+                  <ul className="list-none space-y-2 pl-1">
+                    {exp.details.map((detail, dIdx) => (
+                      <li key={dIdx} className="flex items-start gap-2.5 text-xs text-[var(--color-text-muted)] font-poppins leading-relaxed">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)]/60 mt-1.5 flex-shrink-0" />
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
             ))}
           </div>
