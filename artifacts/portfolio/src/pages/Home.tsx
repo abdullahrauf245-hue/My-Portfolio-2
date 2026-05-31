@@ -853,31 +853,20 @@ export default function Home() {
                   labels={{
                     totalCount: '{{count}} contributions in the last year'
                   }}
-                  renderBlock={(block, activity) => (
-                    <a
-                      href={`https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {cloneElement(block, {
-                        style: {
-                          ...block.props.style,
-                          cursor: 'pointer',
-                          transition: 'filter 0.15s ease, transform 0.15s ease',
-                        },
-                        onMouseEnter: (e: React.MouseEvent<SVGRectElement>) => {
-                          (e.currentTarget as SVGRectElement).style.filter = 'brightness(1.4)';
-                          (e.currentTarget as SVGRectElement).style.transform = 'scale(1.2)';
-                          (e.currentTarget as SVGRectElement).style.transformOrigin = 'center';
-                        },
-                        onMouseLeave: (e: React.MouseEvent<SVGRectElement>) => {
-                          (e.currentTarget as SVGRectElement).style.filter = '';
-                          (e.currentTarget as SVGRectElement).style.transform = '';
-                        },
-                      })}
-                    </a>
-                  )}
+                  renderBlock={(block, activity) =>
+                    cloneElement(block, {
+                      style: {
+                        ...block.props.style,
+                        cursor: 'pointer',
+                      },
+                      onClick: () => {
+                        window.open(
+                          `https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`,
+                          '_blank'
+                        );
+                      },
+                    })
+                  }
                 />
               </div>
             </div>
