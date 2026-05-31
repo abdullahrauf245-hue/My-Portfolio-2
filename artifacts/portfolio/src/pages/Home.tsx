@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, cloneElement } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
@@ -853,6 +853,31 @@ export default function Home() {
                   labels={{
                     totalCount: '{{count}} contributions in the last year'
                   }}
+                  renderBlock={(block, activity) => (
+                    <a
+                      href={`https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {cloneElement(block, {
+                        style: {
+                          ...block.props.style,
+                          cursor: 'pointer',
+                          transition: 'filter 0.15s ease, transform 0.15s ease',
+                        },
+                        onMouseEnter: (e: React.MouseEvent<SVGRectElement>) => {
+                          (e.currentTarget as SVGRectElement).style.filter = 'brightness(1.4)';
+                          (e.currentTarget as SVGRectElement).style.transform = 'scale(1.2)';
+                          (e.currentTarget as SVGRectElement).style.transformOrigin = 'center';
+                        },
+                        onMouseLeave: (e: React.MouseEvent<SVGRectElement>) => {
+                          (e.currentTarget as SVGRectElement).style.filter = '';
+                          (e.currentTarget as SVGRectElement).style.transform = '';
+                        },
+                      })}
+                    </a>
+                  )}
                 />
               </div>
             </div>
@@ -990,10 +1015,10 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Custom Mouse Cursor */}
+      {/* Custom Mouse Cursor — Crosshair + Diamond */}
       {!a11y.reducedMotion && cursorVisible && (
         <>
-          {/* Outer ring */}
+          {/* Ambient glow trail */}
           <motion.div
             style={{
               x: cursorXSpring,
@@ -1002,17 +1027,23 @@ export default function Home() {
               translateY: "-50%",
             }}
             animate={{
-              width: cursorHovered ? 48 : 24,
-              height: cursorHovered ? 48 : 24,
-              backgroundColor: cursorHovered ? "rgba(244, 108, 56, 0.08)" : "rgba(244, 108, 56, 0)",
-              borderColor: cursorHovered ? "var(--color-accent-orange)" : "var(--color-accent-orange)",
-              borderWidth: cursorHovered ? 2 : 1,
+              width: cursorHovered ? 80 : 40,
+              height: cursorHovered ? 80 : 40,
+              opacity: cursorHovered ? 0.25 : 0.1,
             }}
-            transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] hidden md:block"
-          />
+            transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            className="fixed top-0 left-0 rounded-full pointer-events-none z-[9998] hidden md:block"
+          >
+            <div 
+              className="w-full h-full rounded-full"
+              style={{ 
+                background: 'radial-gradient(circle, rgba(255,107,53,0.4) 0%, rgba(197,255,65,0.1) 50%, transparent 70%)',
+                filter: 'blur(8px)',
+              }} 
+            />
+          </motion.div>
 
-          {/* Inner dot */}
+          {/* Crosshair lines container */}
           <motion.div
             style={{
               x: cursorXSpring,
@@ -1021,12 +1052,39 @@ export default function Home() {
               translateY: "-50%",
             }}
             animate={{
-              scale: cursorHovered ? 1.5 : 1,
-              backgroundColor: cursorHovered ? "var(--color-accent-orange)" : "var(--color-accent-orange)",
+              rotate: cursorHovered ? 45 : 0,
+              scale: cursorHovered ? 1.3 : 1,
             }}
-            transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] hidden md:block"
-          />
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
+          >
+            {/* Vertical line */}
+            <motion.div 
+              animate={{ height: cursorHovered ? 28 : 20, opacity: cursorHovered ? 1 : 0.6 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="absolute left-1/2 top-1/2 w-[1.5px] -translate-x-1/2 -translate-y-1/2"
+              style={{ background: 'linear-gradient(180deg, transparent 0%, #FF6B35 30%, #FF6B35 70%, transparent 100%)' }}
+            />
+            {/* Horizontal line */}
+            <motion.div 
+              animate={{ width: cursorHovered ? 28 : 20, opacity: cursorHovered ? 1 : 0.6 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="absolute left-1/2 top-1/2 h-[1.5px] -translate-x-1/2 -translate-y-1/2"
+              style={{ background: 'linear-gradient(90deg, transparent 0%, #FF6B35 30%, #FF6B35 70%, transparent 100%)' }}
+            />
+            {/* Center diamond */}
+            <motion.div
+              animate={{
+                width: cursorHovered ? 8 : 5,
+                height: cursorHovered ? 8 : 5,
+                borderColor: cursorHovered ? '#FF6B35' : 'rgba(255,107,53,0.7)',
+                backgroundColor: cursorHovered ? 'rgba(255,107,53,0.3)' : 'transparent',
+                rotate: 45,
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border"
+            />
+          </motion.div>
         </>
       )}
     </div>
