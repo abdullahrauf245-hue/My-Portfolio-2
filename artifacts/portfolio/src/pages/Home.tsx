@@ -416,7 +416,7 @@ export default function Home() {
 
         {/* HERO SECTION with parallax */}
         <motion.div id="overview" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
-        <section className="pt-[140px] md:pt-[180px] mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
+        <section className="pt-[60px] md:pt-[80px] mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
           <motion.div 
             className="flex-1"
             initial="hidden"
