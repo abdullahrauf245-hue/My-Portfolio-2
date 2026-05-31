@@ -141,7 +141,7 @@ export default function Home() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  const springConfig = { damping: 30, stiffness: 280, mass: 0.6 };
+  const springConfig = { damping: 25, stiffness: 480, mass: 0.45 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
@@ -1312,47 +1312,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
     } catch (err: any) {
       console.error("Form submission AJAX error:", err);
       
-      const isFetchError = err.message === "Failed to fetch" || err.message?.includes("fetch");
-      
-      if (isFetchError) {
-        try {
-          const form = document.createElement("form");
-          form.method = "POST";
-          form.action = "https://formsubmit.co/abdullahrauf245@gmail.com";
-          form.style.display = "none";
 
-          const fields = {
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-            _subject: `New Portfolio Message from ${formData.name}`,
-          };
-
-          for (const [key, value] of Object.entries(fields)) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = value;
-            form.appendChild(input);
-          }
-
-          document.body.appendChild(form);
-          form.submit();
-          
-          setTimeout(() => {
-            document.body.removeChild(form);
-            setStatus("success");
-            setFormData({ name: "", email: "", message: "" });
-          }, 1000);
-        } catch (fallbackErr) {
-          console.error("Form submission fallback error:", fallbackErr);
-          setStatus("error");
-          setErrorMessage("Failed to submit form. Please email directly to abdullahrauf245@gmail.com.");
-        }
-      } else {
-        setStatus("error");
-        setErrorMessage(err.message || "Something went wrong. Please try again.");
-      }
     }
   };
   return (
@@ -1447,8 +1407,18 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                 className="space-y-6"
               >
                 {status === "error" && (
-                  <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm font-poppins">
-                    {errorMessage}
+                  <div className="space-y-4">
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm font-poppins leading-relaxed">
+                      {errorMessage}
+                    </div>
+                    {errorMessage.includes("outage") && (
+                      <a
+                        href={`mailto:abdullahrauf245@gmail.com?subject=${encodeURIComponent(`Inquiry from ${formData.name}`)}&body=${encodeURIComponent(`Hi Abdullah,\n\n${formData.message}\n\n---\nSender Name: ${formData.name}\nSender Email: ${formData.email}`)}`}
+                        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white font-satoshi font-bold text-xs tracking-wider uppercase transition-all duration-200 cursor-pointer text-center"
+                      >
+                        <Mail className="w-4 h-4" /> Send Direct Email
+                      </a>
+                    )}
                   </div>
                 )}
 
