@@ -539,7 +539,7 @@ export default function Home() {
           className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-[11px] tracking-[4px] text-[#FF6B35] font-medium uppercase">Selected Work</h2>
+            <h2 className="text-[11px] tracking-[4px] text-[var(--color-accent-lime)] font-medium uppercase">Selected Work</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
@@ -704,7 +704,7 @@ export default function Home() {
           className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-[11px] tracking-[4px] text-[#FF6B35] font-medium uppercase">Experience & Leadership</h2>
+            <h2 className="text-[11px] tracking-[4px] text-[var(--color-accent-lime)] font-medium uppercase">Experience & Leadership</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
