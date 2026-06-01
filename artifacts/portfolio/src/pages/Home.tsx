@@ -11,6 +11,7 @@ import nustEvents1 from "@assets/nust_events_1.png";
 import nustEvents2 from "@assets/nust_events_2.png";
 import nustCafe1 from "@assets/nust_cafe_1.png";
 import ToolkitOrbital from "@/components/ToolkitOrbital";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -1037,20 +1038,34 @@ export default function Home() {
                   labels={{
                     totalCount: '{{count}} contributions in the last year'
                   }}
-                  renderBlock={(block, activity) =>
-                    cloneElement(block, {
-                      style: {
-                        ...block.props.style,
-                        cursor: 'pointer',
-                      },
-                      onClick: () => {
-                        window.open(
-                          `https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`,
-                          '_blank'
-                        );
-                      },
-                    })
-                  }
+                  renderBlock={(block, activity) => (
+                    <Tooltip key={activity.date} delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        {cloneElement(block, {
+                          style: {
+                            ...block.props.style,
+                            cursor: 'pointer',
+                          },
+                          onClick: () => {
+                            window.open(
+                              `https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`,
+                              '_blank'
+                            );
+                          },
+                        })}
+                      </TooltipTrigger>
+                      <TooltipContent 
+                        side="top" 
+                        align="center" 
+                        className="bg-black/90 backdrop-blur-md border border-white/10 text-white rounded-lg shadow-2xl px-3 py-2 z-50 pointer-events-none"
+                      >
+                        <div className="font-poppins text-[11px] leading-tight select-none">
+                          <span className="font-bold text-[var(--color-accent-orange)]">{activity.count} contributions</span>
+                          <span className="text-stone-400 block mt-0.5">{activity.date}</span>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
                 />
               </div>
             </div>
