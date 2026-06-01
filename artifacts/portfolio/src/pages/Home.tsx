@@ -666,8 +666,7 @@ export default function Home() {
           className="mb-20"
         >
           <div className="flex items-center gap-4 mb-12">
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-            <h2 className="text-[11px] tracking-[4px] text-[#FF6B35] font-medium uppercase">About</h2>
+            <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">About</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
@@ -699,7 +698,7 @@ export default function Home() {
           className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-[11px] tracking-[4px] text-[var(--color-accent-lime)] font-medium uppercase">Selected Work</h2>
+            <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Selected Work</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
@@ -852,7 +851,7 @@ export default function Home() {
         <motion.div id="skills" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
           <section className="mb-32 md:mb-40">
             <div className="flex items-center gap-4 mb-12">
-              <h2 className="text-[11px] tracking-[4px] text-[#FF6B35] font-medium uppercase">Technical Arsenal</h2>
+              <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Technical Arsenal</h2>
               <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
             </div>
             <ToolkitOrbital />
@@ -867,7 +866,7 @@ export default function Home() {
           className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-[11px] tracking-[4px] text-[var(--color-accent-lime)] font-medium uppercase">Experience & Leadership</h2>
+            <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Experience & Leadership</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
@@ -1013,7 +1012,7 @@ export default function Home() {
           className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-[11px] tracking-[4px] text-[#FF6B35] font-medium uppercase">Education</h2>
+            <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Education</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
  
@@ -1064,7 +1063,7 @@ export default function Home() {
           className="mb-32 md:mb-40"
         >
           <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-[11px] tracking-[4px] text-[var(--color-accent-lime)] font-medium uppercase">Activity</h2>
+            <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Activity</h2>
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 

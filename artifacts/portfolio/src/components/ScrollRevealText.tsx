@@ -29,11 +29,11 @@ export default function ScrollRevealText({ text, className = "" }: ScrollRevealT
         return (
           <span key={idx} className="relative inline-block mr-[0.25em] select-none">
             {/* Very faint background layout text to prevent layout shifting and add visual structure */}
-            <span className="absolute opacity-10 text-white pointer-events-none">
+            <span className="absolute opacity-10 text-[var(--color-text-primary)] pointer-events-none">
               {word}
             </span>
             {/* Animated white foreground word */}
-            <motion.span style={{ opacity }} className="text-white relative z-10">
+            <motion.span style={{ opacity }} className="text-[var(--color-text-primary)] relative z-10">
               {word}
             </motion.span>
           </span>
