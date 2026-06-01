@@ -88,11 +88,13 @@ export default function ToolkitOrbital() {
             left: "50%",
             top: "50%",
             transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${isHovered ? 1.1 : 1})`,
-            borderColor: isHovered ? "#FF6B35" : "#1f1f1f",
             boxShadow: isHovered ? "0 0 12px rgba(255, 107, 53, 0.35)" : "none",
-            color: isHovered ? "#FF6B35" : "#ffffff",
           }}
-          className="absolute z-20 px-3 py-1.5 rounded-full bg-[#111111] border text-xs font-medium cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none"
+          className={`absolute z-20 px-3 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none ${
+            isHovered
+              ? "border-[var(--color-accent-orange)] text-[var(--color-accent-orange)]"
+              : "bg-white dark:bg-[#111111] border-stone-200 dark:border-stone-800 text-stone-700 dark:text-[#ffffff]"
+          }`}
         >
           {skill.name}
         </button>
@@ -124,28 +126,28 @@ export default function ToolkitOrbital() {
         {/* Orbit Ring 1 */}
         <div
           style={{ width: radius1 * 2, height: radius1 * 2 }}
-          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
+          className="absolute rounded-full border border-black/[0.06] dark:border-white/10 pointer-events-none z-10"
         />
         {renderSkills(ring1Skills, radius1, speeds.ring1)}
 
         {/* Orbit Ring 2 */}
         <div
           style={{ width: radius2 * 2, height: radius2 * 2 }}
-          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
+          className="absolute rounded-full border border-black/[0.06] dark:border-white/10 pointer-events-none z-10"
         />
         {renderSkills(ring2Skills, radius2, speeds.ring2)}
 
         {/* Orbit Ring 3 */}
         <div
           style={{ width: radius3 * 2, height: radius3 * 2 }}
-          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
+          className="absolute rounded-full border border-black/[0.06] dark:border-white/10 pointer-events-none z-10"
         />
         {renderSkills(ring3Skills, radius3, speeds.ring3)}
 
         {/* Orbit Ring 4 */}
         <div
           style={{ width: radius4 * 2, height: radius4 * 2 }}
-          className="absolute rounded-full border border-[#ffffff15] pointer-events-none z-10"
+          className="absolute rounded-full border border-black/[0.06] dark:border-white/10 pointer-events-none z-10"
         />
         {renderSkills(ring4Skills, radius4, speeds.ring4)}
       </motion.div>

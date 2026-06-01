@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef, cloneElement } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
-import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode, GitGraph } from "lucide-react";
+import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode, GitGraph, Sun, Moon } from "lucide-react";
 import { GitHubCalendar } from "react-github-calendar";
+import { useTheme } from "@/App";
 import avatarImg from "@assets/image_1780161923266.png";
 import muslimTraders1 from "@assets/muslim_traders_1.png";
 import muslimTraders2 from "@assets/muslim_traders_2.png";
@@ -118,6 +119,7 @@ const MagneticButton = ({ children, className = "", href, download, target, rel 
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -368,8 +370,8 @@ export default function Home() {
       {/* Sticky Top Header Navigation - Floating Island Header Easing (Fixed Position) */}
       <header className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 py-4 ${
         isScrolled 
-          ? "bg-black/85 backdrop-blur-lg border-b border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-8 md:py-3 md:shadow-lg md:shadow-black/40" 
-          : "bg-black/60 backdrop-blur-md border-b border-white/5 px-6 md:px-12"
+          ? "bg-white/85 dark:bg-black/85 backdrop-blur-lg border-b border-black/10 dark:border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-8 md:py-3 md:shadow-lg md:shadow-stone-200/40 dark:shadow-black/40" 
+          : "bg-white/60 dark:bg-black/60 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-6 md:px-12"
       } flex items-center justify-between select-none`}>
         {/* Left Side Spacer to maintain center nav alignments */}
         <div className="w-12 h-6 md:block hidden" />
@@ -382,7 +384,7 @@ export default function Home() {
               <button
                 key={sec.id}
                 onClick={() => scrollToSection(sec.id)}
-                className="relative px-4 py-2 text-xs font-poppins font-semibold uppercase tracking-wider transition-colors cursor-pointer border-none outline-none text-stone-400 hover:text-white"
+                className="relative px-4 py-2 text-xs font-poppins font-semibold uppercase tracking-wider transition-colors cursor-pointer border-none outline-none text-stone-400 hover:text-stone-900 dark:hover:text-white"
               >
                 <span className={`relative z-10 transition-colors ${isActive ? "text-[var(--color-accent-orange)]" : ""}`}>
                   {sec.label}
@@ -391,7 +393,7 @@ export default function Home() {
                   <motion.div
                     layoutId="activeHeaderTab"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    className="absolute inset-0 bg-white/5 border border-white/5 rounded-full z-0"
+                    className="absolute inset-0 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-full z-0"
                   />
                 )}
               </button>
@@ -399,7 +401,7 @@ export default function Home() {
           })}
         </nav>
 
-        {/* Right Side: Icons + Contact Button */}
+        {/* Right Side: Icons + Theme Toggle + Contact Button */}
         <div className="flex items-center gap-5">
           {/* Social Icons */}
           <div className="hidden sm:flex items-center gap-3">
@@ -407,7 +409,7 @@ export default function Home() {
               href="https://github.com/abdullahrauf245-hue/"
               target="_blank"
               rel="noreferrer"
-              className="text-stone-400 hover:text-white transition-all hover:scale-110"
+              className="text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all hover:scale-110"
               aria-label="GitHub"
             >
               <SiGithub className="w-[18px] h-[18px]" />
@@ -416,19 +418,32 @@ export default function Home() {
               href="https://www.linkedin.com/in/muhammad-abdullahrauf/"
               target="_blank"
               rel="noreferrer"
-              className="text-stone-400 hover:text-white transition-all hover:scale-110"
+              className="text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all hover:scale-110"
               aria-label="LinkedIn"
             >
               <FaLinkedin className="w-[18px] h-[18px]" />
             </a>
             <button
               onClick={() => setIsContactOpen(true)}
-              className="text-stone-400 hover:text-white transition-all hover:scale-110 bg-transparent border-none p-0 cursor-pointer outline-none"
+              className="text-stone-400 hover:text-stone-900 dark:hover:text-white transition-all hover:scale-110 bg-transparent border-none p-0 cursor-pointer outline-none"
               aria-label="Email"
             >
               <Mail className="w-[18px] h-[18px]" />
             </button>
           </div>
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 rounded-full text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-all cursor-pointer outline-none hover:scale-105 duration-200 flex items-center justify-center"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? (
+              <Moon className="w-[18px] h-[18px]" />
+            ) : (
+              <Sun className="w-[18px] h-[18px]" />
+            )}
+          </button>
 
           {/* Contact Button (CTA) */}
           <button
@@ -441,7 +456,7 @@ export default function Home() {
           {/* Mobile Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 text-stone-400 hover:text-white hover:bg-white/10 text-xs font-poppins font-bold uppercase tracking-wider rounded-lg cursor-pointer outline-none"
+            className="md:hidden flex items-center gap-1.5 px-3 py-1.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 text-xs font-poppins font-bold uppercase tracking-wider rounded-lg cursor-pointer outline-none"
           >
             Menu
           </button>
@@ -464,12 +479,12 @@ export default function Home() {
               animate={{ x: 0 }}
               exit={{ x: 260 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 bottom-0 right-0 w-64 bg-[#000000] border-l border-white/5 z-50 flex flex-col justify-between p-6 md:hidden"
+              className="fixed top-0 bottom-0 right-0 w-64 bg-white dark:bg-[#000000] border-l border-black/5 dark:border-white/5 z-50 flex flex-col justify-between p-6 md:hidden"
             >
               <div>
                 <div className="flex items-center justify-between mb-8">
                   <div className="select-none">
-                    <h1 className="text-[25px] font-extrabold tracking-tighter text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
+                    <h1 className="text-[25px] font-extrabold tracking-tighter text-stone-900 dark:text-white font-poppins leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]">
                       My Portfolio
                     </h1>
                     <p className="text-[9px] font-poppins font-bold text-[#727293] uppercase tracking-[0.2em] mt-1.5 leading-none">
@@ -478,18 +493,18 @@ export default function Home() {
                   </div>
                   <button
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-stone-400 hover:text-white p-1 hover:bg-white/5 rounded-lg md:hidden cursor-pointer border-none bg-transparent"
+                    className="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg md:hidden cursor-pointer border-none bg-transparent"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="flex items-center gap-3.5 p-3.5 bg-[#0a0a0a] border border-white/5 rounded-2xl mb-8">
+                <div className="flex items-center gap-3.5 p-3.5 bg-stone-50 dark:bg-[#0a0a0a] border border-black/5 dark:border-white/5 rounded-2xl mb-8">
                   <div className="w-11 h-11 rounded-full bg-[#FF6B35] text-white font-poppins font-bold flex items-center justify-center text-sm shadow-md flex-shrink-0">
                     MA
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[14px] font-semibold text-white font-poppins truncate leading-tight">Muhammad Abdullah</div>
+                    <div className="text-[14px] font-semibold text-stone-900 dark:text-white font-poppins truncate leading-tight">Muhammad Abdullah</div>
                     <div className="text-[10px] text-stone-500 font-mono mt-0.5 tracking-wider">BSDS-3A</div>
                   </div>
                 </div>
@@ -505,7 +520,7 @@ export default function Home() {
                         className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-[14px] font-poppins font-medium tracking-wide transition-all cursor-pointer border-none outline-none ${
                           isActive
                             ? "bg-[var(--color-accent-orange)]/10 text-[var(--color-accent-orange)] border border-[var(--color-accent-orange)]/25 shadow-lg shadow-[var(--color-accent-orange)]/5"
-                            : "bg-transparent text-stone-400 hover:text-white hover:bg-white/5"
+                            : "bg-transparent text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5"
                         }`}
                       >
                         <Icon className={`w-4 h-4 ${isActive ? "text-[var(--color-accent-orange)]" : "text-stone-500"}`} />
@@ -533,7 +548,7 @@ export default function Home() {
             animate="visible"
             variants={staggerContainer}
           >
-            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-white">
+            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-stone-900 dark:text-white">
               <span className="inline-block">
                 {"Muhammad".split("").map((letter, idx) => (
                   <motion.span
@@ -572,7 +587,7 @@ export default function Home() {
             </motion.h1>
             
             <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[var(--color-text-secondary)] font-poppins font-normal mb-8 max-w-xl leading-relaxed">
-              <strong className="text-white font-semibold">Curious. Resourceful. Driven.</strong> <br/>
+              <strong className="text-stone-900 dark:text-white font-semibold">Curious. Resourceful. Driven.</strong> <br/>
               A Data Science builder thinking from first principles.
             </motion.p>
             
@@ -580,10 +595,10 @@ export default function Home() {
               <MagneticButton href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
                 <Download className="w-4 h-4" /> Download CV
               </MagneticButton>
-              <MagneticButton href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+              <MagneticButton href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[var(--color-border-subtle)]/45 hover:border-stone-900 dark:hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-stone-850 dark:text-white hover:scale-105 duration-200">
                 <SiGithub className="w-4 h-4" /> GitHub
               </MagneticButton>
-              <MagneticButton href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-white/5 border border-[var(--color-border-subtle)]/40 hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-white hover:scale-105 duration-200">
+              <MagneticButton href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[var(--color-border-subtle)]/45 hover:border-stone-900 dark:hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-stone-850 dark:text-white hover:scale-105 duration-200">
                 <FaLinkedin className="w-4 h-4" /> LinkedIn
               </MagneticButton>
             </motion.div>
@@ -651,13 +666,13 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-start">
-            <h3 className="text-3xl font-poppins font-bold leading-tight tracking-tight text-white">
+            <h3 className="text-3xl font-poppins font-bold leading-tight tracking-tight text-stone-900 dark:text-white">
               I study Data Science at NUST Islamabad. But my real education happens when I build.
             </h3>
             <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed font-poppins font-normal text-[15px]">
               <ScrollRevealText text="I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events." />
               <ScrollRevealText text="I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems." />
-              <div className="flex gap-6 pt-4 text-white">
+              <div className="flex gap-6 pt-4 text-stone-900 dark:text-white">
                 <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
                   <MapPin className="w-4 h-4 text-[var(--color-accent-orange)]" /> Islamabad, PK
                 </div>
@@ -742,7 +757,7 @@ export default function Home() {
                       <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)]" />
                       <span className="text-[10px] font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">{project.classification}</span>
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-poppins font-bold text-white tracking-tight leading-none group-hover:text-[var(--color-accent-orange)] transition-colors duration-300">
+                    <h3 className="text-3xl md:text-4xl font-poppins font-bold text-stone-900 dark:text-white tracking-tight leading-none group-hover:text-[var(--color-accent-orange)] transition-colors duration-300">
                       {project.title}
                     </h3>
                   </div>
@@ -762,7 +777,7 @@ export default function Home() {
 
                   <div className="flex flex-wrap gap-2 pt-2">
                     {project.tags.map(tag => (
-                      <span key={tag} className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">{tag}</span>
+                      <span key={tag} className="px-3 py-1 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-full text-stone-850 dark:text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">{tag}</span>
                     ))}
                   </div>
 
@@ -771,7 +786,7 @@ export default function Home() {
                       href={project.github} 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="flex items-center gap-2 text-stone-400 hover:text-white transition-colors animate-pulse"
+                      className="flex items-center gap-2 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors animate-pulse"
                     >
                       <SiGithub className="w-4 h-4" /> GitHub
                     </a>
@@ -792,13 +807,13 @@ export default function Home() {
                   glowColor={idx % 2 === 0 ? "rgba(255, 107, 53, 0.12)" : "rgba(197, 255, 65, 0.12)"}
                 >
                   {/* Laptop Mockup */}
-                  <div className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-transform duration-300">
-                    <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#0b0b1a] border-b border-[#1b1b36]">
+                  <div className="w-full h-full bg-[#121225]/5 dark:bg-[#121225]/45 border border-slate-200 dark:border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-transform duration-300">
+                    <div className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 dark:bg-[#0b0b1a] border-b border-slate-200 dark:border-[#1b1b36]">
                       <div className="w-2 h-2 rounded-full bg-red-500/60" />
                       <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
                       <div className="w-2 h-2 rounded-full bg-green-500/60" />
                     </div>
-                    <div className="w-full h-full bg-[#05050d] overflow-hidden relative">
+                    <div className="w-full h-full bg-[#faf9f6] dark:bg-[#05050d] overflow-hidden relative">
                       <img 
                         src={project.img1} 
                         alt={`${project.title} Desktop`} 
@@ -808,15 +823,15 @@ export default function Home() {
                   </div>
 
                   {/* Overlapping Mobile Phone Mockup */}
-                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-transform duration-300">
-                    <div className="w-full h-full rounded-xl overflow-hidden bg-black relative border border-white/5">
+                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-slate-100 dark:bg-[#0b0b1a] border border-slate-200 dark:border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-transform duration-300">
+                    <div className="w-full h-full rounded-xl overflow-hidden bg-white dark:bg-black relative border border-black/5 dark:border-white/5">
                       <img 
                         src={project.img2} 
                         alt={`${project.title} Mobile`} 
                         className="w-full h-full object-cover object-top opacity-95"
                       />
-                      <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-black rounded-full flex items-center justify-center">
-                        <div className="w-6 h-1 bg-stone-800 rounded-full" />
+                      <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-white dark:bg-black rounded-full flex items-center justify-center border border-black/5 dark:border-none">
+                        <div className="w-6 h-1 bg-stone-300 dark:bg-stone-800 rounded-full" />
                       </div>
                     </div>
                   </div>
@@ -952,14 +967,14 @@ export default function Home() {
                 <motion.div 
                   custom={idx}
                   variants={beadVariants}
-                  className="absolute -left-2 top-[6px] w-4 h-4 rounded-full bg-[var(--color-accent-orange)]/10 border-2 border-[var(--color-accent-orange)] ring-4 ring-[#05050d] shadow-[0_0_12px_rgba(255,107,53,0.3)] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-125"
+                  className="absolute -left-2 top-[6px] w-4 h-4 rounded-full bg-[var(--color-accent-orange)]/10 border-2 border-[var(--color-accent-orange)] ring-4 ring-[#f5f5f7] dark:ring-[#05050d] shadow-[0_0_12px_rgba(255,107,53,0.3)] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-125"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)] group-hover:bg-[var(--color-accent-lime)] transition-colors duration-300" />
                 </motion.div>
 
                 {/* Experience Header */}
                 <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-3">
-                  <h3 className="text-lg font-poppins font-bold text-white group-hover:text-[var(--color-accent-lime)] transition-colors duration-300">{exp.role}</h3>
+                  <h3 className="text-lg font-poppins font-bold text-stone-900 dark:text-white group-hover:text-[var(--color-accent-lime)] transition-colors duration-300">{exp.role}</h3>
                   <span className="text-[var(--color-accent-orange)] font-satoshi font-bold text-xs uppercase tracking-wider">@ {exp.org}</span>
                   <span className="text-xs font-mono text-[var(--color-text-muted)] md:ml-auto">{exp.date}</span>
                 </div>
@@ -999,34 +1014,34 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             <motion.div variants={fadeInUp} className="rounded-2xl relative">
               <HoverCard3D 
-                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] transition-colors duration-300 h-full flex flex-col"
+                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 h-full flex flex-col"
                 glowColor="rgba(255, 107, 53, 0.1)"
               >
                 <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-1 text-white">NUST Islamabad</h4>
+                <h4 className="font-poppins font-bold text-lg mb-1 text-stone-900 dark:text-white">NUST Islamabad</h4>
                 <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">Sep 2025 – Sep 2029</p>
               </HoverCard3D>
             </motion.div>
             <motion.div variants={fadeInUp} className="rounded-2xl relative">
               <HoverCard3D 
-                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] transition-colors duration-300 h-full flex flex-col"
+                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 h-full flex flex-col"
                 glowColor="rgba(197, 255, 65, 0.08)"
               >
                 <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-1 text-white">Punjab College Chakwal</h4>
+                <h4 className="font-poppins font-bold text-lg mb-1 text-stone-900 dark:text-white">Punjab College Chakwal</h4>
                 <p className="text-sm text-[var(--color-text-secondary)] font-satoshi font-bold uppercase tracking-wider mb-3">Intermediate</p>
                 <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">1069/1200<br/>2023-2025</p>
               </HoverCard3D>
             </motion.div>
             <motion.div variants={fadeInUp} className="rounded-2xl relative overflow-hidden">
               <HoverCard3D 
-                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] transition-colors duration-300 relative h-full flex flex-col"
+                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 relative h-full flex flex-col"
                 glowColor="rgba(255, 107, 53, 0.1)"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-accent-orange)]/5 rounded-bl-full pointer-events-none" />
                 <Trophy className="w-6 h-6 text-[var(--color-accent-orange)] mb-4 relative z-10" />
-                <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-white">DPS Chakwal</h4>
+                <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-stone-900 dark:text-white">DPS Chakwal</h4>
                 <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
                 <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed mt-auto">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
               </HoverCard3D>
@@ -1051,7 +1066,7 @@ export default function Home() {
             {/* Header Row */}
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <h3 className="text-3xl font-poppins font-bold tracking-tight text-white mb-2">
+                <h3 className="text-3xl font-poppins font-bold tracking-tight text-stone-900 dark:text-white mb-2">
                   Contributions
                 </h3>
                 <p className="text-[var(--color-text-secondary)] font-poppins text-sm font-normal">
@@ -1062,14 +1077,14 @@ export default function Home() {
                 href="https://github.com/abdullahrauf245-hue" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[var(--color-accent-orange)] text-white text-xs font-satoshi font-bold uppercase tracking-wider transition-all hover:scale-105 duration-200 w-fit"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-[var(--color-accent-orange)] dark:hover:border-[var(--color-accent-orange)] text-stone-800 dark:text-white text-xs font-satoshi font-bold uppercase tracking-wider transition-all hover:scale-105 duration-200 w-fit"
               >
                 <SiGithub className="w-4 h-4" /> View Profile
               </a>
             </div>
 
             {/* Calendar Container */}
-            <div className="relative p-6 md:p-8 rounded-2xl bg-[#080808] border border-[var(--color-border-subtle)]/15 overflow-hidden group hover:border-[var(--color-accent-orange)]/30 transition-colors duration-300">
+            <div className="relative p-6 md:p-8 rounded-2xl bg-white dark:bg-[#080808] border border-[var(--color-border-subtle)]/15 overflow-hidden group hover:border-[var(--color-accent-orange)]/30 transition-colors duration-300">
               {/* Subtle gradient glow behind */}
               <div className="absolute -top-20 -right-20 w-60 h-60 bg-[var(--color-accent-orange)]/5 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[var(--color-accent-lime)]/5 rounded-full blur-[60px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -1077,12 +1092,14 @@ export default function Home() {
               <div className="relative z-10 github-calendar-wrapper overflow-x-auto">
                 <GitHubCalendar 
                   username="abdullahrauf245-hue" 
-                  colorScheme="dark"
+                  colorScheme={theme === "light" ? "light" : "dark"}
                   blockSize={14}
                   blockMargin={4}
                   fontSize={13}
                   style={{ width: '100%' }}
-                  theme={{
+                  theme={theme === "light" ? {
+                    light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+                  } : {
                     dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353']
                   }}
                   labels={{
@@ -1168,16 +1185,31 @@ export default function Home() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ type: "spring", duration: 0.35, bounce: 0.15 }}
-              className="mb-3 w-[260px] bg-[#0a0a0a] border border-[var(--color-border-subtle)]/30 rounded-2xl p-5 shadow-2xl"
+              className="mb-3 w-[260px] bg-white dark:bg-[#0a0a0a] border border-[var(--color-border-subtle)]/30 rounded-2xl p-5 shadow-2xl"
             >
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-sm font-satoshi font-bold text-white uppercase tracking-wider">Accessibility</h3>
+                <h3 className="text-sm font-satoshi font-bold text-stone-900 dark:text-white uppercase tracking-wider">Accessibility</h3>
                 <button
                   onClick={() => setA11y(prev => ({ ...prev, menuOpen: false }))}
-                  className="text-stone-500 hover:text-white transition-colors cursor-pointer bg-transparent border-none outline-none p-1"
+                  className="text-stone-400 hover:text-stone-900 dark:text-stone-500 dark:hover:text-white transition-colors cursor-pointer bg-transparent border-none outline-none p-1"
                   aria-label="Close accessibility menu"
                 >
                   <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Theme Toggle inside Accessibility Menu */}
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-3">
+                  {theme === "light" ? <Sun className="w-4 h-4 text-[var(--color-accent-orange)]" /> : <Moon className="w-4 h-4 text-[var(--color-accent-orange)]" />}
+                  <span className="text-xs font-satoshi font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Appearance</span>
+                </div>
+                <button
+                  onClick={toggleTheme}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-satoshi font-bold uppercase tracking-wider transition-all cursor-pointer border-none bg-black/5 dark:bg-white/5 text-stone-600 dark:text-stone-400 hover:bg-black/10 dark:hover:bg-white/10 outline-none"
+                >
+                  <span>{theme === "light" ? "Light Mode" : "Dark Mode"}</span>
+                  <span className="text-[10px] text-[var(--color-accent-orange)]">Toggle</span>
                 </button>
               </div>
 
@@ -1195,7 +1227,7 @@ export default function Home() {
                       className={`flex-1 py-2 rounded-lg text-xs font-satoshi font-bold transition-all cursor-pointer border-none outline-none ${
                         a11y.fontSize === level
                           ? 'bg-[var(--color-accent-orange)] text-white'
-                          : 'bg-white/5 text-stone-400 hover:bg-white/10'
+                          : 'bg-black/5 dark:bg-white/5 text-stone-600 dark:text-stone-400 hover:bg-black/10 dark:hover:bg-white/10'
                       }`}
                     >
                       {level === -1 ? 'S' : level === 0 ? 'M' : level === 1 ? 'L' : 'XL'}
@@ -1211,7 +1243,7 @@ export default function Home() {
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-satoshi font-bold uppercase tracking-wider transition-all cursor-pointer border-none outline-none ${
                     a11y.highContrast
                       ? 'bg-[var(--color-accent-orange)]/15 text-[var(--color-accent-orange)] border border-[var(--color-accent-orange)]/30'
-                      : 'bg-white/5 text-stone-400 hover:bg-white/10'
+                      : 'bg-black/5 dark:bg-white/5 text-stone-600 dark:text-stone-400 hover:bg-black/10 dark:hover:bg-white/10'
                   }`}
                 >
                   <Eye className="w-4 h-4" />
@@ -1227,7 +1259,7 @@ export default function Home() {
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-satoshi font-bold uppercase tracking-wider transition-all cursor-pointer border-none outline-none ${
                     a11y.reducedMotion
                       ? 'bg-[var(--color-accent-orange)]/15 text-[var(--color-accent-orange)] border border-[var(--color-accent-orange)]/30'
-                      : 'bg-white/5 text-stone-400 hover:bg-white/10'
+                      : 'bg-black/5 dark:bg-white/5 text-stone-600 dark:text-stone-400 hover:bg-black/10 dark:hover:bg-white/10'
                   }`}
                 >
                   <Zap className="w-4 h-4" />
@@ -1245,7 +1277,7 @@ export default function Home() {
           className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer border-none outline-none hover:scale-110 ${
             a11y.menuOpen
               ? 'bg-[var(--color-accent-orange)] text-white rotate-0'
-              : 'bg-[#111] border border-[var(--color-border-subtle)]/30 text-stone-400 hover:text-white hover:border-[var(--color-accent-orange)]'
+              : 'bg-white dark:bg-[#111] border border-[var(--color-border-subtle)]/30 text-stone-600 dark:text-stone-400 hover:text-stone-950 dark:hover:text-white hover:border-[var(--color-accent-orange)] dark:hover:border-[var(--color-accent-orange)]'
           }`}
           aria-label="Toggle accessibility menu"
         >
@@ -1398,12 +1430,12 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
-        className="relative w-full max-w-4xl bg-[#080808] border border-[var(--color-border-subtle)]/30 rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row min-h-[500px]"
+        className="relative w-full max-w-4xl bg-white dark:bg-[#080808] border border-[var(--color-border-subtle)]/30 rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row min-h-[500px]"
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-stone-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full z-20 cursor-pointer border-none outline-none"
+          className="absolute top-4 right-4 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full z-20 cursor-pointer border-none outline-none"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
@@ -1412,12 +1444,12 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         {/* Info Column (Left) with large @ symbol background */}
         <div className="relative flex-1 p-8 md:p-12 overflow-hidden flex flex-col justify-between border-b md:border-b-0 md:border-r border-[var(--color-border-subtle)]/15">
           {/* Watermark @ Symbol */}
-          <div className="absolute -bottom-24 -left-24 text-[30rem] font-bold text-white/[0.02] select-none pointer-events-none leading-none">
+          <div className="absolute -bottom-24 -left-24 text-[30rem] font-bold text-black/[0.02] dark:text-white/[0.02] select-none pointer-events-none leading-none">
             @
           </div>
 
           <div className="relative z-10">
-            <h2 className="text-4xl md:text-5xl font-poppins font-bold tracking-tight text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-poppins font-bold tracking-tight text-stone-900 dark:text-white mb-6">
               Contact<span className="text-[var(--color-accent-orange)]">.</span>
             </h2>
             <p className="text-[var(--color-text-secondary)] font-poppins text-[15px] font-normal leading-relaxed max-w-sm">
@@ -1431,7 +1463,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
             </div>
             <a 
               href="mailto:abdullahrauf245@gmail.com" 
-              className="text-white hover:text-[var(--color-accent-orange)] font-poppins text-lg font-medium transition-colors"
+              className="text-stone-900 dark:text-white hover:text-[var(--color-accent-orange)] font-poppins text-lg font-medium transition-colors"
             >
               abdullahrauf245@gmail.com
             </a>
@@ -1452,13 +1484,13 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                 <div className="w-16 h-16 bg-[var(--color-accent-orange)]/10 rounded-full flex items-center justify-center mb-6 border border-[var(--color-accent-orange)]/20 animate-pulse">
                   <CheckCircle2 className="w-8 h-8 text-[var(--color-accent-orange)]" />
                 </div>
-                <h3 className="text-2xl font-poppins font-bold text-white mb-3">Message Sent!</h3>
+                <h3 className="text-2xl font-poppins font-bold text-stone-900 dark:text-white mb-3">Message Sent!</h3>
                 <p className="text-[var(--color-text-secondary)] font-poppins text-sm leading-relaxed max-w-sm">
                   Thank you for reaching out. Abdullah has received your email and will get back to you shortly.
                 </p>
                 <button
                   onClick={onClose}
-                  className="mt-8 px-6 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white text-xs font-satoshi font-bold tracking-widest uppercase transition-all cursor-pointer outline-none"
+                  className="mt-8 px-6 py-2.5 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 rounded-full text-stone-850 dark:text-white text-xs font-satoshi font-bold tracking-widest uppercase transition-all cursor-pointer outline-none"
                 >
                   Close Window
                 </button>
@@ -1497,7 +1529,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                     disabled={status === "submitting"}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-[#0d0d0d] border border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-white text-sm font-poppins placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors disabled:opacity-50"
+                    className="w-full bg-stone-50 dark:bg-[#0d0d0d] border border-stone-200 dark:border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-stone-900 dark:text-white text-sm font-poppins placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors disabled:opacity-50"
                     placeholder="Enter your name"
                   />
                 </div>
@@ -1513,7 +1545,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                     disabled={status === "submitting"}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-[#0d0d0d] border border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-white text-sm font-poppins placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors disabled:opacity-50"
+                    className="w-full bg-stone-50 dark:bg-[#0d0d0d] border border-stone-200 dark:border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-stone-900 dark:text-white text-sm font-poppins placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors disabled:opacity-50"
                     placeholder="Enter your email address"
                   />
                 </div>
@@ -1529,7 +1561,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                     disabled={status === "submitting"}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-[#0d0d0d] border border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-white text-sm font-poppins placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors resize-none disabled:opacity-50"
+                    className="w-full bg-stone-50 dark:bg-[#0d0d0d] border border-stone-200 dark:border-[var(--color-border-subtle)]/30 rounded-xl px-4 py-3 text-stone-900 dark:text-white text-sm font-poppins placeholder-stone-400 dark:placeholder-stone-600 focus:outline-none focus:border-[var(--color-accent-orange)] transition-colors resize-none disabled:opacity-50"
                     placeholder="Type your message here..."
                   />
                 </div>

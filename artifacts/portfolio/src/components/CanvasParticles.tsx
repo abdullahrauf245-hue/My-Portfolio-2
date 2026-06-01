@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
+import { useTheme } from "@/App";
 
 export default function CanvasParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -82,6 +84,7 @@ export default function CanvasParticles() {
 
     const drawLines = () => {
       if (!ctx) return;
+      const isLight = document.documentElement.classList.contains("light");
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -93,7 +96,9 @@ export default function CanvasParticles() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.strokeStyle = isLight 
+              ? `rgba(0, 0, 0, ${alpha * 1.5})` 
+              : `rgba(255, 255, 255, ${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -147,8 +152,8 @@ export default function CanvasParticles() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-40"
-      style={{ mixBlendMode: "screen" }}
+      className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-40 transition-all duration-500"
+      style={{ mixBlendMode: theme === "light" ? "multiply" : "screen" }}
     />
   );
 }
