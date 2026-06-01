@@ -1346,7 +1346,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
         body: JSON.stringify({
           service_id: "service_m0jpia6",
           template_id: "template_9l21rmj",
-          user_id: "smTVJOSBUhJWL775Ru5CO",
+          user_id: "MK-HLtehHL5oDyY0H",
           template_params: {
             from_name: formData.name,
             reply_to: formData.email,
