@@ -12,6 +12,9 @@ import nustEvents2 from "@assets/nust_events_2.png";
 import nustCafe1 from "@assets/nust_cafe_1.png";
 import ToolkitOrbital from "@/components/ToolkitOrbital";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import CanvasParticles from "@/components/CanvasParticles";
+import HoverCard3D from "@/components/HoverCard3D";
+import ScrollRevealText from "@/components/ScrollRevealText";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -114,6 +117,15 @@ const MagneticButton = ({ children, className = "", href, download, target, rel 
 
 export default function Home() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
   const [activeSection, setActiveSection] = useState("overview");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -338,8 +350,15 @@ export default function Home() {
         <motion.div style={{ y: a11y.reducedMotion ? 0 : bgBlobY2 }} className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-[var(--color-accent-lime)]/5 blur-[120px]" />
       </div>
 
-      {/* Sticky Top Header Navigation */}
-      <header className="sticky top-0 z-40 w-full bg-black/60 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex items-center justify-between transition-all duration-300 select-none">
+      {/* Interactive Node Particles Canvas Backdrop */}
+      <CanvasParticles />
+
+      {/* Sticky Top Header Navigation - Floating Island Header Easing */}
+      <header className={`sticky top-0 z-40 w-full transition-all duration-500 py-4 ${
+        isScrolled 
+          ? "bg-black/85 backdrop-blur-lg border-b border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-8 md:py-3 md:shadow-lg md:shadow-black/40" 
+          : "bg-black/60 backdrop-blur-md border-b border-white/5 px-6 md:px-12"
+      } flex items-center justify-between select-none`}>
         {/* Left Side Spacer to maintain center nav alignments */}
         <div className="w-12 h-6 md:block hidden" />
 
@@ -558,45 +577,50 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          {/* Profile Card component */}
+          {/* Profile Card component wrapped in 3D perspective tilt and spotlight glow */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full md:w-[350px] bg-white text-black rounded-2xl p-6 shadow-2xl border border-[var(--color-border-subtle)] flex-shrink-0 flex flex-col gap-4 hover:scale-[1.01] transition-transform duration-300 relative"
+            className="w-full md:w-[350px] rounded-2xl flex-shrink-0 relative"
           >
-            <div className="relative w-full h-64 overflow-hidden rounded-xl bg-stone-100">
-              <img 
-                src={avatarImg} 
-                alt="Muhammad Abdullah" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
-              <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
-            </div>
-            <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
-              Data Science builder thinking from first principles. Chakwal District Topper.
-            </p>
-            <div className="h-px bg-stone-200 my-1" />
-            <div className="flex justify-between items-center">
-              <span className="font-satoshi text-xs font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Let's Connect</span>
-              <div className="flex gap-2.5">
-                <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
-                  <SiGithub className="w-4 h-4" />
-                </a>
-                <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
-                  <FaLinkedin className="w-4 h-4" />
-                </a>
-                <button 
-                  onClick={() => setIsContactOpen(true)}
-                  className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors cursor-pointer border-none outline-none"
-                >
-                  <Mail className="w-4 h-4" />
-                </button>
+            <HoverCard3D 
+              className="w-full bg-white text-black rounded-2xl p-6 shadow-2xl border border-[var(--color-border-subtle)] flex flex-col gap-4"
+              glowColor="rgba(255, 107, 53, 0.12)"
+            >
+              <div className="relative w-full h-64 overflow-hidden rounded-xl bg-stone-100">
+                <img 
+                  src={avatarImg} 
+                  alt="Muhammad Abdullah" 
+                  className="w-full h-full object-cover"
+                />
               </div>
-            </div>
+              <div>
+                <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
+                <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
+              </div>
+              <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
+                Data Science builder thinking from first principles. Chakwal District Topper.
+              </p>
+              <div className="h-px bg-stone-200 my-1" />
+              <div className="flex justify-between items-center">
+                <span className="font-satoshi text-xs font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Let's Connect</span>
+                <div className="flex gap-2.5">
+                  <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                    <SiGithub className="w-4 h-4" />
+                  </a>
+                  <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                    <FaLinkedin className="w-4 h-4" />
+                  </a>
+                  <button 
+                    onClick={() => setIsContactOpen(true)}
+                    className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors cursor-pointer border-none outline-none"
+                  >
+                    <Mail className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </HoverCard3D>
           </motion.div>
         </section>
         </motion.div>
@@ -619,12 +643,8 @@ export default function Home() {
               I study Data Science at NUST Islamabad. But my real education happens when I build.
             </h3>
             <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed font-poppins font-normal text-[15px]">
-              <p>
-                I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events.
-              </p>
-              <p>
-                I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems.
-              </p>
+              <ScrollRevealText text="I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events." />
+              <ScrollRevealText text="I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems." />
               <div className="flex gap-6 pt-4 text-white">
                 <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
                   <MapPin className="w-4 h-4 text-[var(--color-accent-orange)]" /> Islamabad, PK
@@ -754,10 +774,13 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Device Mockups (Right) */}
-                <div className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4">
+                {/* Device Mockups (Right) wrapped in 3D perspective tilt and spotlight glow */}
+                <HoverCard3D 
+                  className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4 rounded-2xl overflow-visible"
+                  glowColor={idx % 2 === 0 ? "rgba(255, 107, 53, 0.12)" : "rgba(197, 255, 65, 0.12)"}
+                >
                   {/* Laptop Mockup */}
-                  <div className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col group-hover:scale-[1.02] transition-transform duration-300">
+                  <div className="w-full h-full bg-[#121225]/45 border border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-transform duration-300">
                     <div className="flex items-center gap-1.5 px-3 py-2.5 bg-[#0b0b1a] border-b border-[#1b1b36]">
                       <div className="w-2 h-2 rounded-full bg-red-500/60" />
                       <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
@@ -767,13 +790,13 @@ export default function Home() {
                       <img 
                         src={project.img1} 
                         alt={`${project.title} Desktop`} 
-                        className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                        className="w-full h-full object-cover object-top opacity-90 transition-opacity duration-300"
                       />
                     </div>
                   </div>
 
                   {/* Overlapping Mobile Phone Mockup */}
-                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 group-hover:translate-x-2 transition-transform duration-300">
+                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-[#0b0b1a] border border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-transform duration-300">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-black relative border border-white/5">
                       <img 
                         src={project.img2} 
@@ -785,7 +808,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </HoverCard3D>
               </motion.div>
             ))}
           </div>
@@ -962,24 +985,39 @@ export default function Home() {
           </div>
  
           <div className="grid md:grid-cols-3 gap-6">
-            <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-orange)] transition-colors duration-300">
-              <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
-              <h4 className="font-poppins font-bold text-lg mb-1 text-white">NUST Islamabad</h4>
-              <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
-              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">Sep 2025 – Sep 2029</p>
+            <motion.div variants={fadeInUp} className="rounded-2xl relative">
+              <HoverCard3D 
+                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] transition-colors duration-300 h-full flex flex-col"
+                glowColor="rgba(255, 107, 53, 0.1)"
+              >
+                <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
+                <h4 className="font-poppins font-bold text-lg mb-1 text-white">NUST Islamabad</h4>
+                <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">Sep 2025 – Sep 2029</p>
+              </HoverCard3D>
             </motion.div>
-            <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-orange)] transition-colors duration-300">
-              <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
-              <h4 className="font-poppins font-bold text-lg mb-1 text-white">Punjab College Chakwal</h4>
-              <p className="text-sm text-[var(--color-text-secondary)] font-satoshi font-bold uppercase tracking-wider mb-3">Intermediate</p>
-              <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">1069/1200<br/>2023-2025</p>
+            <motion.div variants={fadeInUp} className="rounded-2xl relative">
+              <HoverCard3D 
+                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] transition-colors duration-300 h-full flex flex-col"
+                glowColor="rgba(197, 255, 65, 0.08)"
+              >
+                <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
+                <h4 className="font-poppins font-bold text-lg mb-1 text-white">Punjab College Chakwal</h4>
+                <p className="text-sm text-[var(--color-text-secondary)] font-satoshi font-bold uppercase tracking-wider mb-3">Intermediate</p>
+                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">1069/1200<br/>2023-2025</p>
+              </HoverCard3D>
             </motion.div>
-            <motion.div variants={fadeInUp} className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] hover:border-[var(--color-accent-orange)] transition-colors duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-accent-orange)]/5 rounded-bl-full" />
-              <Trophy className="w-6 h-6 text-[var(--color-accent-orange)] mb-4 relative z-10" />
-              <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-white">DPS Chakwal</h4>
-              <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
-              <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
+            <motion.div variants={fadeInUp} className="rounded-2xl relative overflow-hidden">
+              <HoverCard3D 
+                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-[#080808] transition-colors duration-300 relative h-full flex flex-col"
+                glowColor="rgba(255, 107, 53, 0.1)"
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-accent-orange)]/5 rounded-bl-full pointer-events-none" />
+                <Trophy className="w-6 h-6 text-[var(--color-accent-orange)] mb-4 relative z-10" />
+                <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-white">DPS Chakwal</h4>
+                <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
+                <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed mt-auto">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
+              </HoverCard3D>
             </motion.div>
           </div>
         </motion.section>
