@@ -370,7 +370,7 @@ export default function Home() {
       {/* Sticky Top Header Navigation - Floating Island Header Easing (Fixed Position) */}
       <header className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 py-4 ${
         isScrolled 
-          ? "bg-white/85 dark:bg-black/85 backdrop-blur-lg border-b border-black/10 dark:border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-8 md:py-3 md:shadow-lg md:shadow-stone-200/40 dark:shadow-black/40" 
+          ? "bg-white/85 dark:bg-black/85 backdrop-blur-lg border-b border-black/10 dark:border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-5 md:py-3 md:shadow-lg md:shadow-stone-200/40 dark:shadow-black/40" 
           : "bg-white/60 dark:bg-black/60 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-6 md:px-12"
       } flex items-center justify-between select-none`}>
         {/* Left Side Spacer to maintain center nav alignments */}
@@ -384,7 +384,9 @@ export default function Home() {
               <button
                 key={sec.id}
                 onClick={() => scrollToSection(sec.id)}
-                className="relative px-4 py-2 text-xs font-poppins font-semibold uppercase tracking-wider transition-colors cursor-pointer border-none outline-none text-stone-400 hover:text-stone-900 dark:hover:text-white"
+                className={`relative py-2 text-xs font-poppins font-semibold uppercase tracking-wider transition-colors cursor-pointer border-none outline-none text-stone-400 hover:text-stone-900 dark:hover:text-white ${
+                  isScrolled ? "px-2.5" : "px-4"
+                }`}
               >
                 <span className={`relative z-10 transition-colors ${isActive ? "text-[var(--color-accent-orange)]" : ""}`}>
                   {sec.label}
@@ -402,7 +404,7 @@ export default function Home() {
         </nav>
 
         {/* Right Side: Icons + Theme Toggle + Contact Button */}
-        <div className="flex items-center gap-5">
+        <div className={`flex items-center transition-all duration-300 ${isScrolled ? "gap-3.5" : "gap-5"}`}>
           {/* Social Icons */}
           <div className="hidden sm:flex items-center gap-3">
             <a
