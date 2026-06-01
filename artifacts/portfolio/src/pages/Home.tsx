@@ -448,7 +448,11 @@ export default function Home() {
           {/* Contact Button (CTA) */}
           <button
             onClick={() => setIsContactOpen(true)}
-            className="px-5 py-2 text-xs font-poppins font-extrabold uppercase tracking-wider bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white rounded-full transition-all hover:scale-105 duration-200 cursor-pointer border-none outline-none shadow-md shadow-[var(--color-accent-orange)]/10"
+            className={`px-5 py-2 text-xs font-poppins font-extrabold uppercase tracking-wider bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white rounded-full transition-all duration-300 cursor-pointer border-none outline-none shadow-md shadow-[var(--color-accent-orange)]/10 ${
+              isScrolled 
+                ? "md:translate-x-5 md:hover:translate-x-6 md:hover:scale-105" 
+                : "hover:scale-105"
+            }`}
           >
             Contact
           </button>
