@@ -450,7 +450,7 @@ export default function Home() {
             onClick={() => setIsContactOpen(true)}
             className={`px-5 py-2 text-xs font-poppins font-extrabold uppercase tracking-wider bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white rounded-full transition-all duration-300 cursor-pointer border-none outline-none shadow-md shadow-[var(--color-accent-orange)]/10 ${
               isScrolled 
-                ? "md:translate-x-5 md:hover:translate-x-6 md:hover:scale-105" 
+                ? "md:translate-x-1.5 md:hover:translate-x-2.5 md:hover:scale-105" 
                 : "hover:scale-105"
             }`}
           >
