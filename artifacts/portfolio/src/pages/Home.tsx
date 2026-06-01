@@ -1323,8 +1323,8 @@ function ContactModal({ onClose }: { onClose: () => void }) {
       }
     } catch (err: any) {
       console.error("Form submission AJAX error:", err);
-      
-
+      setStatus("error");
+      setErrorMessage(err.message || "An unexpected error occurred. Please try again or send a direct email.");
     }
   };
   return (
@@ -1423,14 +1423,12 @@ function ContactModal({ onClose }: { onClose: () => void }) {
                     <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm font-poppins leading-relaxed">
                       {errorMessage}
                     </div>
-                    {errorMessage.includes("outage") && (
-                      <a
-                        href={`mailto:abdullahrauf245@gmail.com?subject=${encodeURIComponent(`Inquiry from ${formData.name}`)}&body=${encodeURIComponent(`Hi Abdullah,\n\n${formData.message}\n\n---\nSender Name: ${formData.name}\nSender Email: ${formData.email}`)}`}
-                        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white font-satoshi font-bold text-xs tracking-wider uppercase transition-all duration-200 cursor-pointer text-center"
-                      >
-                        <Mail className="w-4 h-4" /> Send Direct Email
-                      </a>
-                    )}
+                    <a
+                      href={`mailto:abdullahrauf245@gmail.com?subject=${encodeURIComponent(`Inquiry from ${formData.name}`)}&body=${encodeURIComponent(`Hi Abdullah,\n\n${formData.message}\n\n---\nSender Name: ${formData.name}\nSender Email: ${formData.email}`)}`}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[var(--color-accent-orange)] hover:bg-[var(--color-accent-orange)]/90 text-white font-satoshi font-bold text-xs tracking-wider uppercase transition-all duration-200 cursor-pointer text-center"
+                    >
+                      <Mail className="w-4 h-4" /> Send Direct Email
+                    </a>
                   </div>
                 )}
 
