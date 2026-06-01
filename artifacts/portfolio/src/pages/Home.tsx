@@ -570,9 +570,6 @@ export default function Home() {
                 alt="Muhammad Abdullah" 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[var(--color-accent-orange)] text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">
-                BS Data Science
-              </div>
             </div>
             <div>
               <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
