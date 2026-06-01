@@ -1299,27 +1299,30 @@ function ContactModal({ onClose }: { onClose: () => void }) {
 
     setStatus("submitting");
     try {
-      const response = await fetch("https://formsubmit.co/ajax/abdullahrauf245@gmail.com", {
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          _subject: `New Portfolio Message from ${formData.name}`,
-          _honey: "", // Honeypot field for spam prevention
+          service_id: "service_m0jpia6",
+          template_id: "template_9l21rmj",
+          user_id: "smTVJOSBUhJWL775Ru5CO",
+          template_params: {
+            from_name: formData.name,
+            reply_to: formData.email,
+            message: formData.message,
+          }
         })
       });
 
-      const result = await response.json();
-      if (response.ok && result.success === "true") {
+      if (response.ok) {
         setStatus("success");
         setFormData({ name: "", email: "", message: "" });
       } else {
-        throw new Error(result.message || "Failed to send message.");
+        const errorText = await response.text();
+        throw new Error(errorText || "Failed to send message.");
       }
     } catch (err: any) {
       console.error("Form submission AJAX error:", err);
