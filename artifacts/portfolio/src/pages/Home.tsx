@@ -233,21 +233,33 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-      for (const section of sections) {
-        const el = document.getElementById(section.id);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section.id);
-          }
-        }
-      }
+    const observerOptions = {
+      root: null,
+      rootMargin: "-25% 0px -55% 0px", // Trigger active section when it is inside the core reading zone
+      threshold: 0.02,
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+
+    sections.forEach((section) => {
+      const el = document.getElementById(section.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      sections.forEach((section) => {
+        const el = document.getElementById(section.id);
+        if (el) observer.unobserve(el);
+      });
+    };
   }, []);
 
   const { scrollYProgress } = useScroll();
@@ -353,8 +365,8 @@ export default function Home() {
       {/* Interactive Node Particles Canvas Backdrop */}
       <CanvasParticles />
 
-      {/* Sticky Top Header Navigation - Floating Island Header Easing */}
-      <header className={`sticky top-0 z-40 w-full transition-all duration-500 py-4 ${
+      {/* Sticky Top Header Navigation - Floating Island Header Easing (Fixed Position) */}
+      <header className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 py-4 ${
         isScrolled 
           ? "bg-black/85 backdrop-blur-lg border-b border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-8 md:py-3 md:shadow-lg md:shadow-black/40" 
           : "bg-black/60 backdrop-blur-md border-b border-white/5 px-6 md:px-12"
