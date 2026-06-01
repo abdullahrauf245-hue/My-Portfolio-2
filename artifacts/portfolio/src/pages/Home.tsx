@@ -1360,9 +1360,10 @@ function ContactModal({ onClose }: { onClose: () => void }) {
           template_id: "template_9l21rmj",
           user_id: "MK-HLtehHL5oDyY0H",
           template_params: {
-            from_name: formData.name,
-            reply_to: formData.email,
+            name: formData.name,
+            email: formData.email,
             message: formData.message,
+            title: "Portfolio Contact",
           }
         })
       });
