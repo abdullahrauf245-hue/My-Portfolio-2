@@ -5,7 +5,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode, GitGraph, Sun, Moon } from "lucide-react";
 import { GitHubCalendar } from "react-github-calendar";
 import { useTheme } from "@/App";
-import avatarImg from "@assets/image_1780161923266.png";
+import avatarImg from "@assets/profile.jpg.png";
 import muslimTraders1 from "@assets/muslim_traders_1.png";
 import muslimTraders2 from "@assets/muslim_traders_2.png";
 import nustEvents1 from "@assets/nust_events_1.png";
