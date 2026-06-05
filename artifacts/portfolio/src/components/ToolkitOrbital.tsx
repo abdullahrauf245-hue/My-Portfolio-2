@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Code2 } from "lucide-react";
 
@@ -11,6 +11,8 @@ export default function ToolkitOrbital() {
   const [time, setTime] = useState(0);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [screenSize, setScreenSize] = useState<"xs" | "sm" | "md" | "lg">("lg");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mousePosRef = useRef({ x: 0, y: 0, active: false });
 
   useEffect(() => {
     const handleResize = () => {
@@ -93,6 +95,23 @@ export default function ToolkitOrbital() {
     return () => cancelAnimationFrame(frameId);
   }, []);
 
+  // Mouse handlers for magnetic orbit attraction
+  const handleContainerMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    mousePosRef.current = {
+      x: e.clientX - centerX,
+      y: e.clientY - centerY,
+      active: true
+    };
+  };
+
+  const handleContainerMouseLeave = () => {
+    mousePosRef.current = { ...mousePosRef.current, active: false };
+  };
+
   const renderSkills = (skills: Skill[], radius: number, speed: number) => {
     return skills.map((skill, index) => {
       // Calculate angular spacing for perfect even distribution
@@ -101,6 +120,24 @@ export default function ToolkitOrbital() {
       const currentAngle = baseAngle + time * speed;
       const x = Math.cos(currentAngle) * radius;
       const y = Math.sin(currentAngle) * radius;
+
+      // Magnetic cursor attraction — deflect skill toward cursor when nearby
+      const mp = mousePosRef.current;
+      let finalX = x;
+      let finalY = y;
+
+      if (mp.active) {
+        const dx = mp.x - x;
+        const dy = mp.y - y;
+        const dist = Math.hypot(dx, dy);
+        const magnetRadius = 90 * scale;
+
+        if (dist < magnetRadius && dist > 0) {
+          const force = ((magnetRadius - dist) / magnetRadius) * 0.45;
+          finalX += dx * force;
+          finalY += dy * force;
+        }
+      }
 
       const isHovered = hoveredSkill === skill.name;
 
@@ -119,7 +156,7 @@ export default function ToolkitOrbital() {
           style={{
             left: "50%",
             top: "50%",
-            transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${isHovered ? 1.1 : 1})`,
+            transform: `translate(-50%, -50%) translate(${finalX}px, ${finalY}px) scale(${isHovered ? 1.1 : 1})`,
             boxShadow: isHovered ? "0 0 12px rgba(255, 107, 53, 0.35)" : "none",
           }}
           className={`absolute z-20 rounded-full border font-medium cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none ${btnSizeClass} ${
@@ -139,6 +176,9 @@ export default function ToolkitOrbital() {
       
       {/* Responsive wrapper size that perfectly aligns with dynamic radii dimensions */}
       <motion.div
+        ref={containerRef}
+        onMouseMove={handleContainerMouseMove}
+        onMouseLeave={handleContainerMouseLeave}
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}

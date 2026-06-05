@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, cloneElement } from "react";
-import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring, type MotionValue } from "framer-motion";
 import { SiGithub } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
 import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode, GitGraph, Sun, Moon } from "lucide-react";
@@ -62,6 +62,60 @@ const contentVariants: any = {
   })
 };
 
+// Scroll-driven timeline bead that activates as the line draws past it
+function TimelineBead({ scrollProgress, idx, total }: { 
+  scrollProgress: MotionValue<number>; 
+  idx: number; 
+  total: number;
+}) {
+  const activationPoint = idx / Math.max(total - 1, 1);
+  
+  const beadScale = useTransform(
+    scrollProgress,
+    [Math.max(0, activationPoint - 0.1), activationPoint, Math.min(1, activationPoint + 0.05)],
+    [0.7, 1.25, 1.1]
+  );
+  const springScale = useSpring(beadScale, { stiffness: 300, damping: 20 });
+  
+  const glowOpacity = useTransform(
+    scrollProgress,
+    [Math.max(0, activationPoint - 0.05), activationPoint + 0.02],
+    [0, 1]
+  );
+  const springGlow = useSpring(glowOpacity, { stiffness: 200, damping: 25 });
+  
+  const innerDotColor = useTransform(
+    scrollProgress,
+    [Math.max(0, activationPoint - 0.05), activationPoint + 0.02],
+    ["#FF6B35", "#a3e635"]
+  );
+
+  const borderColor = useTransform(
+    scrollProgress,
+    [Math.max(0, activationPoint - 0.05), activationPoint + 0.02],
+    ["rgba(255, 107, 53, 0.6)", "rgba(163, 230, 53, 0.9)"]
+  );
+
+  return (
+    <motion.div
+      style={{ 
+        scale: springScale,
+        borderColor: borderColor,
+      }}
+      className="absolute -left-2 top-[6px] w-4 h-4 rounded-full bg-[var(--color-accent-orange)]/10 border-2 ring-4 ring-[#f5f5f7] dark:ring-[#05050d] flex items-center justify-center z-10"
+    >
+      {/* Animated glow pulse */}
+      <motion.div 
+        style={{ opacity: springGlow }}
+        className="absolute inset-[-8px] rounded-full bg-[var(--color-accent-lime)]/25 blur-md pointer-events-none"
+      />
+      <motion.div 
+        style={{ backgroundColor: innerDotColor }}
+        className="w-1.5 h-1.5 rounded-full"
+      />
+    </motion.div>
+  );
+}
 
 // Parallax hook for individual sections
 function useParallax(offset: number = 50) {
@@ -273,6 +327,14 @@ export default function Home() {
   const projectsParallax = useParallax(35);
   const skillsParallax = useParallax(25);
   const experienceParallax = useParallax(30);
+
+  // Scroll-driven timeline tracking
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: timelineScrollProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 0.85", "end 0.5"]
+  });
+  const timelineScaleY = useTransform(timelineScrollProgress, [0, 1], [0, 1]);
   const educationParallax = useParallax(25);
   const activityParallax = useParallax(25);
 
@@ -812,7 +874,7 @@ export default function Home() {
                   glowColor={idx % 2 === 0 ? "rgba(255, 107, 53, 0.12)" : "rgba(197, 255, 65, 0.12)"}
                 >
                   {/* Laptop Mockup */}
-                  <div className="w-full h-full bg-[#121225]/5 dark:bg-[#121225]/45 border border-slate-200 dark:border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-transform duration-300">
+                  <div className="w-full h-full bg-[#121225]/5 dark:bg-[#121225]/45 border border-slate-200 dark:border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-all duration-500 group-hover:scale-[1.02] group-hover:-translate-y-1">
                     <div className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 dark:bg-[#0b0b1a] border-b border-slate-200 dark:border-[#1b1b36]">
                       <div className="w-2 h-2 rounded-full bg-red-500/60" />
                       <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
@@ -828,7 +890,7 @@ export default function Home() {
                   </div>
 
                   {/* Overlapping Mobile Phone Mockup */}
-                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-slate-100 dark:bg-[#0b0b1a] border border-slate-200 dark:border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-transform duration-300">
+                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-slate-100 dark:bg-[#0b0b1a] border border-slate-200 dark:border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-all duration-500 group-hover:-translate-y-4 group-hover:translate-x-2 group-hover:scale-105 group-hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)]">
                     <div className="w-full h-full rounded-xl overflow-hidden bg-white dark:bg-black relative border border-black/5 dark:border-white/5">
                       <img 
                         src={project.img2} 
@@ -870,17 +932,14 @@ export default function Home() {
             <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
           </div>
 
-          <div className="relative ml-4 md:ml-6 space-y-12">
+          <div ref={timelineRef} className="relative ml-4 md:ml-6 space-y-12">
             {/* The background track line */}
             <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[var(--color-border-subtle)]/15 pointer-events-none rounded-full" />
             
-            {/* The animated drawing line */}
+            {/* Scroll-driven drawing line */}
             <motion.div 
-              className="absolute left-0 top-2 w-[2px] bg-gradient-to-b from-[var(--color-accent-lime)] via-[var(--color-accent-orange)] to-[var(--color-accent-orange)] origin-top pointer-events-none rounded-full"
-              initial={{ height: 0 }}
-              whileInView={{ height: "calc(100% - 16px)" }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute left-0 top-2 bottom-2 w-[2px] bg-gradient-to-b from-[var(--color-accent-lime)] via-[var(--color-accent-orange)] to-[var(--color-accent-orange)] origin-top pointer-events-none rounded-full"
+              style={{ scaleY: timelineScaleY }}
             />
 
             {[
@@ -968,14 +1027,8 @@ export default function Home() {
                 variants={contentVariants}
                 className="relative pl-8 md:pl-10 group"
               >
-                {/* Bead (snaps onto line one by one) */}
-                <motion.div 
-                  custom={idx}
-                  variants={beadVariants}
-                  className="absolute -left-2 top-[6px] w-4 h-4 rounded-full bg-[var(--color-accent-orange)]/10 border-2 border-[var(--color-accent-orange)] ring-4 ring-[#f5f5f7] dark:ring-[#05050d] shadow-[0_0_12px_rgba(255,107,53,0.3)] flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-125"
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)] group-hover:bg-[var(--color-accent-lime)] transition-colors duration-300" />
-                </motion.div>
+                {/* Scroll-driven bead */}
+                <TimelineBead scrollProgress={timelineScrollProgress} idx={idx} total={7} />
 
                 {/* Experience Header */}
                 <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-3">
@@ -986,15 +1039,38 @@ export default function Home() {
 
                 {/* Experience Body */}
                 <div className="space-y-3 max-w-4xl">
-                  <p className="text-[var(--color-text-secondary)] text-sm font-poppins font-medium leading-relaxed">{exp.desc}</p>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-30px" }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-[var(--color-text-secondary)] text-sm font-poppins font-medium leading-relaxed"
+                  >{exp.desc}</motion.p>
                   
-                  {/* Detailed Bullet Points */}
+                  {/* Staggered Bullet Points */}
                   <ul className="list-none space-y-2 pl-1">
                     {exp.details.map((detail, dIdx) => (
-                      <li key={dIdx} className="flex items-start gap-2.5 text-xs text-[var(--color-text-muted)] font-poppins leading-relaxed">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)]/60 mt-1.5 flex-shrink-0" />
+                      <motion.li 
+                        key={dIdx} 
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-30px" }}
+                        transition={{ 
+                          delay: 0.15 + dIdx * 0.12, 
+                          duration: 0.5, 
+                          ease: [0.22, 1, 0.36, 1] 
+                        }}
+                        className="flex items-start gap-2.5 text-xs text-[var(--color-text-muted)] font-poppins leading-relaxed"
+                      >
+                        <motion.span 
+                          initial={{ scale: 0 }}
+                          whileInView={{ scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.25 + dIdx * 0.12, type: "spring", stiffness: 400, damping: 15 }}
+                          className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)]/60 mt-1.5 flex-shrink-0" 
+                        />
                         <span>{detail}</span>
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
                 </div>
