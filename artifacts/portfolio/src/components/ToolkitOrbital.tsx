@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Code2, Award } from "lucide-react";
+import { Code2 } from "lucide-react";
 
 interface Skill {
   name: string;
@@ -10,6 +10,31 @@ interface Skill {
 export default function ToolkitOrbital() {
   const [time, setTime] = useState(0);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [screenSize, setScreenSize] = useState<"xs" | "sm" | "md" | "lg">("lg");
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 400) {
+        setScreenSize("xs");
+      } else if (width < 640) {
+        setScreenSize("sm");
+      } else if (width < 1024) {
+        setScreenSize("md");
+      } else {
+        setScreenSize("lg");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Scale multiplier based on responsive screen size
+  const scale = 
+    screenSize === "xs" ? 0.52 :
+    screenSize === "sm" ? 0.68 :
+    screenSize === "md" ? 0.85 : 1.0;
 
   // Orbit Speed definitions (radians per second)
   const speeds = {
@@ -19,11 +44,11 @@ export default function ToolkitOrbital() {
     ring4: 0.15,
   };
 
-  // Concentric Orbit Radii (px)
-  const radius1 = 50;
-  const radius2 = 90;
-  const radius3 = 130;
-  const radius4 = 170;
+  // Concentric Orbit Radii (px) scaled dynamically
+  const radius1 = 50 * scale;
+  const radius2 = 90 * scale;
+  const radius3 = 130 * scale;
+  const radius4 = 170 * scale;
 
   // Skills mapped exactly to the request
   const ring1Skills: Skill[] = [
@@ -79,6 +104,13 @@ export default function ToolkitOrbital() {
 
       const isHovered = hoveredSkill === skill.name;
 
+      // Adjust padding and font size dynamically based on scale
+      const btnSizeClass = 
+        screenSize === "xs" ? "px-1.5 py-0.5 text-[9px]" :
+        screenSize === "sm" ? "px-2 py-1 text-[10px]" :
+        screenSize === "md" ? "px-2.5 py-1 text-xs" :
+        "px-3 py-1.5 text-xs";
+
       return (
         <button
           key={skill.name}
@@ -90,7 +122,7 @@ export default function ToolkitOrbital() {
             transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${isHovered ? 1.1 : 1})`,
             boxShadow: isHovered ? "0 0 12px rgba(255, 107, 53, 0.35)" : "none",
           }}
-          className={`absolute z-20 px-3 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none ${
+          className={`absolute z-20 rounded-full border font-medium cursor-pointer transition-all duration-200 ease-out select-none whitespace-nowrap outline-none ${btnSizeClass} ${
             isHovered
               ? "border-[var(--color-accent-orange)] text-[var(--color-accent-orange)]"
               : "bg-white dark:bg-[#111111] border-stone-200 dark:border-stone-800 text-stone-700 dark:text-[#ffffff]"
@@ -105,22 +137,24 @@ export default function ToolkitOrbital() {
   return (
     <div className="w-full flex flex-col items-center justify-center py-6 select-none relative z-10">
       
-      {/* Dynamic Scale Wrapper for perfect Mobile viewports scaling */}
+      {/* Responsive wrapper size that perfectly aligns with dynamic radii dimensions */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-[380px] h-[380px] md:w-[400px] md:h-[400px] relative flex items-center justify-center scale-75 sm:scale-90 md:scale-100 flex-shrink-0"
+        className="w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[400px] md:h-[400px] relative flex items-center justify-center flex-shrink-0"
       >
         {/* Center core: solid orange circle with Code Lucide Icon */}
         <div 
           style={{
             boxShadow: "0 0 30px rgba(255, 107, 53, 0.45)",
           }}
-          className="w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center z-35 transition-transform duration-300 hover:scale-105"
+          className={`rounded-full bg-[#FF6B35] flex items-center justify-center z-35 transition-transform duration-300 hover:scale-105 ${
+            screenSize === "xs" ? "w-8 h-8" : screenSize === "sm" ? "w-10 h-10" : "w-12 h-12"
+          }`}
         >
-          <Code2 className="w-5 h-5 text-white" />
+          <Code2 className={screenSize === "xs" ? "w-4 h-4 text-white" : "w-5 h-5 text-white"} />
         </div>
 
         {/* Orbit Ring 1 */}
@@ -151,9 +185,6 @@ export default function ToolkitOrbital() {
         />
         {renderSkills(ring4Skills, radius4, speeds.ring4)}
       </motion.div>
-
-
-
     </div>
   );
 }
