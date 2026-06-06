@@ -28,6 +28,13 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/overview" component={Home} />
+      <Route path="/about" component={Home} />
+      <Route path="/projects" component={Home} />
+      <Route path="/skills" component={Home} />
+      <Route path="/experience" component={Home} />
+      <Route path="/education" component={Home} />
+      <Route path="/activity" component={Home} />
       <Route component={NotFound} />
     </Switch>
   );

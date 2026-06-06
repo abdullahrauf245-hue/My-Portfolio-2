@@ -5,6 +5,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { Mail, ArrowUpRight, Code2, Database, Terminal, MapPin, Building, Trophy, GraduationCap, Award, Download, X, Send, CheckCircle2, Loader2, Accessibility, Type, Eye, Zap, ChevronUp, LayoutDashboard, User2, Briefcase, FolderCode, GitGraph, Sun, Moon } from "lucide-react";
 import { GitHubCalendar } from "react-github-calendar";
 import { useTheme } from "@/App";
+import { useLocation } from "wouter";
 import avatarImg from "@assets/image_1780161923266.png";
 import muslimTraders1 from "@assets/muslim_traders_1.png";
 import muslimTraders2 from "@assets/muslim_traders_2.png";
@@ -183,7 +184,6 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const [a11y, setA11y] = useState({ fontSize: 0, highContrast: false, reducedMotion: false, menuOpen: false });
-  const [activeSection, setActiveSection] = useState("overview");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -279,44 +279,19 @@ export default function Home() {
     { id: "activity", label: "Activity", icon: GitGraph },
   ];
 
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      setActiveSection(id);
-      setMobileMenuOpen(false);
-    }
+  const [location, setLocation] = useLocation();
+  const currentPath = location === "/" ? "overview" : location.replace(/^\//, "");
+  const activeSection = sections.some(s => s.id === currentPath) ? currentPath : "overview";
+
+  const navigateToSection = (id: string) => {
+    setLocation(id === "overview" ? "/" : "/" + id);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "-25% 0px -55% 0px", // Trigger active section when it is inside the core reading zone
-      threshold: 0.02,
-    };
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
-    sections.forEach((section) => {
-      const el = document.getElementById(section.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => {
-      sections.forEach((section) => {
-        const el = document.getElementById(section.id);
-        if (el) observer.unobserve(el);
-      });
-    };
-  }, []);
+  const activeIndex = sections.findIndex(s => s.id === activeSection);
+  const prevSection = activeIndex > 0 ? sections[activeIndex - 1] : null;
+  const nextSection = activeIndex < sections.length - 1 ? sections[activeIndex + 1] : null;
 
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -445,7 +420,7 @@ export default function Home() {
             return (
               <button
                 key={sec.id}
-                onClick={() => scrollToSection(sec.id)}
+                onClick={() => navigateToSection(sec.id)}
                 className={`relative py-2 text-xs font-poppins font-semibold uppercase tracking-wider transition-colors cursor-pointer border-none outline-none text-stone-400 hover:text-stone-900 dark:hover:text-white ${
                   isScrolled ? "px-2.5" : "px-4"
                 }`}
@@ -584,7 +559,7 @@ export default function Home() {
                     return (
                       <button
                         key={sec.id}
-                        onClick={() => scrollToSection(sec.id)}
+                        onClick={() => navigateToSection(sec.id)}
                         className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left text-[14px] font-poppins font-medium tracking-wide transition-all cursor-pointer border-none outline-none ${
                           isActive
                             ? "bg-[var(--color-accent-orange)]/10 text-[var(--color-accent-orange)] border border-[var(--color-accent-orange)]/25 shadow-lg shadow-[var(--color-accent-orange)]/5"
@@ -607,619 +582,662 @@ export default function Home() {
       <div className="min-h-screen flex flex-col relative z-10">
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-32 relative z-10 w-full flex-grow">
 
-        {/* HERO SECTION with parallax */}
-        <motion.div id="overview" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
-        <section className="pt-[60px] md:pt-[80px] mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
-          <motion.div 
-            className="flex-1"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-          >
-            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-stone-900 dark:text-white">
-              <span className="inline-block">
-                {"Muhammad".split("").map((letter, idx) => (
-                  <motion.span
-                    key={idx}
-                    className="inline-block hover:text-[var(--color-accent-orange)] cursor-default select-none transition-colors duration-200"
-                    whileHover={{ 
-                      scale: 1.2, 
-                      y: -8,
-                      rotate: idx % 2 === 0 ? -5 : 5,
-                      filter: "drop-shadow(0 0 10px rgba(255, 107, 53, 0.6))"
-                    }}
-                    transition={{ type: "spring", stiffness: 350, damping: 12 }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </span>{" "}
-              <br />
-              <span className="text-[var(--color-accent-orange)] inline-block mt-2">
-                {"Abdullah.".split("").map((letter, idx) => (
-                  <motion.span
-                    key={idx}
-                    className="inline-block hover:text-[var(--color-accent-lime)] cursor-default select-none transition-colors duration-200"
-                    whileHover={{ 
-                      scale: 1.2, 
-                      y: -8,
-                      rotate: idx % 2 === 0 ? 5 : -5,
-                      filter: "drop-shadow(0 0 10px rgba(163, 230, 53, 0.6))"
-                    }}
-                    transition={{ type: "spring", stiffness: 350, damping: 12 }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </span>
-            </motion.h1>
-            
-            <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[var(--color-text-secondary)] font-poppins font-normal mb-8 max-w-xl leading-relaxed">
-              <strong className="text-stone-900 dark:text-white font-semibold">Curious. Resourceful. Driven.</strong> <br/>
-              A Data Science builder thinking from first principles.
-            </motion.p>
-            
-            <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-              <MagneticButton href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
-                <Download className="w-4 h-4" /> Download CV
-              </MagneticButton>
-              <MagneticButton href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[var(--color-border-subtle)]/45 hover:border-stone-900 dark:hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-stone-850 dark:text-white hover:scale-105 duration-200">
-                <SiGithub className="w-4 h-4" /> GitHub
-              </MagneticButton>
-              <MagneticButton href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[var(--color-border-subtle)]/45 hover:border-stone-900 dark:hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-stone-850 dark:text-white hover:scale-105 duration-200">
-                <FaLinkedin className="w-4 h-4" /> LinkedIn
-              </MagneticButton>
-            </motion.div>
-          </motion.div>
-
-          {/* Profile Card component wrapped in 3D perspective tilt and spotlight glow */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full md:w-[350px] rounded-2xl flex-shrink-0 relative"
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <HoverCard3D 
-              className="w-full bg-white text-black rounded-2xl p-6 shadow-2xl border border-[var(--color-border-subtle)] flex flex-col gap-4"
-              glowColor="rgba(255, 107, 53, 0.12)"
-            >
-              <div className="relative w-full h-64 overflow-hidden rounded-xl bg-stone-100">
-                <img 
-                  src={avatarImg} 
-                  alt="Muhammad Abdullah" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
-                <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
-              </div>
-              <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
-                Data Science builder thinking from first principles. Chakwal District Topper.
-              </p>
-              <div className="h-px bg-stone-200 my-1" />
-              <div className="flex justify-between items-center">
-                <span className="font-satoshi text-xs font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Let's Connect</span>
-                <div className="flex gap-2.5">
-                  <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
-                    <SiGithub className="w-4 h-4" />
-                  </a>
-                  <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
-                    <FaLinkedin className="w-4 h-4" />
-                  </a>
-                  <button 
-                    onClick={() => setIsContactOpen(true)}
-                    className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors cursor-pointer border-none outline-none"
-                  >
-                    <Mail className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </HoverCard3D>
-          </motion.div>
-        </section>
-        </motion.div>
-
-        {/* ABOUT SECTION with parallax */}
-        <motion.div id="about" ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-          className="mb-20"
-        >
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">About</h2>
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            <h3 className="text-3xl font-poppins font-bold leading-tight tracking-tight text-stone-900 dark:text-white">
-              I study Data Science at NUST Islamabad. But my real education happens when I build.
-            </h3>
-            <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed font-poppins font-normal text-[15px]">
-              <ScrollRevealText text="I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events." />
-              <ScrollRevealText text="I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems." />
-              <div className="flex gap-6 pt-4 text-stone-900 dark:text-white">
-                <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
-                  <MapPin className="w-4 h-4 text-[var(--color-accent-orange)]" /> Islamabad, PK
-                </div>
-                <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
-                  <Building className="w-4 h-4 text-[var(--color-accent-orange)]" /> NUST SEECS
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.section>
-        </motion.div>
-
-        {/* PROJECTS SECTION with parallax */}
-        <motion.div id="projects" ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="mb-32 md:mb-40"
-        >
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Selected Work</h2>
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-          </div>
-
-          <div className="flex flex-col gap-24">
-            {[
-              {
-                title: "Muslim Traders",
-                classification: "ENTERPRISE LOGISTICS - FEATURED",
-                desc: "Enterprise logistics and distribution platform for a 1988-founded network covering 375+ exclusive sub-distributors and 400,000+ retail stores across Pakistan.",
-                bullets: [
-                  "375+ exclusive distribution hubs mapped throughout regional networks.",
-                  "400,000+ retail storefronts supported with path-optimized delivery systems.",
-                  "3+ Decades of secure enterprise logistics management and supply chain rigor."
-                ],
-                tags: ["Next.js", "Full Stack", "Enterprise", "Tailwind CSS"],
-                link: "https://muslim-traders.vercel.app",
-                github: "https://github.com/abdullahrauf245-hue/muslim-traders-2",
-                img1: muslimTraders1,
-                img2: muslimTraders2
-              },
-              {
-                title: "NUST Events & Society Portal",
-                classification: "FULL STACK PORTAL - FEATURED",
-                desc: "An all-in-one campus discovery platform providing structured event search, student registrations, and role-based workflows for organizers and guests.",
-                bullets: [
-                  "Role-based workflows with robust permission gates for Students, Guests, and Admins.",
-                  "Supabase integration driving live participant dashboards and data logging.",
-                  "Clean glassmorphism dashboard UI with instantaneous status updates."
-                ],
-                tags: ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
-                link: "https://nust-pulse.vercel.app",
-                github: "https://github.com/abdullahrauf245-hue/Nust-society-and-portal-system",
-                img1: nustEvents1,
-                img2: nustEvents2
-              },
-              {
-                title: "NUSTCafe",
-                classification: "CAMPUS WEB APP - COLLABORATIVE",
-                desc: "Centralized search, menu, and filter system consolidation covering 9 NUST campus cafes, built collaboratively with the BSDS-3A development team.",
-                bullets: [
-                  "9 Campus cafes indexed under a single high-speed menu finder.",
-                  "Dynamic filtering by location, meal categorization, and price limits.",
-                  "Collaborative sprint designed and launched with the BSDS-3A developer group."
-                ],
-                tags: ["Frontend", "Tailwind CSS", "Vite", "React"],
-                link: "https://nustcafe.vercel.app",
-                github: "https://github.com/abdullahrauf245-hue/nustcafe",
-                img1: nustCafe1,
-                img2: nustCafe1
-              }
-            ].map((project, idx) => (
-              <motion.div 
-                key={idx}
-                variants={fadeInUp}
-                className="flex flex-col lg:flex-row gap-12 items-center justify-between group"
-              >
-                {/* Project Details (Left) */}
-                <div className="flex-1 space-y-6">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)]" />
-                      <span className="text-[10px] font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">{project.classification}</span>
-                    </div>
-                    <h3 className="text-3xl md:text-4xl font-poppins font-bold text-stone-900 dark:text-white tracking-tight leading-none group-hover:text-[var(--color-accent-orange)] transition-colors duration-300">
-                      {project.title}
-                    </h3>
-                  </div>
-
-                  <p className="text-[var(--color-text-secondary)] font-poppins font-normal text-[15px] leading-relaxed">
-                    {project.desc}
-                  </p>
-
-                  <ul className="space-y-3">
-                    {project.bullets.map((bullet, bIdx) => (
-                      <li key={bIdx} className="flex gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                        <span className="text-[var(--color-accent-orange)] font-poppins font-bold flex-shrink-0 mt-0.5">+</span>
-                        <span className="font-poppins">{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {project.tags.map(tag => (
-                      <span key={tag} className="px-3 py-1 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-full text-stone-850 dark:text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">{tag}</span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-6 pt-4 text-xs font-satoshi font-bold uppercase tracking-wider">
-                    <a 
-                      href={project.github} 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="flex items-center gap-2 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors animate-pulse"
-                    >
-                      <SiGithub className="w-4 h-4" /> GitHub
-                    </a>
-                    <a 
-                      href={project.link} 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="flex items-center gap-2 text-[var(--color-accent-orange)] hover:text-[var(--color-accent-orange)]/80 transition-colors font-bold"
-                    >
-                      <ArrowUpRight className="w-4 h-4" /> Live Demo
-                    </a>
-                  </div>
-                </div>
-
-                {/* Device Mockups (Right) wrapped in 3D perspective tilt and spotlight glow */}
-                <HoverCard3D 
-                  className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4 rounded-2xl overflow-visible"
-                  glowColor={idx % 2 === 0 ? "rgba(255, 107, 53, 0.12)" : "rgba(197, 255, 65, 0.12)"}
+            {activeSection === "overview" && (
+              <motion.div id="overview" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
+              <section className="pt-[60px] md:pt-[80px] mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
+                <motion.div 
+                  className="flex-1"
+                  initial="hidden"
+                  animate="visible"
+                  variants={staggerContainer}
                 >
-                  {/* Laptop Mockup */}
-                  <div className="w-full h-full bg-[#121225]/5 dark:bg-[#121225]/45 border border-slate-200 dark:border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-all duration-500 group-hover:scale-[1.02] group-hover:-translate-y-1">
-                    <div className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 dark:bg-[#0b0b1a] border-b border-slate-200 dark:border-[#1b1b36]">
-                      <div className="w-2 h-2 rounded-full bg-red-500/60" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
-                      <div className="w-2 h-2 rounded-full bg-green-500/60" />
-                    </div>
-                    <div className="w-full h-full bg-[#faf9f6] dark:bg-[#05050d] overflow-hidden relative">
-                      <img 
-                        src={project.img1} 
-                        alt={`${project.title} Desktop`} 
-                        className="w-full h-full object-cover object-top opacity-90 transition-opacity duration-300"
-                      />
-                    </div>
-                  </div>
+                  <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-poppins font-bold tracking-tighter mb-6 leading-[0.95] text-stone-900 dark:text-white">
+                    <span className="inline-block">
+                      {"Muhammad".split("").map((letter, idx) => (
+                        <motion.span
+                          key={idx}
+                          className="inline-block hover:text-[var(--color-accent-orange)] cursor-default select-none transition-colors duration-200"
+                          whileHover={{ 
+                            scale: 1.2, 
+                            y: -8,
+                            rotate: idx % 2 === 0 ? -5 : 5,
+                            filter: "drop-shadow(0 0 10px rgba(255, 107, 53, 0.6))"
+                          }}
+                          transition={{ type: "spring", stiffness: 350, damping: 12 }}
+                        >
+                          {letter}
+                        </motion.span>
+                      ))}
+                    </span>{" "}
+                    <br />
+                    <span className="text-[var(--color-accent-orange)] inline-block mt-2">
+                      {"Abdullah.".split("").map((letter, idx) => (
+                        <motion.span
+                          key={idx}
+                          className="inline-block hover:text-[var(--color-accent-lime)] cursor-default select-none transition-colors duration-200"
+                          whileHover={{ 
+                            scale: 1.2, 
+                            y: -8,
+                            rotate: idx % 2 === 0 ? 5 : -5,
+                            filter: "drop-shadow(0 0 10px rgba(163, 230, 53, 0.6))"
+                          }}
+                          transition={{ type: "spring", stiffness: 350, damping: 12 }}
+                        >
+                          {letter}
+                        </motion.span>
+                      ))}
+                    </span>
+                  </motion.h1>
+                  
+                  <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[var(--color-text-secondary)] font-poppins font-normal mb-8 max-w-xl leading-relaxed">
+                    <strong className="text-stone-900 dark:text-white font-semibold">Curious. Resourceful. Driven.</strong> <br/>
+                    A Data Science builder thinking from first principles.
+                  </motion.p>
+                  
+                  <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
+                    <MagneticButton href="/Muhammad_Abdullah_CV.pdf" download="Muhammad_Abdullah_CV.pdf" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-[var(--color-accent-orange)] text-white hover:bg-[var(--color-accent-orange)]/90 transition-all font-satoshi font-bold text-xs tracking-wider uppercase shadow-lg shadow-[var(--color-accent-orange)]/20 hover:scale-105 duration-200 group">
+                      <Download className="w-4 h-4" /> Download CV
+                    </MagneticButton>
+                    <MagneticButton href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[var(--color-border-subtle)]/45 hover:border-stone-900 dark:hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-stone-850 dark:text-white hover:scale-105 duration-200">
+                      <SiGithub className="w-4 h-4" /> GitHub
+                    </MagneticButton>
+                    <MagneticButton href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[var(--color-border-subtle)]/45 hover:border-stone-900 dark:hover:border-white transition-all font-satoshi font-bold text-xs tracking-wider uppercase text-stone-850 dark:text-white hover:scale-105 duration-200">
+                      <FaLinkedin className="w-4 h-4" /> LinkedIn
+                    </MagneticButton>
+                  </motion.div>
+                </motion.div>
 
-                  {/* Overlapping Mobile Phone Mockup */}
-                  <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-slate-100 dark:bg-[#0b0b1a] border border-slate-200 dark:border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-all duration-500 group-hover:-translate-y-4 group-hover:translate-x-2 group-hover:scale-105 group-hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)]">
-                    <div className="w-full h-full rounded-xl overflow-hidden bg-white dark:bg-black relative border border-black/5 dark:border-white/5">
+                {/* Profile Card component wrapped in 3D perspective tilt and spotlight glow */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="w-full md:w-[350px] rounded-2xl flex-shrink-0 relative"
+                >
+                  <HoverCard3D 
+                    className="w-full bg-white text-black rounded-2xl p-6 shadow-2xl border border-[var(--color-border-subtle)] flex flex-col gap-4"
+                    glowColor="rgba(255, 107, 53, 0.12)"
+                  >
+                    <div className="relative w-full h-64 overflow-hidden rounded-xl bg-stone-100">
                       <img 
-                        src={project.img2} 
-                        alt={`${project.title} Mobile`} 
-                        className="w-full h-full object-cover object-top opacity-95"
+                        src={avatarImg} 
+                        alt="Muhammad Abdullah" 
+                        className="w-full h-full object-cover"
                       />
-                      <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-white dark:bg-black rounded-full flex items-center justify-center border border-black/5 dark:border-none">
-                        <div className="w-6 h-1 bg-stone-300 dark:bg-stone-800 rounded-full" />
+                    </div>
+                    <div>
+                      <h3 className="font-poppins font-bold text-2xl tracking-tight text-black mb-1">M. Abdullah</h3>
+                      <p className="font-poppins text-xs text-stone-500 font-medium">BS Data Science @ NUST</p>
+                    </div>
+                    <p className="font-poppins text-sm text-stone-600 leading-relaxed font-normal">
+                      Data Science builder thinking from first principles. Chakwal District Topper.
+                    </p>
+                    <div className="h-px bg-stone-200 my-1" />
+                    <div className="flex justify-between items-center">
+                      <span className="font-satoshi text-xs font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">Let's Connect</span>
+                      <div className="flex gap-2.5">
+                        <a href="https://github.com/abdullahrauf245-hue/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                          <SiGithub className="w-4 h-4" />
+                        </a>
+                        <a href="https://www.linkedin.com/in/muhammad-abdullahrauf/" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors">
+                          <FaLinkedin className="w-4 h-4" />
+                        </a>
+                        <button 
+                          onClick={() => setIsContactOpen(true)}
+                          className="w-8 h-8 rounded-full bg-stone-100 hover:bg-[var(--color-accent-orange)] hover:text-white flex items-center justify-center text-stone-800 transition-colors cursor-pointer border-none outline-none"
+                        >
+                          <Mail className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </HoverCard3D>
+                </motion.div>
+              </section>
+              </motion.div>
+            )}
+
+            {activeSection === "about" && (
+              <motion.div id="about" ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
+              <motion.section 
+                initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInUp}
+                className="mb-20"
+              >
+                <div className="flex items-center gap-4 mb-12">
+                  <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">About</h2>
+                  <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-12 items-start">
+                  <h3 className="text-3xl font-poppins font-bold leading-tight tracking-tight text-stone-900 dark:text-white">
+                    I study Data Science at NUST Islamabad. But my real education happens when I build.
+                  </h3>
+                  <div className="space-y-6 text-[var(--color-text-secondary)] leading-relaxed font-poppins font-normal text-[15px]">
+                    <ScrollRevealText text="I merge academic rigor with a hacker's mindset. My background spans from being a District Topper in Chakwal to leading logistics for major university events." />
+                    <ScrollRevealText text="I don't just write code; I orchestrate systems. Whether it's crafting full-stack web products, managing multi-venue logistics, or designing databases, I focus on solving real, tangible problems." />
+                    <div className="flex gap-6 pt-4 text-stone-900 dark:text-white">
+                      <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
+                        <MapPin className="w-4 h-4 text-[var(--color-accent-orange)]" /> Islamabad, PK
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-satoshi font-bold uppercase tracking-wider">
+                        <Building className="w-4 h-4 text-[var(--color-accent-orange)]" /> NUST SEECS
                       </div>
                     </div>
                   </div>
-                </HoverCard3D>
+                </div>
+              </motion.section>
               </motion.div>
-            ))}
-          </div>
-        </motion.section>
-        </motion.div>
+            )}
 
-        {/* SKILLS SECTION with parallax */}
-        <motion.div id="skills" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
-          <section className="mb-32 md:mb-40">
-            <div className="flex items-center gap-4 mb-12">
-              <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Technical Arsenal</h2>
-              <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-            </div>
-            <ToolkitOrbital />
-          </section>
-        </motion.div>
-
-        {/* EXPERIENCE & LEADERSHIP with parallax */}
-        <motion.div id="experience" ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="mb-32 md:mb-40"
-        >
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Experience & Leadership</h2>
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-          </div>
-
-          <div ref={timelineRef} className="relative ml-4 md:ml-6 space-y-12">
-            {/* The background track line */}
-            <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[var(--color-border-subtle)]/15 pointer-events-none rounded-full" />
-            
-            {/* Scroll-driven drawing line */}
-            <motion.div 
-              className="absolute left-0 top-2 bottom-2 w-[2px] bg-gradient-to-b from-[var(--color-accent-lime)] via-[var(--color-accent-orange)] to-[var(--color-accent-orange)] origin-top pointer-events-none rounded-full"
-              style={{ scaleY: timelineScaleY }}
-            />
-
-            {[
-              {
-                role: "Dev-Weekend Fellow",
-                org: "Dev-Weekend Fellowship",
-                date: "May 2026 – Present",
-                desc: "Accepted into the highly selective Dev-Weekend Fellowship program, designed to cultivate advanced software engineering and rapid product development capabilities.",
-                details: [
-                  "Collaborating with cross-functional development teams in intensive weekend hackathons and engineering sprints to ship production-ready applications.",
-                  "Designing and building high-performance systems under rapid timelines, focusing on robust APIs and responsive glassmorphism UI design.",
-                  "Engaging in expert mentorship sessions covering advanced database architectures, cloud deployments, and scalable engineering practices."
-                ]
-              },
-              {
-                role: "Forward Program Learner",
-                org: "McKinsey.org",
-                date: "May 2026 – Present",
-                desc: "Selected into McKinsey's prestigious flagship Forward Program to build foundational business leadership and analytical capabilities.",
-                details: [
-                  "Engaging in intensive training on systematic problem-solving, structured communication, and data-driven business analytics.",
-                  "Collaborating with global peers on real-world business case simulations, developing robust strategic thinking methodologies.",
-                  "Mastering modern work adaptability skills including agile collaboration, emotional intelligence, and digital fluency."
-                ]
-              },
-              {
-                role: "Communications Executive",
-                org: "NUST Entrepreneurs Club",
-                date: "Oct 2025 – Present",
-                desc: "Leading the design and execution of high-impact communication strategies to amplify entrepreneurial activities across NUST.",
-                details: [
-                  "Drafting high-profile official announcements, newsletters, and promotional copies for events reaching a student body of 10,000+.",
-                  "Managing end-to-end outreach initiatives, fostering strategic collaborations with external startups, media partners, and keynote speakers.",
-                  "Spearheading internal team alignment across marketing, design, and public relations teams to ensure brand consistency."
-                ]
-              },
-              {
-                role: "Logistics Executive",
-                org: "HAAMI NUST",
-                date: "Feb 2026 – Present",
-                desc: "Executing complex operations and logistics management for HAAMI, NUST's premier student-led fundraising and social welfare initiative.",
-                details: [
-                  "Coordinating end-to-end supply chain and resource allocation for large-scale charity drives and fundraising galas.",
-                  "Managing vendor relations, negotiating contracts, and optimizing procurement budgets to maximize proceeds directed to beneficiary causes.",
-                  "Collaborating with public relations and finance departments to streamline volunteer deployment of 100+ members."
-                ]
-              },
-              {
-                role: "Finance Executive",
-                org: "NUST Cultural Fest",
-                date: "Dec 2025 – Feb 2026",
-                desc: "Supervised the complete financial lifecycle, budgeting, and audits for NUST's flagship annual cultural celebration.",
-                details: [
-                  "Formulated a detailed operational budget, allocating resources across multiple festival departments to maximize financial efficiency.",
-                  "Tracked real-time expenses, managed digital and physical cash flows, and executed swift ticket-sales reconciliation.",
-                  "Compiled and presented comprehensive post-event financial reports to university administration, detailing cost-saving outcomes."
-                ]
-              },
-              {
-                role: "Logistics Executive",
-                org: "NUST Olympiad",
-                date: "Nov 2025 – Feb 2026",
-                desc: "Managed venue operations, volunteer scheduling, and event coordination for NUST's largest national-level sports and academic Olympiad.",
-                details: [
-                  "Orchestrated complex multi-venue scheduling and participant logistics for 20+ parallel competitive sports and academic events.",
-                  "Led a dedicated task force of 50+ campus volunteers, conducting training workshops on crowd management and emergency response.",
-                  "Managed dynamic on-site equipment inventory, ensuring seamless technical and physical setup for all events."
-                ]
-              },
-              {
-                role: "Finance Executive",
-                org: "ASME NUST Chapter",
-                date: "Oct 2025 – Dec 2025",
-                desc: "Administered financial operations, sponsorship funds, and budget controls for the American Society of Mechanical Engineers (ASME) student chapter.",
-                details: [
-                  "Managed financial operations and budget planning for the ASME Engineering Festivals (EFX), ensuring optimal fund utilization.",
-                  "Oversaw registration payments, cash inflows, and managed disbursements for technical workshops and hardware exhibition items.",
-                  "Secured and accounted for corporate sponsorships, building transparent ledger records for audit trails."
-                ]
-              }
-            ].map((exp, idx) => (
-              <motion.div 
-                key={idx} 
-                custom={idx}
-                variants={contentVariants}
-                className="relative pl-8 md:pl-10 group"
+            {activeSection === "projects" && (
+              <motion.div id="projects" ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
+              <motion.section 
+                initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+                className="mb-32 md:mb-40"
               >
-                {/* Scroll-driven bead */}
-                <TimelineBead scrollProgress={timelineScrollProgress} idx={idx} total={7} />
-
-                {/* Experience Header */}
-                <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-3">
-                  <h3 className="text-lg font-poppins font-bold text-stone-900 dark:text-white group-hover:text-[var(--color-accent-lime)] transition-colors duration-300">{exp.role}</h3>
-                  <span className="text-[var(--color-accent-orange)] font-satoshi font-bold text-xs uppercase tracking-wider">@ {exp.org}</span>
-                  <span className="text-xs font-mono text-[var(--color-text-muted)] md:ml-auto">{exp.date}</span>
+                <div className="flex items-center gap-4 mb-12">
+                  <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Selected Work</h2>
+                  <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
                 </div>
 
-                {/* Experience Body */}
-                <div className="space-y-3 max-w-4xl">
-                  <motion.p 
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-30px" }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-[var(--color-text-secondary)] text-sm font-poppins font-medium leading-relaxed"
-                  >{exp.desc}</motion.p>
-                  
-                  {/* Staggered Bullet Points */}
-                  <ul className="list-none space-y-2 pl-1">
-                    {exp.details.map((detail, dIdx) => (
-                      <motion.li 
-                        key={dIdx} 
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-30px" }}
-                        transition={{ 
-                          delay: 0.15 + dIdx * 0.12, 
-                          duration: 0.5, 
-                          ease: [0.22, 1, 0.36, 1] 
-                        }}
-                        className="flex items-start gap-2.5 text-xs text-[var(--color-text-muted)] font-poppins leading-relaxed"
-                      >
-                        <motion.span 
-                          initial={{ scale: 0 }}
-                          whileInView={{ scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.25 + dIdx * 0.12, type: "spring", stiffness: 400, damping: 15 }}
-                          className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)]/60 mt-1.5 flex-shrink-0" 
-                        />
-                        <span>{detail}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-        </motion.div>
-
-        {/* EDUCATION with parallax */}
-        <motion.div id="education" ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="mb-32 md:mb-40"
-        >
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Education</h2>
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-          </div>
- 
-          <div className="grid md:grid-cols-3 gap-6">
-            <motion.div variants={fadeInUp} className="rounded-2xl relative">
-              <HoverCard3D 
-                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 h-full flex flex-col"
-                glowColor="rgba(255, 107, 53, 0.1)"
-              >
-                <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-1 text-stone-900 dark:text-white">NUST Islamabad</h4>
-                <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
-                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">Sep 2025 – Sep 2029</p>
-              </HoverCard3D>
-            </motion.div>
-            <motion.div variants={fadeInUp} className="rounded-2xl relative">
-              <HoverCard3D 
-                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 h-full flex flex-col"
-                glowColor="rgba(197, 255, 65, 0.08)"
-              >
-                <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
-                <h4 className="font-poppins font-bold text-lg mb-1 text-stone-900 dark:text-white">Punjab College Chakwal</h4>
-                <p className="text-sm text-[var(--color-text-secondary)] font-satoshi font-bold uppercase tracking-wider mb-3">Intermediate</p>
-                <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">1069/1200<br/>2023-2025</p>
-              </HoverCard3D>
-            </motion.div>
-            <motion.div variants={fadeInUp} className="rounded-2xl relative overflow-hidden">
-              <HoverCard3D 
-                className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 relative h-full flex flex-col"
-                glowColor="rgba(255, 107, 53, 0.1)"
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-accent-orange)]/5 rounded-bl-full pointer-events-none" />
-                <Trophy className="w-6 h-6 text-[var(--color-accent-orange)] mb-4 relative z-10" />
-                <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-stone-900 dark:text-white">DPS Chakwal</h4>
-                <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
-                <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed mt-auto">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
-              </HoverCard3D>
-            </motion.div>
-          </div>
-        </motion.section>
-        </motion.div>
-
-        {/* GITHUB ACTIVITY SECTION with parallax */}
-        <motion.div id="activity" ref={activityParallax.ref} style={{ y: a11y.reducedMotion ? 0 : activityParallax.y }}>
-        <motion.section 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-          variants={fadeInUp}
-          className="mb-32 md:mb-40"
-        >
-          <div className="flex items-center gap-4 mb-12">
-            <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Activity</h2>
-            <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
-          </div>
-
-          <div className="space-y-8">
-            {/* Header Row */}
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-              <div>
-                <h3 className="text-3xl font-poppins font-bold tracking-tight text-stone-900 dark:text-white mb-2">
-                  Contributions
-                </h3>
-                <p className="text-[var(--color-text-secondary)] font-poppins text-sm font-normal">
-                  My GitHub contribution graph — consistency is the compound interest of growth.
-                </p>
-              </div>
-              <a 
-                href="https://github.com/abdullahrauf245-hue" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-[var(--color-accent-orange)] dark:hover:border-[var(--color-accent-orange)] text-stone-800 dark:text-white text-xs font-satoshi font-bold uppercase tracking-wider transition-all hover:scale-105 duration-200 w-fit"
-              >
-                <SiGithub className="w-4 h-4" /> View Profile
-              </a>
-            </div>
-
-            {/* Calendar Container */}
-            <div className="relative p-6 md:p-8 rounded-2xl bg-white dark:bg-[#080808] border border-[var(--color-border-subtle)]/15 overflow-hidden group hover:border-[var(--color-accent-orange)]/30 transition-colors duration-300">
-              {/* Subtle gradient glow behind */}
-              <div className="absolute -top-20 -right-20 w-60 h-60 bg-[var(--color-accent-orange)]/5 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[var(--color-accent-lime)]/5 rounded-full blur-[60px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative z-10 github-calendar-wrapper overflow-x-auto">
-                <GitHubCalendar 
-                  username="abdullahrauf245-hue" 
-                  colorScheme={theme === "light" ? "light" : "dark"}
-                  blockSize={14}
-                  blockMargin={4}
-                  fontSize={13}
-                  style={{ width: '100%' }}
-                  theme={theme === "light" ? {
-                    light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
-                  } : {
-                    dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353']
-                  }}
-                  labels={{
-                    totalCount: '{{count}} contributions in the last year'
-                  }}
-                  renderBlock={(block, activity) => (
-                    <Tooltip key={activity.date} delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        {cloneElement(block, {
-                          style: {
-                            ...block.props.style,
-                            cursor: 'pointer',
-                          },
-                          onClick: () => {
-                            window.open(
-                              `https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`,
-                              '_blank'
-                            );
-                          },
-                        })}
-                      </TooltipTrigger>
-                      <TooltipContent 
-                        side="top" 
-                        align="center" 
-                        className="bg-black/90 backdrop-blur-md border border-white/10 text-white rounded-lg shadow-2xl px-3 py-2 z-50 pointer-events-none"
-                      >
-                        <div className="font-poppins text-[11px] leading-tight select-none">
-                          <span className="font-bold text-[var(--color-accent-orange)]">{activity.count} contributions</span>
-                          <span className="text-stone-400 block mt-0.5">{activity.date}</span>
+                <div className="flex flex-col gap-24">
+                  {[
+                    {
+                      title: "Muslim Traders",
+                      classification: "ENTERPRISE LOGISTICS - FEATURED",
+                      desc: "Enterprise logistics and distribution platform for a 1988-founded network covering 375+ exclusive sub-distributors and 400,000+ retail stores across Pakistan.",
+                      bullets: [
+                        "375+ exclusive distribution hubs mapped throughout regional networks.",
+                        "400,000+ retail storefronts supported with path-optimized delivery systems.",
+                        "3+ Decades of secure enterprise logistics management and supply chain rigor."
+                      ],
+                      tags: ["Next.js", "Full Stack", "Enterprise", "Tailwind CSS"],
+                      link: "https://muslim-traders.vercel.app",
+                      github: "https://github.com/abdullahrauf245-hue/muslim-traders-2",
+                      img1: muslimTraders1,
+                      img2: muslimTraders2
+                    },
+                    {
+                      title: "NUST Events & Society Portal",
+                      classification: "FULL STACK PORTAL - FEATURED",
+                      desc: "An all-in-one campus discovery platform providing structured event search, student registrations, and role-based workflows for organizers and guests.",
+                      bullets: [
+                        "Role-based workflows with robust permission gates for Students, Guests, and Admins.",
+                        "Supabase integration driving live participant dashboards and data logging.",
+                        "Clean glassmorphism dashboard UI with instantaneous status updates."
+                      ],
+                      tags: ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
+                      link: "https://nust-pulse.vercel.app",
+                      github: "https://github.com/abdullahrauf245-hue/Nust-society-and-portal-system",
+                      img1: nustEvents1,
+                      img2: nustEvents2
+                    },
+                    {
+                      title: "NUSTCafe",
+                      classification: "CAMPUS WEB APP - COLLABORATIVE",
+                      desc: "Centralized search, menu, and filter system consolidation covering 9 NUST campus cafes, built collaboratively with the BSDS-3A development team.",
+                      bullets: [
+                        "9 Campus cafes indexed under a single high-speed menu finder.",
+                        "Dynamic filtering by location, meal categorization, and price limits.",
+                        "Collaborative sprint designed and launched with the BSDS-3A developer group."
+                      ],
+                      tags: ["Frontend", "Tailwind CSS", "Vite", "React"],
+                      link: "https://nustcafe.vercel.app",
+                      github: "https://github.com/abdullahrauf245-hue/nustcafe",
+                      img1: nustCafe1,
+                      img2: nustCafe1
+                    }
+                  ].map((project, idx) => (
+                    <motion.div 
+                      key={idx}
+                      variants={fadeInUp}
+                      className="flex flex-col lg:flex-row gap-12 items-center justify-between group"
+                    >
+                      {/* Project Details (Left) */}
+                      <div className="flex-1 space-y-6">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-orange)]" />
+                            <span className="text-[10px] font-satoshi font-bold text-[var(--color-accent-orange)] tracking-widest uppercase">{project.classification}</span>
+                          </div>
+                          <h3 className="text-3xl md:text-4xl font-poppins font-bold text-stone-900 dark:text-white tracking-tight leading-none group-hover:text-[var(--color-accent-orange)] transition-colors duration-300">
+                            {project.title}
+                          </h3>
                         </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                />
-              </div>
+
+                        <p className="text-[var(--color-text-secondary)] font-poppins font-normal text-[15px] leading-relaxed">
+                          {project.desc}
+                        </p>
+
+                        <ul className="space-y-3">
+                          {project.bullets.map((bullet, bIdx) => (
+                            <li key={bIdx} className="flex gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                              <span className="text-[var(--color-accent-orange)] font-poppins font-bold flex-shrink-0 mt-0.5">+</span>
+                              <span className="font-poppins">{bullet}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {project.tags.map(tag => (
+                            <span key={tag} className="px-3 py-1 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 rounded-full text-stone-850 dark:text-white text-[10px] font-satoshi font-bold uppercase tracking-wider">{tag}</span>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-6 pt-4 text-xs font-satoshi font-bold uppercase tracking-wider">
+                          <a 
+                            href={project.github} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="flex items-center gap-2 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors animate-pulse"
+                          >
+                            <SiGithub className="w-4 h-4" /> GitHub
+                          </a>
+                          <a 
+                            href={project.link} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="flex items-center gap-2 text-[var(--color-accent-orange)] hover:text-[var(--color-accent-orange)]/80 transition-colors font-bold"
+                          >
+                            <ArrowUpRight className="w-4 h-4" /> Live Demo
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Device Mockups (Right) wrapped in 3D perspective tilt and spotlight glow */}
+                      <HoverCard3D 
+                        className="flex-1 relative w-full max-w-[500px] aspect-[16/10] flex items-center justify-center p-4 rounded-2xl overflow-visible"
+                        glowColor={idx % 2 === 0 ? "rgba(255, 107, 53, 0.12)" : "rgba(197, 255, 65, 0.12)"}
+                      >
+                        {/* Laptop Mockup */}
+                        <div className="w-full h-full bg-[#121225]/5 dark:bg-[#121225]/45 border border-slate-200 dark:border-[#1b1b36] rounded-xl overflow-hidden shadow-2xl relative flex flex-col transition-all duration-500 group-hover:scale-[1.02] group-hover:-translate-y-1">
+                          <div className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 dark:bg-[#0b0b1a] border-b border-slate-200 dark:border-[#1b1b36]">
+                            <div className="w-2 h-2 rounded-full bg-red-500/60" />
+                            <div className="w-2 h-2 rounded-full bg-yellow-500/60" />
+                            <div className="w-2 h-2 rounded-full bg-green-500/60" />
+                          </div>
+                          <div className="w-full h-full bg-[#faf9f6] dark:bg-[#05050d] overflow-hidden relative">
+                            <img 
+                              src={project.img1} 
+                              alt={`${project.title} Desktop`} 
+                              className="w-full h-full object-cover object-top opacity-90 transition-opacity duration-300"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Overlapping Mobile Phone Mockup */}
+                        <div className="absolute right-[-15px] bottom-[-20px] w-[140px] aspect-[9/18] bg-slate-100 dark:bg-[#0b0b1a] border border-slate-200 dark:border-[#1b1b36] rounded-2xl p-1.5 shadow-2xl z-20 transition-all duration-500 group-hover:-translate-y-4 group-hover:translate-x-2 group-hover:scale-105 group-hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.35)]">
+                          <div className="w-full h-full rounded-xl overflow-hidden bg-white dark:bg-black relative border border-black/5 dark:border-white/5">
+                            <img 
+                              src={project.img2} 
+                              alt={`${project.title} Mobile`} 
+                              className="w-full h-full object-cover object-top opacity-95"
+                            />
+                            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-white dark:bg-black rounded-full flex items-center justify-center border border-black/5 dark:border-none">
+                              <div className="w-6 h-1 bg-stone-300 dark:bg-stone-800 rounded-full" />
+                            </div>
+                          </div>
+                        </div>
+                      </HoverCard3D>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.section>
+              </motion.div>
+            )}
+
+            {activeSection === "skills" && (
+              <motion.div id="skills" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
+                <section className="mb-32 md:mb-40">
+                  <div className="flex items-center gap-4 mb-12">
+                    <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Technical Arsenal</h2>
+                    <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+                  </div>
+                  <ToolkitOrbital />
+                </section>
+              </motion.div>
+            )}
+
+            {activeSection === "experience" && (
+              <motion.div id="experience" ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
+              <motion.section 
+                initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+                className="mb-32 md:mb-40"
+              >
+                <div className="flex items-center gap-4 mb-12">
+                  <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Experience & Leadership</h2>
+                  <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+                </div>
+
+                <div ref={timelineRef} className="relative ml-4 md:ml-6 space-y-12">
+                  {/* The background track line */}
+                  <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[var(--color-border-subtle)]/15 pointer-events-none rounded-full" />
+                  
+                  {/* Scroll-driven drawing line */}
+                  <motion.div 
+                    className="absolute left-0 top-2 bottom-2 w-[2px] bg-gradient-to-b from-[var(--color-accent-lime)] via-[var(--color-accent-orange)] to-[var(--color-accent-orange)] origin-top pointer-events-none rounded-full"
+                    style={{ scaleY: timelineScaleY }}
+                  />
+
+                  {[
+                    {
+                      role: "Dev-Weekend Fellow",
+                      org: "Dev-Weekend Fellowship",
+                      date: "May 2026 – Present",
+                      desc: "Accepted into the highly selective Dev-Weekend Fellowship program, designed to cultivate advanced software engineering and rapid product development capabilities.",
+                      details: [
+                        "Collaborating with cross-functional development teams in intensive weekend hackathons and engineering sprints to ship production-ready applications.",
+                        "Designing and building high-performance systems under rapid timelines, focusing on robust APIs and responsive glassmorphism UI design.",
+                        "Engaging in expert mentorship sessions covering advanced database architectures, cloud deployments, and scalable engineering practices."
+                      ]
+                    },
+                    {
+                      role: "Forward Program Learner",
+                      org: "McKinsey.org",
+                      date: "May 2026 – Present",
+                      desc: "Selected into McKinsey's prestigious flagship Forward Program to build foundational business leadership and analytical capabilities.",
+                      details: [
+                        "Engaging in intensive training on systematic problem-solving, structured communication, and data-driven business analytics.",
+                        "Collaborating with global peers on real-world business case simulations, developing robust strategic thinking methodologies.",
+                        "Mastering modern work adaptability skills including agile collaboration, emotional intelligence, and digital fluency."
+                      ]
+                    },
+                    {
+                      role: "Communications Executive",
+                      org: "NUST Entrepreneurs Club",
+                      date: "Oct 2025 – Present",
+                      desc: "Leading the design and execution of high-impact communication strategies to amplify entrepreneurial activities across NUST.",
+                      details: [
+                        "Drafting high-profile official announcements, newsletters, and promotional copies for events reaching a student body of 10,000+.",
+                        "Managing end-to-end outreach initiatives, fostering strategic collaborations with external startups, media partners, and keynote speakers.",
+                        "Spearheading internal team alignment across marketing, design, and public relations teams to ensure brand consistency."
+                      ]
+                    },
+                    {
+                      role: "Logistics Executive",
+                      org: "HAAMI NUST",
+                      date: "Feb 2026 – Present",
+                      desc: "Executing complex operations and logistics management for HAAMI, NUST's premier student-led fundraising and social welfare initiative.",
+                      details: [
+                        "Coordinating end-to-end supply chain and resource allocation for large-scale charity drives and fundraising galas.",
+                        "Managing vendor relations, negotiating contracts, and optimizing procurement budgets to maximize proceeds directed to beneficiary causes.",
+                        "Collaborating with public relations and finance departments to streamline volunteer deployment of 100+ members."
+                      ]
+                    },
+                    {
+                      role: "Finance Executive",
+                      org: "NUST Cultural Fest",
+                      date: "Dec 2025 – Feb 2026",
+                      desc: "Supervised the complete financial lifecycle, budgeting, and audits for NUST's flagship annual cultural celebration.",
+                      details: [
+                        "Formulated a detailed operational budget, allocating resources across multiple festival departments to maximize financial efficiency.",
+                        "Tracked real-time expenses, managed digital and physical cash flows, and executed swift ticket-sales reconciliation.",
+                        "Compiled and presented comprehensive post-event financial reports to university administration, detailing cost-saving outcomes."
+                      ]
+                    },
+                    {
+                      role: "Logistics Executive",
+                      org: "NUST Olympiad",
+                      date: "Nov 2025 – Feb 2026",
+                      desc: "Managed venue operations, volunteer scheduling, and event coordination for NUST's largest national-level sports and academic Olympiad.",
+                      details: [
+                        "Orchestrated complex multi-venue scheduling and participant logistics for 20+ parallel competitive sports and academic events.",
+                        "Led a dedicated task force of 50+ campus volunteers, conducting training workshops on crowd management and emergency response.",
+                        "Managed dynamic on-site equipment inventory, ensuring seamless technical and physical setup for all events."
+                      ]
+                    },
+                    {
+                      role: "Finance Executive",
+                      org: "ASME NUST Chapter",
+                      date: "Oct 2025 – Dec 2025",
+                      desc: "Administered financial operations, sponsorship funds, and budget controls for the American Society of Mechanical Engineers (ASME) student chapter.",
+                      details: [
+                        "Managed financial operations and budget planning for the ASME Engineering Festivals (EFX), ensuring optimal fund utilization.",
+                        "Oversaw registration payments, cash inflows, and managed disbursements for technical workshops and hardware exhibition items.",
+                        "Secured and accounted for corporate sponsorships, building transparent ledger records for audit trails."
+                      ]
+                    }
+                  ].map((exp, idx) => (
+                    <motion.div 
+                      key={idx} 
+                      custom={idx}
+                      variants={contentVariants}
+                      className="relative pl-8 md:pl-10 group"
+                    >
+                      {/* Scroll-driven bead */}
+                      <TimelineBead scrollProgress={timelineScrollProgress} idx={idx} total={7} />
+
+                      {/* Experience Header */}
+                      <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-3">
+                        <h3 className="text-lg font-poppins font-bold text-stone-900 dark:text-white group-hover:text-[var(--color-accent-lime)] transition-colors duration-300">{exp.role}</h3>
+                        <span className="text-[var(--color-accent-orange)] font-satoshi font-bold text-xs uppercase tracking-wider">@ {exp.org}</span>
+                        <span className="text-xs font-mono text-[var(--color-text-muted)] md:ml-auto">{exp.date}</span>
+                      </div>
+
+                      {/* Experience Body */}
+                      <div className="space-y-3 max-w-4xl">
+                        <motion.p 
+                          initial={{ opacity: 0, y: 12 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-30px" }}
+                          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                          className="text-[var(--color-text-secondary)] text-sm font-poppins font-medium leading-relaxed"
+                        >{exp.desc}</motion.p>
+                        
+                        {/* Staggered Bullet Points */}
+                        <ul className="list-none space-y-2 pl-1">
+                          {exp.details.map((detail, dIdx) => (
+                            <motion.li 
+                              key={dIdx} 
+                              initial={{ opacity: 0, x: -20 }}
+                              whileInView={{ opacity: 1, x: 0 }}
+                              viewport={{ once: true, margin: "-30px" }}
+                              transition={{ 
+                                delay: 0.15 + dIdx * 0.12, 
+                                duration: 0.5, 
+                                ease: [0.22, 1, 0.36, 1] 
+                              }}
+                              className="flex items-start gap-2.5 text-xs text-[var(--color-text-muted)] font-poppins leading-relaxed"
+                            >
+                              <motion.span 
+                                initial={{ scale: 0 }}
+                                whileInView={{ scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.25 + dIdx * 0.12, type: "spring", stiffness: 400, damping: 15 }}
+                                className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)]/60 mt-1.5 flex-shrink-0" 
+                              />
+                              <span>{detail}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.section>
+              </motion.div>
+            )}
+
+            {activeSection === "education" && (
+              <motion.div id="education" ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
+              <motion.section 
+                initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+                className="mb-32 md:mb-40"
+              >
+                <div className="flex items-center gap-4 mb-12">
+                  <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Education</h2>
+                  <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+                </div>
+       
+                <div className="grid md:grid-cols-3 gap-6">
+                  <motion.div variants={fadeInUp} className="rounded-2xl relative">
+                    <HoverCard3D 
+                      className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 h-full flex flex-col"
+                      glowColor="rgba(255, 107, 53, 0.1)"
+                    >
+                      <GraduationCap className="w-6 h-6 text-[var(--color-accent-orange)] mb-4" />
+                      <h4 className="font-poppins font-bold text-lg mb-1 text-stone-900 dark:text-white">NUST Islamabad</h4>
+                      <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3">Bachelor's Data Science</p>
+                      <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">Sep 2025 – Sep 2029</p>
+                    </HoverCard3D>
+                  </motion.div>
+                  <motion.div variants={fadeInUp} className="rounded-2xl relative">
+                    <HoverCard3D 
+                      className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 h-full flex flex-col"
+                      glowColor="rgba(197, 255, 65, 0.08)"
+                    >
+                      <Building className="w-6 h-6 text-[var(--color-text-secondary)] mb-4" />
+                      <h4 className="font-poppins font-bold text-lg mb-1 text-stone-900 dark:text-white">Punjab College Chakwal</h4>
+                      <p className="text-sm text-[var(--color-text-secondary)] font-satoshi font-bold uppercase tracking-wider mb-3">Intermediate</p>
+                      <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed mt-auto">1069/1200<br/>2023-2025</p>
+                    </HoverCard3D>
+                  </motion.div>
+                  <motion.div variants={fadeInUp} className="rounded-2xl relative overflow-hidden">
+                    <HoverCard3D 
+                      className="p-6 border border-[var(--color-border-subtle)]/15 rounded-2xl bg-white dark:bg-[#080808] transition-colors duration-300 relative h-full flex flex-col"
+                      glowColor="rgba(255, 107, 53, 0.1)"
+                    >
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-accent-orange)]/5 rounded-bl-full pointer-events-none" />
+                      <Trophy className="w-6 h-6 text-[var(--color-accent-orange)] mb-4 relative z-10" />
+                      <h4 className="font-poppins font-bold text-lg mb-1 relative z-10 text-stone-900 dark:text-white">DPS Chakwal</h4>
+                      <p className="text-sm text-[var(--color-accent-orange)] font-satoshi font-bold uppercase tracking-wider mb-3 relative z-10">Matriculation</p>
+                      <p className="text-xs text-[var(--color-text-secondary)] relative z-10 leading-relaxed mt-auto">1059/1100<br/><span className="text-[var(--color-accent-orange)] font-bold">District Topper 2023</span></p>
+                    </HoverCard3D>
+                  </motion.div>
+                </div>
+              </motion.section>
+              </motion.div>
+            )}
+
+            {activeSection === "activity" && (
+              <motion.div id="activity" ref={activityParallax.ref} style={{ y: a11y.reducedMotion ? 0 : activityParallax.y }}>
+              <motion.section 
+                initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInUp}
+                className="mb-32 md:mb-40"
+              >
+                <div className="flex items-center gap-4 mb-12">
+                  <h2 className="text-sm tracking-[0.35em] text-[var(--color-accent-lime)] font-bold uppercase">Activity</h2>
+                  <div className="h-px bg-[var(--color-border-subtle)]/20 flex-1" />
+                </div>
+
+                <div className="space-y-8">
+                  {/* Header Row */}
+                  <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                    <div>
+                      <h3 className="text-3xl font-poppins font-bold tracking-tight text-stone-900 dark:text-white mb-2">
+                        Contributions
+                      </h3>
+                      <p className="text-[var(--color-text-secondary)] font-poppins text-sm font-normal">
+                        My GitHub contribution graph — consistency is the compound interest of growth.
+                      </p>
+                    </div>
+                    <a 
+                      href="https://github.com/abdullahrauf245-hue" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 hover:border-[var(--color-accent-orange)] dark:hover:border-[var(--color-accent-orange)] text-stone-800 dark:text-white text-xs font-satoshi font-bold uppercase tracking-wider transition-all hover:scale-105 duration-200 w-fit"
+                    >
+                      <SiGithub className="w-4 h-4" /> View Profile
+                    </a>
+                  </div>
+
+                  {/* Calendar Container */}
+                  <div className="relative p-6 md:p-8 rounded-2xl bg-white dark:bg-[#080808] border border-[var(--color-border-subtle)]/15 overflow-hidden group hover:border-[var(--color-accent-orange)]/30 transition-colors duration-300">
+                    {/* Subtle gradient glow behind */}
+                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-[var(--color-accent-orange)]/5 rounded-full blur-[80px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[var(--color-accent-lime)]/5 rounded-full blur-[60px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    <div className="relative z-10 github-calendar-wrapper overflow-x-auto">
+                      <GitHubCalendar 
+                        username="abdullahrauf245-hue" 
+                        colorScheme={theme === "light" ? "light" : "dark"}
+                        blockSize={14}
+                        blockMargin={4}
+                        fontSize={13}
+                        style={{ width: '100%' }}
+                        theme={theme === "light" ? {
+                          light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+                        } : {
+                          dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353']
+                        }}
+                        labels={{
+                          totalCount: '{{count}} contributions in the last year'
+                        }}
+                        renderBlock={(block, activity) => (
+                          <Tooltip key={activity.date} delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              {cloneElement(block, {
+                                style: {
+                                  ...block.props.style,
+                                  cursor: 'pointer',
+                                },
+                                onClick: () => {
+                                  window.open(
+                                    `https://github.com/abdullahrauf245-hue?tab=overview&from=${activity.date}`,
+                                    '_blank'
+                                  );
+                                },
+                              })}
+                            </TooltipTrigger>
+                            <TooltipContent 
+                              side="top" 
+                              align="center" 
+                              className="bg-black/90 backdrop-blur-md border border-white/10 text-white rounded-lg shadow-2xl px-3 py-2 z-50 pointer-events-none"
+                            >
+                              <div className="font-poppins text-[11px] leading-tight select-none">
+                                <span className="font-bold text-[var(--color-accent-orange)]">{activity.count} contributions</span>
+                                <span className="text-stone-400 block mt-0.5">{activity.date}</span>
+                              </div>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.section>
+              </motion.div>
+            )}
+
+            {/* Pagination Controls */}
+            <div className="flex justify-between items-center mt-16 pt-8 border-t border-[var(--color-border-subtle)]/15">
+              {prevSection ? (
+                <button
+                  onClick={() => navigateToSection(prevSection.id)}
+                  className="flex flex-col items-start text-left group cursor-pointer border-none bg-transparent outline-none"
+                >
+                  <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--color-text-muted)] group-hover:text-[var(--color-accent-orange)] transition-colors">Previous</span>
+                  <span className="text-sm font-poppins font-bold text-stone-850 dark:text-stone-300 group-hover:text-[var(--color-accent-orange)] transition-colors mt-1">&larr; {prevSection.label}</span>
+                </button>
+              ) : (
+                <div />
+              )}
+              {nextSection ? (
+                <button
+                  onClick={() => navigateToSection(nextSection.id)}
+                  className="flex flex-col items-end text-right group cursor-pointer border-none bg-transparent outline-none"
+                >
+                  <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--color-text-muted)] group-hover:text-[var(--color-accent-orange)] transition-colors">Next</span>
+                  <span className="text-sm font-poppins font-bold text-stone-850 dark:text-stone-300 group-hover:text-[var(--color-accent-orange)] transition-colors mt-1">{nextSection.label} &rarr;</span>
+                </button>
+              ) : (
+                <div />
+              )}
             </div>
-          </div>
-        </motion.section>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
 
         {/* FOOTER / CONTACT */}
         <motion.footer 
