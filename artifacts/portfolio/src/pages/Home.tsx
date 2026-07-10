@@ -755,8 +755,8 @@ export default function Home() {
                   {[
                     {
                       title: "InternPulse",
-                      classification: "INTERNSHIP RATINGS INDEX - FEATURED",
-                      desc: "A data-driven internship reviews and ratings portal delivering transparent insights into salaries, company culture, and return-offer analytics.",
+                      classification: "INTERNSHIP RATINGS INDEX - WORK IN PROGRESS",
+                      desc: "A data-driven internship reviews and ratings portal (currently under active development) delivering transparent insights into salaries, company culture, and return-offer analytics.",
                       bullets: [
                         "Transparent, crowdsourced metrics for top-tier internship programs worldwide.",
                         "Analytics dashboards detailing median stipends, return offer percentages, and interview dynamics.",
