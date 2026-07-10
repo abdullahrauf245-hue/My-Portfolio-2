@@ -12,6 +12,8 @@ import muslimTraders2 from "@assets/muslim_traders_2.png";
 import nustEvents1 from "@assets/nust_events_1.png";
 import nustEvents2 from "@assets/nust_events_2.png";
 import nustCafe1 from "@assets/nust_cafe_1.png";
+import internPortal1 from "@assets/intern_portal_1.png";
+import internPortal2 from "@assets/intern_portal_2.png";
 import ToolkitOrbital from "@/components/ToolkitOrbital";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import CanvasParticles from "@/components/CanvasParticles";
@@ -751,6 +753,21 @@ export default function Home() {
 
                 <div className="flex flex-col gap-24">
                   {[
+                    {
+                      title: "InternPulse",
+                      classification: "INTERNSHIP RATINGS INDEX - FEATURED",
+                      desc: "A data-driven internship reviews and ratings portal delivering transparent insights into salaries, company culture, and return-offer analytics.",
+                      bullets: [
+                        "Transparent, crowdsourced metrics for top-tier internship programs worldwide.",
+                        "Analytics dashboards detailing median stipends, return offer percentages, and interview dynamics.",
+                        "Premium responsive interface with custom interactive filters and ratings explorer."
+                      ],
+                      tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+                      link: "https://intern-rating-portal.vercel.app/",
+                      github: "https://github.com/abdullahrauf245-hue/Intern-portal",
+                      img1: internPortal1,
+                      img2: internPortal2
+                    },
                     {
                       title: "Muslim Traders",
                       classification: "ENTERPRISE LOGISTICS - FEATURED",
