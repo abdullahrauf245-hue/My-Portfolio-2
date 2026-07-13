@@ -409,8 +409,8 @@ export default function Home() {
       {/* Sticky Top Header Navigation - Floating Island Header Easing (Fixed Position) */}
       <header className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 py-4 ${
         isScrolled 
-          ? "bg-white/85 dark:bg-black/85 backdrop-blur-lg border-b border-black/10 dark:border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-5 md:py-3 md:shadow-lg md:shadow-stone-200/40 dark:shadow-black/40" 
-          : "bg-white/60 dark:bg-black/60 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-6 md:px-12"
+          ? "bg-transparent backdrop-blur-lg border-b border-black/10 dark:border-white/10 md:top-3 md:max-w-4xl md:mx-auto md:rounded-full md:px-5 md:py-3 md:shadow-lg md:shadow-stone-200/40 dark:shadow-black/40" 
+          : "bg-transparent backdrop-blur-md border-b border-black/5 dark:border-white/5 px-6 md:px-12"
       } flex items-center justify-between select-none`}>
         {/* Left Side Spacer to maintain center nav alignments */}
         <div className="w-12 h-6 md:block hidden" />
