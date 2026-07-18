@@ -14,6 +14,7 @@ import nustEvents2 from "@assets/nust_events_2.png";
 import nustCafe1 from "@assets/nust_cafe_1.png";
 import internPortal1 from "@assets/intern_portal_1.png";
 import internPortal2 from "@assets/intern_portal_2.png";
+import jarvis1 from "@assets/jarvis_1.png";
 import ToolkitOrbital from "@/components/ToolkitOrbital";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import CanvasParticles from "@/components/CanvasParticles";
@@ -753,6 +754,21 @@ export default function Home() {
 
                 <div className="flex flex-col gap-24">
                   {[
+                    {
+                      title: "Jarvis 2.0",
+                      classification: "LOCAL PRIVATE AI ASSISTANT - FEATURED",
+                      desc: "A local, private, offline Iron Man style AI voice assistant with an agent loop running entirely on your machine. Integrates real-time tool calling (news, weather, local files, system command execution) backed by a local Hermes 3 8B LLM, faster-whisper STT, Piper TTS, computer vision camera support, and a slick web dashboard.",
+                      bullets: [
+                        "Local Agent Loop: Powered by Hermes 3 (8B) via Ollama with an E2E-verified confirmation gate for risky actions.",
+                        "Voice & Vision Pipeline: Offline speech-to-text (faster-whisper) + TTS (Piper) with live camera recognition capabilities.",
+                        "Dynamic Dashboard: OLED black theme featuring live conversation history, tool activity logs, and system metrics panels."
+                      ],
+                      tags: ["FastAPI", "Next.js", "Ollama", "Hermes 3", "Whisper STT", "Piper TTS", "Python"],
+                      link: "https://github.com/abdullahrauf245-hue/jarvis2",
+                      github: "https://github.com/abdullahrauf245-hue/jarvis2",
+                      img1: jarvis1,
+                      img2: jarvis1
+                    },
                     {
                       title: "InternPulse",
                       classification: "INTERNSHIP RATINGS INDEX - WORK IN PROGRESS",
