@@ -764,8 +764,7 @@ export default function Home() {
                         "Dynamic Dashboard: OLED black theme featuring live conversation history, tool activity logs, and system metrics panels."
                       ],
                       tags: ["FastAPI", "Next.js", "Ollama", "Hermes 3", "Whisper STT", "Piper TTS", "Python"],
-                      link: "https://github.com/abdullahrauf245-hue/jarvis2",
-                      github: "https://github.com/abdullahrauf245-hue/jarvis2",
+                      github: "https://github.com/abdullahrauf245-hue/Jarvis-myversion",
                       img1: jarvis1,
                       img2: jarvis1
                     },
@@ -875,14 +874,16 @@ export default function Home() {
                           >
                             <SiGithub className="w-4 h-4" /> GitHub
                           </a>
-                          <a 
-                            href={project.link} 
-                            target="_blank" 
-                            rel="noreferrer" 
-                            className="flex items-center gap-2 text-[var(--color-accent-orange)] hover:text-[var(--color-accent-orange)]/80 transition-colors font-bold"
-                          >
-                            <ArrowUpRight className="w-4 h-4" /> Live Demo
-                          </a>
+                          {project.link && (
+                            <a 
+                              href={project.link} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="flex items-center gap-2 text-[var(--color-accent-orange)] hover:text-[var(--color-accent-orange)]/80 transition-colors font-bold"
+                            >
+                              <ArrowUpRight className="w-4 h-4" /> Live Demo
+                            </a>
+                          )}
                         </div>
                       </div>
 
