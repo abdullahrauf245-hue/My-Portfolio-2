@@ -283,18 +283,50 @@ export default function Home() {
   ];
 
   const [location, setLocation] = useLocation();
-  const currentPath = location === "/" ? "overview" : location.replace(/^\//, "");
-  const activeSection = sections.some(s => s.id === currentPath) ? currentPath : "overview";
+  const initialPath = location === "/" ? "overview" : location.replace(/^\//, "");
+  const [activeSection, setActiveSection] = useState(
+    sections.some(s => s.id === initialPath) ? initialPath : "overview"
+  );
+  // Suppress scroll-spy while a click-triggered smooth scroll is in flight
+  const spyLockRef = useRef<number | null>(null);
 
   const navigateToSection = (id: string) => {
-    setLocation(id === "overview" ? "/" : "/" + id);
+    setActiveSection(id);
+    setLocation(id === "overview" ? "/" : "/" + id, { replace: true });
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (spyLockRef.current) window.clearTimeout(spyLockRef.current);
+    spyLockRef.current = window.setTimeout(() => { spyLockRef.current = null; }, 900);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const activeIndex = sections.findIndex(s => s.id === activeSection);
-  const prevSection = activeIndex > 0 ? sections[activeIndex - 1] : null;
-  const nextSection = activeIndex < sections.length - 1 ? sections[activeIndex + 1] : null;
+  // Scroll-spy: highlight the section currently in view and sync the URL
+  useEffect(() => {
+    if (loading) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (spyLockRef.current) return;
+        const visible = entries.filter(e => e.isIntersecting);
+        if (visible.length === 0) return;
+        const id = visible[0].target.id;
+        setActiveSection(id);
+        setLocation(id === "overview" ? "/" : "/" + id, { replace: true });
+      },
+      { rootMargin: "-35% 0px -55% 0px" }
+    );
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
+  // Deep link: jump to the section from the URL once the preloader is gone
+  useEffect(() => {
+    if (loading || initialPath === "overview") return;
+    document.getElementById(initialPath)?.scrollIntoView();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -585,16 +617,8 @@ export default function Home() {
       <div className="min-h-screen flex flex-col relative z-10">
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-20 md:pt-16 md:pb-32 relative z-10 w-full flex-grow">
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeSection}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          >
-            {activeSection === "overview" && (
-              <motion.div id="overview" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
+        <div>
+            <motion.div id="overview" className="scroll-mt-28" ref={heroParallax.ref} style={{ y: a11y.reducedMotion ? 0 : heroParallax.y }}>
               <section className="pt-[60px] md:pt-[80px] mb-32 md:mb-40 flex flex-col-reverse md:flex-row gap-12 items-center justify-between">
                 <motion.div 
                   className="flex-1"
@@ -705,10 +729,8 @@ export default function Home() {
                 </motion.div>
               </section>
               </motion.div>
-            )}
 
-            {activeSection === "about" && (
-              <motion.div id="about" ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
+              <motion.div id="about" className="scroll-mt-28" ref={aboutParallax.ref} style={{ y: a11y.reducedMotion ? 0 : aboutParallax.y }}>
               <motion.section 
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
                 variants={fadeInUp}
@@ -738,10 +760,8 @@ export default function Home() {
                 </div>
               </motion.section>
               </motion.div>
-            )}
 
-            {activeSection === "projects" && (
-              <motion.div id="projects" ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
+              <motion.div id="projects" className="scroll-mt-28" ref={projectsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : projectsParallax.y }}>
               <motion.section 
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
                 variants={staggerContainer}
@@ -927,10 +947,8 @@ export default function Home() {
                 </div>
               </motion.section>
               </motion.div>
-            )}
 
-            {activeSection === "skills" && (
-              <motion.div id="skills" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
+              <motion.div id="skills" className="scroll-mt-28" ref={skillsParallax.ref} style={{ y: a11y.reducedMotion ? 0 : skillsParallax.y }}>
                 <section className="mb-32 md:mb-40">
                   <div className="flex items-center gap-4 mb-12">
                     <h2 className="text-sm tracking-[0.35em] text-[#FF6B35] font-bold uppercase">Technical Arsenal</h2>
@@ -939,10 +957,8 @@ export default function Home() {
                   <ToolkitOrbital />
                 </section>
               </motion.div>
-            )}
 
-            {activeSection === "experience" && (
-              <motion.div id="experience" ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
+              <motion.div id="experience" className="scroll-mt-28" ref={experienceParallax.ref} style={{ y: a11y.reducedMotion ? 0 : experienceParallax.y }}>
               <motion.section 
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
                 variants={staggerContainer}
@@ -1100,10 +1116,8 @@ export default function Home() {
                 </div>
               </motion.section>
               </motion.div>
-            )}
 
-            {activeSection === "education" && (
-              <motion.div id="education" ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
+              <motion.div id="education" className="scroll-mt-28" ref={educationParallax.ref} style={{ y: a11y.reducedMotion ? 0 : educationParallax.y }}>
               <motion.section 
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
                 variants={staggerContainer}
@@ -1152,10 +1166,8 @@ export default function Home() {
                 </div>
               </motion.section>
               </motion.div>
-            )}
 
-            {activeSection === "activity" && (
-              <motion.div id="activity" ref={activityParallax.ref} style={{ y: a11y.reducedMotion ? 0 : activityParallax.y }}>
+              <motion.div id="activity" className="scroll-mt-28" ref={activityParallax.ref} style={{ y: a11y.reducedMotion ? 0 : activityParallax.y }}>
               <motion.section 
                 initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
                 variants={fadeInUp}
@@ -1243,35 +1255,7 @@ export default function Home() {
                 </div>
               </motion.section>
               </motion.div>
-            )}
-
-            {/* Pagination Controls */}
-            <div className="flex justify-between items-center mt-16 pt-8 border-t border-[var(--color-border-subtle)]/15">
-              {prevSection ? (
-                <button
-                  onClick={() => navigateToSection(prevSection.id)}
-                  className="flex flex-col items-start text-left group cursor-pointer border-none bg-transparent outline-none"
-                >
-                  <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--color-text-muted)] group-hover:text-[var(--color-accent-orange)] transition-colors">Previous</span>
-                  <span className="text-sm font-poppins font-bold text-stone-850 dark:text-stone-300 group-hover:text-[var(--color-accent-orange)] transition-colors mt-1">&larr; {prevSection.label}</span>
-                </button>
-              ) : (
-                <div />
-              )}
-              {nextSection ? (
-                <button
-                  onClick={() => navigateToSection(nextSection.id)}
-                  className="flex flex-col items-end text-right group cursor-pointer border-none bg-transparent outline-none"
-                >
-                  <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[var(--color-text-muted)] group-hover:text-[var(--color-accent-orange)] transition-colors">Next</span>
-                  <span className="text-sm font-poppins font-bold text-stone-850 dark:text-stone-300 group-hover:text-[var(--color-accent-orange)] transition-colors mt-1">{nextSection.label} &rarr;</span>
-                </button>
-              ) : (
-                <div />
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* FOOTER / CONTACT */}
         <motion.footer 
